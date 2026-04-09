@@ -1,0 +1,104 @@
+.bi {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+
+/*
+ * Sidebar
+ */
+
+@media (min-width: 768px) {
+  .sidebar .offcanvas-lg {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px;
+  }
+  .navbar-search {
+    display: block;
+  }
+}
+
+.sidebar .nav-link {
+  font-size: .875rem;
+  font-weight: 500;
+}
+
+.sidebar .nav-link.active {
+  color: #2470dc;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  background-color: rgba(0, 0, 0, .25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+}
+
+
+.btn-custom {
+    background-color: #0A2A4F;
+    border: none;
+    color: #fff;
+    width: 100%;
+     text-align: center
+}
+
+.btn-custom:hover {
+    background-color: #4682B4;
+    color: #fff;
+}
+
+.btn-custom:focus {
+    box-shadow: 0 0 0 0.2rem rgba(166, 124, 82, 0.5);
+}
+
+.footer-custom {
+    background: #0A2A4F;
+    color: #fff;
+    padding: 5px 0;
+    text-align: center;
+    font-size: 12px;
+    margin-top: auto;
+}
+
+.footer-custom a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer-custom a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+.footer-custom h5 {
+    color: #fff;
+}
+
+.footer-custom a {
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.footer-custom a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.footer-custom p {
+    color: #fff !important;
+}
+

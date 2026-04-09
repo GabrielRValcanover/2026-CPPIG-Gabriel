@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+{% load static %}
+{% load django_bootstrap5 %}
+<html lang="pt-br">
+<head>
+    {% block head %}
+        {% include "head.html" %}
+    {% endblock %}
+</head>
+<body>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"></script>
+
+    {% block header  %}
+        {% include "header.html" %}
+    {% endblock %}
+
+<div class="container-fluid">
+        <div class="row ">
+                    <div class="sidebar border border-right col-md-1 col-md-2 p-1 bg-body-tertiary d-flex flex-column gap-3">              <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu">
+                        <div class="d-flex justify-content-center align-items-center" style="height: 170px;">
+                           <img src="{% static 'img/logo.png' %}" alt="Logo" width="140">
+                         </div>
+
+                        <h3>E.E.F. Maria Lucia</h3>
+                          <hr>
+                        <div class="btn-group dropend mb-2 w-100">
+                               <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                 <i class="bi bi-person-fill-add"></i>
+                                   Cadastrar Usuarios
+                                   </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'ambiente_adicionar' %}">Cadastrar Usuario (ADM) </a></li>
+                                <li><a class="dropdown-item" href="{% url 'ambientes' %}">Cadastrar Usuario (Operario)</a></li>
+                                <li><a class="dropdown-item" href="{% url 'ambientes' %}">Cadastrar Usuario (Usuario  Comum)</a></li>
+                              </ul>
+                            </div>
+                        <div class="btn-group dropend mb-2 w-100">
+                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-layout-text-sidebar-reverse"></i>
+                                  Listagem dos Usuarios
+                                  </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'ambiente_adicionar' %}">Listar Usuarios </a></li>
+                                <li><a class="dropdown-item" href="{% url 'ambientes' %}">Listagem de Ambientes</a></li>
+                                <li><a class="dropdown-item" href="#">Menu item</a></li>
+                              </ul>
+
+                            </div>
+
+                        <div class="btn-group dropend mb-2 w-100">
+                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-buildings"></i>
+                                  Ambientes
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'ambiente_adicionar' %}">Cadastrar Ambiente </a></li>
+                                <li><a class="dropdown-item" href="{% url 'ambientes' %}">Listagem de Ambientes</a></li>
+                                <li><a class="dropdown-item" href="#">Menu item</a></li>
+                              </ul>
+                        </div>
+                        <div class="btn-group dropend mb-2 w-100">
+                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-key"></i>
+                                  Chaves
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Cadastrar Chaves </a></li>
+                                <li><a class="dropdown-item" href="{% url 'usuarios' %}">Listagem de Chaves</a></li>
+                              </ul>
+                        </div>
+                        <div class="btn-group dropend mb-2 w-100">
+                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                               <i class="bi bi-arrow-left-right"></i>
+                                Emprestimo
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Realizar um Emrestio </a></li>
+                                <li><a class="dropdown-item" href="{% url 'usuarios' %}">Emprestimos Realizados</a></li>
+                                <li><a class="dropdown-item" href="#">Menu item</a></li>
+                              </ul>
+                        </div>
+                        <div class="btn-group dropend mb-2 w-100">
+                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-calendar-plus"></i>
+                                  Reservas
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Realizar Reservas </a></li>
+                                <li><a class="dropdown-item" href="{% url 'usuarios' %}">Reservas Realizadas</a></li>
+                                <li><a class="dropdown-item" href="#">Menu item</a></li>
+                              </ul>
+                        </div>
+                        <div class="btn-group dropend mb-2 w-100">
+                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                  <i class="bi bi-arrows-move"></i>
+                                  Movimentações
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Historico de movimentações  </a></li>
+                                <li><a class="dropdown-item" href="{% url 'usuarios' %}">Listagem de Usuarios</a></li>
+                                <li><a class="dropdown-item" href="#">Menu item</a></li>
+                              </ul>
+                        </div>
+                </div>
+         </div>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    {% block content %}
+
+            {% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+    {% block footer %}
+        {% include "footer.html" %}
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
