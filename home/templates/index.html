@@ -20,7 +20,8 @@
 
 <div class="container-fluid">
         <div class="row ">
-                    <div class="sidebar border border-right col-md-1 col-md-2 p-1 bg-body-tertiary d-flex flex-column gap-3">              <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu">
+                    <div class="sidebar border border-right col-md-1 col-md-2 p-1 bg-body-tertiary d-flex flex-column gap-3">
+                        <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu">
                         <div class="d-flex justify-content-center align-items-center" style="height: 170px;">
                            <img src="{% static 'img/logo.png' %}" alt="Logo" width="140">
                          </div>
@@ -33,7 +34,7 @@
                                    Cadastrar Usuarios
                                    </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'ambiente_adicionar' %}">Cadastrar Usuario (ADM) </a></li>
+                                <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Cadastrar Usuario (ADM) </a></li>
                                 <li><a class="dropdown-item" href="{% url 'ambientes' %}">Cadastrar Usuario (Operario)</a></li>
                                 <li><a class="dropdown-item" href="{% url 'ambientes' %}">Cadastrar Usuario (Usuario  Comum)</a></li>
                               </ul>
@@ -44,7 +45,7 @@
                                   Listagem dos Usuarios
                                   </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'ambiente_adicionar' %}">Listar Usuarios </a></li>
+                                <li><a class="dropdown-item" href="{% url 'ambiente_adicionar' %}">Cadastrar Usuarios </a></li>
                                 <li><a class="dropdown-item" href="{% url 'ambientes' %}">Listagem de Ambientes</a></li>
                                 <li><a class="dropdown-item" href="#">Menu item</a></li>
                               </ul>
@@ -68,8 +69,8 @@
                                   Chaves
                               </button>
                               <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Cadastrar Chaves </a></li>
-                                <li><a class="dropdown-item" href="{% url 'usuarios' %}">Listagem de Chaves</a></li>
+                                <li><a class="dropdown-item" href="{% url 'chave_adicionar' %}">Cadastrar Chaves </a></li>
+                                <li><a class="dropdown-item" href="{% url 'chaves' %}">Listagem de Chaves</a></li>
                               </ul>
                         </div>
                         <div class="btn-group dropend mb-2 w-100">

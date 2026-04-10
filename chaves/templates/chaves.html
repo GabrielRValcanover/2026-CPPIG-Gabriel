@@ -6,10 +6,10 @@
         <div class="container">
             <form action="" method="GET">
                 <div class="form-group row p-3">
-                    <label class="col-sm-2 col-form-label">Nome do fornecedor: </label>
+                    <label class="col-sm-2 col-form-label">Chaves </label>
                     <div class="col-sm-8">
                         <input class="form-control" type="text" name="buscar" value="{{ request.GET.buscar }}"
-                               placeholder="Digite o nome do fornecedor">
+                               placeholder="Digite a descricao da chave">
                     </div>
                     <div class="col-sm-2">
                         <button type="submit" class="btn btn-primary">
@@ -20,37 +20,28 @@
             </form>
             {% if object_list %}
                 <div class="card-body">
-                    <h3 class="text-center">Ambientes Cadastrados</h3>
+                    <h3 class="text-center">Cahves Cadastradas</h3>
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="table-success">
-                                <th>Nome</th>
-                                <th>Nomenclatura</th>
-                                <th>Exclusividade</th>
+                                <th>Descrição</th>
+                                <th>Codigo</th>
+                                <th>Startus</th>
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
                             <tbody>
-                                 {% for ambiente in object_list %}
+                                 {% for chave in object_list %}
                                     <tr>
-
-                                        <td>
-                                             <td> {{ambiente.nomenclatura}}</td>
-                                            <select class="form-select" aria-label="Default select example">
-                                                  <option selected>Nome</option>
-                                                  <option value="bloco">Bloco</option>
-                                                  <option value="sala">Sala</option>
-                                                  <option value="auditorio">Auditorio</option>
-                                                </select>
-                                        </td>
-                                        <td> {{ambiente.nomenclatura}}</td>
-                                        <td> {{ambiente.exclusividade}}</td>
+                                         <td> {{ambiente.descricao}}</td>
+                                        <td> {{ambiente.pk}}</td>
+                                        <td> {{ambiente.status}}</td>
                                         <td style="text-align: center">
-                                            <a href="{% url 'ambiente_editar' ambiente.pk %}">
+                                            <a href="{% url 'chaves_editar' chave.pk %}">
                                                 <span class="icon">
                                                     <i class="fas fa-edit"></i>
                                                 </span>
                                             </a>
-                                            <a href="{% url 'ambiente_apagar' ambiente.pk %}">">
+                                            <a href="{% url 'chaves_apagar' chave.pk %}">">
                                                 <span class="icon">
                                                     <i class="far fa-trash-alt"></i>
                                                 </span>
@@ -62,7 +53,7 @@
                         </table>
                     </div>
                     <div class="d-flex justify-content-center">
-                        {% bootstrap_pagination object_list url="/ambientes?page=1" size="sm" %}
+                        {% bootstrap_pagination object_list url="/chaves?page=1" size="sm" %}
                     </div>
                 </div>
             {% endif %}
