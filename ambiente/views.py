@@ -50,3 +50,5 @@ class AmbienteDeleteView(SuccessMessageMixin,DeleteView):
     template_name = 'ambientes_apagar.html'
     success_url = reverse_lazy('ambientes')
     success_message= "Ambiente Deletado com sucesso!"
+
+

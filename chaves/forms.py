@@ -9,6 +9,5 @@ class ChaveModelForm(forms.ModelForm):
 
         error_messages = {
             'descricao': {'required': 'A do descricao é um campo obrigatório'},
-            'codigo_indentificacao': {'required': 'O codigo da descrição é um campo obrigatório', 'unique': 'o Codigo já cadastrado'},
             'status': {'required': 'O Status da chave é um campo obrigatório'},
         }

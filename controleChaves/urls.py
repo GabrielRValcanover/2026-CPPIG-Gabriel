@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('home.urls')),
     path('',include('usuarios.urls')),
     path('',include('ambiente.urls')),
+    path('',include('chaves.urls')),
 ]
