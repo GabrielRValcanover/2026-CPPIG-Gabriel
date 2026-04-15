@@ -25,21 +25,21 @@
                         <table class="table table-hover">
                             <thead class="table-success">
                                 <th>Nome do Bloco</th>
-                                <th>Quantidade de Salas </th>
+                                <th>Quantidade que o bloco pode ter: </th>
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
                             <tbody>
                                  {% for bloco in object_list %}
                                     <tr>
-                                        <td> {{ambiente.nome}}</td>
-                                        <td> {{ambiente.quantidade}}</td>
+                                        <td> {{bloco.nome}}</td>
+                                        <td> {{bloco.quantidade}}</td>
                                         <td style="text-align: center">
-{#                                            <a href="{% url 'ambiente_editar' ambiente.pk %}">#}
+                                            <a href="{% url 'bloco_editar' bloco.pk %}">
                                                 <span class="icon">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </span>
                                             </a>
-{#                                            <a href="{% url 'ambiente_apagar' ambiente.pk %}">#}
+                                          <a href="{% url 'bloco_apagar' bloco.pk %}">
                                                 <span class="icon">
                                                    <i class="bi bi-trash-fill"></i>
                                                 </span>

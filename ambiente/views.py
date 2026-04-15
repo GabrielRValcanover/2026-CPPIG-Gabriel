@@ -21,7 +21,7 @@ class AmbientesListView(ListView):
             return qs.filter(nome__icontains=buscar)
 
         if qs.count()>0:
-          paginator = Paginator(qs,1)
+          paginator = Paginator(qs,50)
           listagem = paginator.get_page(self.request.GET.get('page'))
           return listagem
         else:
