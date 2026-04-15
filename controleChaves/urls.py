@@ -23,4 +23,5 @@ urlpatterns = [
     path('',include('usuarios.urls')),
     path('',include('ambiente.urls')),
     path('',include('chaves.urls')),
+    path('',include('blocos.urls')),
 ]

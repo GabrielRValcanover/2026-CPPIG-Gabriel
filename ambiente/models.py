@@ -29,7 +29,3 @@ class Ambiente(models.Model):
     def __str__(self):
         return self.nome
 
-
-    def NOME_CHOICES(self):
-        if NOME_CHOICES == 'sala':
-            return bootstrap(Modal)
