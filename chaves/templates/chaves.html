@@ -3,6 +3,8 @@
 {% load static %}
 {% block content %}
     <section class="section">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
         <div class="container">
             <form action="" method="GET">
                 <div class="form-group row p-3">
@@ -53,7 +55,7 @@
                         </table>
                     </div>
                     <div class="d-flex justify-content-center">
-                        {% bootstrap_pagination object_list url="/chave?page=1" size="sm" %}
+                        {% bootstrap_pagination object_list url="/chaves?page=1" size="sm" %}
                     </div>
                 </div>
             {% endif %}

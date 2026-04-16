@@ -5,8 +5,6 @@ class Chave(models.Model):
 
     STATUS_CHOICES = [
         ('disponivel', 'Disponível'),
-        ('emprestada', 'Emprestada'),
-        ('reservada', 'Reservada'),
         ('manutencao', 'Manutenção'),
         ('perdida', 'Perdida'),
     ]

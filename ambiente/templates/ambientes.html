@@ -6,7 +6,7 @@
         <div class="container">
             <form action="" method="GET">
                 <div class="form-group row p-3">
-                    <label class="col-sm-2 col-form-label">Nome do fornecedor: </label>
+                    <label class="col-sm-2 col-form-label">Nome da Ambiente: </label>
                     <div class="col-sm-8">
                         <input class="form-control" type="text" name="buscar" value="{{ request.GET.buscar }}"
                                placeholder="Digite o nome do fornecedor">
@@ -29,6 +29,7 @@
                                 <th>Exclusividade</th>
                                 <th>Bloco</th>
                                 <th style="width: 100px; text-align: center">Ações</th>
+                                 <th>Registrar uma chave</th>
                             </thead>
                             <tbody>
                                  {% for ambiente in object_list %}
@@ -37,6 +38,7 @@
                                         <td> {{ambiente.nomenclatura}}</td>
                                         <td> {{ambiente.exclusividade}}</td>
                                         <td> {{ambiente.bloco}}</td>
+
                                         <td style="text-align: center">
                                             <a href="{% url 'ambiente_editar' ambiente.pk %}">
                                                 <span class="icon">
@@ -48,6 +50,16 @@
                                                    <i class="bi bi-trash-fill"></i>
                                                 </span>
                                             </a>
+
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-dark">
+                                            <a href="{% url 'ambiente_apagar' ambiente.pk %}">
+                                                <span class="icon">
+                                                   <i class="bi bi-key-fill"></i>
+                                                </span>
+                                            </a>
+                                            </button>
                                         </td>
                                     </tr>
                                 {% endfor %}
