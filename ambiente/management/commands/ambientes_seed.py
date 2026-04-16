@@ -19,9 +19,9 @@ class Command(BaseCommand):
 
                 Ambiente.objects.create(
                     nome='sala',
-                    nomenclatura=f' Sala{i}',
+                    nomenclatura={i},
                     exclusividade=exclusividade_sala,
-                    bloco=bloco
+                    bloco = bloco
                 )
 
         self.stdout.write(self.style.SUCCESS(f'Instâmcias de ambientes foram criadas com sucesso!'))

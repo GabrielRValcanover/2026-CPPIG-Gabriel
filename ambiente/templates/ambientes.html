@@ -27,6 +27,7 @@
                                 <th>Nome</th>
                                 <th>Nomenclatura</th>
                                 <th>Exclusividade</th>
+                                <th>Bloco</th>
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
                             <tbody>
@@ -35,6 +36,7 @@
                                         <td> {{ambiente.nome}}</td>
                                         <td> {{ambiente.nomenclatura}}</td>
                                         <td> {{ambiente.exclusividade}}</td>
+                                        <td> {{ambiente.bloco}}</td>
                                         <td style="text-align: center">
                                             <a href="{% url 'ambiente_editar' ambiente.pk %}">
                                                 <span class="icon">
