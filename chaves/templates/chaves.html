@@ -26,17 +26,19 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="table-success">
-                                <th>Descrição</th>
                                 <th>Codigo indentificador</th>
+                                <th>Descrição</th>
                                 <th>Startus</th>
+                                <th>Ambiente</th>
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
                             <tbody>
                                  {% for chave in object_list %}
                                     <tr>
+                                         <td> {{chave.id}}</td>
                                          <td> {{chave.descricao}}</td>
-                                        <td> {{chave.id}}</td>
                                         <td> {{chave.status}}</td>
+                                        <td> {{chave.ambiente}}</td>
                                         <td style="text-align: center">
                                             <a href="{% url 'chave_editar' chave.pk %}">
                                                 <span class="icon">
