@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:pk>/bloco/editar/', BlocoUpdateView.as_view(), name='bloco_editar'),
     path('<int:pk>/bloco/apagar/', BlocoDeleteView.as_view(), name='bloco_apagar'),
 
+
 ]

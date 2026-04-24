@@ -30,6 +30,7 @@
                                 <th>Descrição</th>
                                 <th>Startus</th>
                                 <th>Ambiente</th>
+                                <th>Bloco</th>
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
                             <tbody>
@@ -39,6 +40,7 @@
                                          <td> {{chave.descricao}}</td>
                                         <td> {{chave.status}}</td>
                                         <td> {{chave.ambiente}}</td>
+                                        <td> {{chave.bloco}}</td>
                                         <td style="text-align: center">
                                             <a href="{% url 'chave_editar' chave.pk %}">
                                                 <span class="icon">

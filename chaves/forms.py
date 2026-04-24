@@ -5,7 +5,7 @@ from .models import Chave
 class ChaveModelForm(forms.ModelForm):
     class Meta:
         model = Chave
-        fields = '__all__'
+        fields =  ['descricao', 'status']
 
         error_messages = {
             'descricao': {'required': 'A do descricao é um campo obrigatório'},

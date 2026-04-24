@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="card shadow m-3 col-md-6 mx-auto">
+    <div class="card-body">
+        <h3 class="text-center">Atenção</h3>
+        <p class="p-2 mt-3">
+            Já existe uma chave cadastrada para este local.
+        </p>
+        <p class="p-2">
+            <strong>Descrição:</strong> {{ chave.descricao }}
+        </p>
+        <p class="p-2">
+            <strong>Código:</strong> {{ chave.pk }}
+        </p>
+        <p class="p-2">
+            Deseja alterar essa chave?
+        </p>
+        <div class="text-end mt-3">
+            <a href="{% url 'chaves' %}" class="btn btn-secondary">
+                Não
+            </a>
+            <a href="{% url 'chave_editar' chave.id %}" class="btn btn-primary">
+                Sim
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

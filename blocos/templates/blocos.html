@@ -45,12 +45,13 @@
                                                 </span>
                                             </a>
                                             <button type="button" class="btn btn-outline-dark">
-                                            <a href="{% url 'chave_bloco' bloco.id %}">
+                                            <a href="{% url 'verificar_chave' 'bloco' bloco.id %}">
                                                 <span class="icon">
                                                    <i class="bi bi-key-fill"></i>
                                                 </span>
                                             </a>
                                             </button>
+=
                                         </td>
                                     </tr>
                                 {% endfor %}

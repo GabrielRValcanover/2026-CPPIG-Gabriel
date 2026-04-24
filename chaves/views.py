@@ -1,10 +1,12 @@
+from contextlib import redirect_stderr
+
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-
+from django.shortcuts import render, redirect
 from chaves.forms import ChaveModelForm
 from chaves.models import Chave
 from ambiente.models import Ambiente
@@ -29,7 +31,17 @@ class ChavesListView(ListView):
             return listagem
         else:
             return messages.info(self.request, 'Não existem chaves cadastradas!')
-
+    # def get_queryset(self):
+    #     buscar = self.request.GET.get('buscar')
+    #     qs = super().get_queryset()
+    #
+    #     if buscar:
+    #         qs = qs.filter(descricao__icontains=buscar)
+    #
+    #     if not qs.exists():
+    #         messages.info(self.request, 'Não existem chaves cadastradas!')
+    #
+    #     return qs
 
 
 class ChaveAddView(SuccessMessageMixin, CreateView):
@@ -85,3 +97,22 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['bloco'] = Bloco.objects.get(id=self.kwargs['bloco_id'])
         return context
+
+
+def verificacaoChaves(request, tipo, id):
+        if tipo not in [ 'ambiente' , 'bloco' ]:
+            return redirect('chaves')
+
+        if tipo == 'ambiente':
+            chave = Chave.objects.filter(ambiente_id=id).first()
+        else:
+            chave = Chave.objects.filter(bloco_id=id).first()
+
+        if chave:
+            return render(request, 'verifica_form.html', {'chave': chave})
+
+        if tipo == 'ambiente':
+            return redirect('chave_ambiente', ambiente_id=id)
+        else:
+            return redirect('chave_bloco', bloco_id=id)
+
