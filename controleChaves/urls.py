@@ -26,4 +26,5 @@ urlpatterns = [
     path('',include('ambiente.urls')),
     path('',include('chaves.urls')),
     path('',include('blocos.urls')),
+    path('',include('emprestimo.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

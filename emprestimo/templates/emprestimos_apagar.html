@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+    <div class="card shadow m-3 col-md-6 mx-auto">
+        <div class="card-body">
+            <div class="row">
+                <h3 class="text-center">Dados do Emprestimo</h3>
+                <p class="p-2 mt-2"><strong>Numero do emprestimo: </strong>{{object</p>
+               <p class="p-2 mt-2"><strong>pessoa: </strong>{{object.pessoa}}</p>
+               <p class="p-2 mt-2"><strong>Data Retirada: </strong>{{object.data_retirada}}</p>
+               <p class="p-2 mt-2"><strong>Data Prevista: </strong>{{object.data_prevista}}</p>
+               <p class="p-2 mt-2"><strong>Data Devolução: </strong>{{object.data_devolucao}</p>
+               <p class="p-2 mt-2"><strong>Status: </strong>{{object.status}}</p>
+                <p class="p-2 mt-2"><strong>Status: </strong>{{object.hora}}</p>
+                <p class="p-2 mt-2">Confirma a exclusão do Emprestimo: <strong>{{ object }}</strong>?</p>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <div class="text-end">
+                        {% bootstrap_button button_type="submit" content="Sim" %}
+                        <a href="{% url 'emprestimos' %}" class="btn btn-secondary text-white" type="button">
+                           <span class="text">Cancelar</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
