@@ -23,7 +23,8 @@ class ChavesListView(ListView):
 
 
         if buscar:
-            qs = qs.filter(nome__icontains=buscar)
+            # qs = qs.filter(nome__icontains=buscar)
+            qs = qs.filter(descricao__icontains=buscar)
 
         if qs.count() > 0:
             paginator = Paginator(qs, 5)
@@ -31,17 +32,6 @@ class ChavesListView(ListView):
             return listagem
         else:
             return messages.info(self.request, 'Não existem chaves cadastradas!')
-    # def get_queryset(self):
-    #     buscar = self.request.GET.get('buscar')
-    #     qs = super().get_queryset()
-    #
-    #     if buscar:
-    #         qs = qs.filter(descricao__icontains=buscar)
-    #
-    #     if not qs.exists():
-    #         messages.info(self.request, 'Não existem chaves cadastradas!')
-    #
-    #     return qs
 
 
 class ChaveAddView(SuccessMessageMixin, CreateView):
@@ -64,6 +54,8 @@ class ChaveDeleteView(SuccessMessageMixin, DeleteView):
     success_url = reverse_lazy('chaves')
     success_message = 'Chave excluída com sucesso!'
 
+
+
 class ChaveAmbienteAddView(SuccessMessageMixin, CreateView):
     model = Chave
     form_class = ChaveModelForm
@@ -72,9 +64,10 @@ class ChaveAmbienteAddView(SuccessMessageMixin, CreateView):
     success_message = 'Chave adicionada com sucesso no ambiente!'
 
     def form_valid(self, form):
+        response = super().form_valid(form)
         ambiente = Ambiente.objects.get(id=self.kwargs['ambiente_id'])
-        form.instance.ambiente = ambiente
-        return super().form_valid(form)
+        self.object.ambientes.add(ambiente)
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -89,30 +82,34 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
     success_message = 'Chave do bloco adicionada com sucesso no bloco!'
 
     def form_valid(self, form):
-        bloco = Bloco.objects.get(id=self.kwargs['bloco_id'])
-        form.instance.bloco = bloco
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        ambientes = Ambiente.objects.filter(
+            bloco_id=self.kwargs['bloco_id'])
+        for ambiente in ambientes:
+            self.object.ambientes.add(ambiente)
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['bloco'] = Bloco.objects.get(id=self.kwargs['bloco_id'])
         return context
 
-
 def verificacaoChaves(request, tipo, id):
-        if tipo not in [ 'ambiente' , 'bloco' ]:
-            return redirect('chaves')
 
-        if tipo == 'ambiente':
-            chave = Chave.objects.filter(ambiente_id=id).first()
-        else:
-            chave = Chave.objects.filter(bloco_id=id).first()
+    if tipo == 'ambiente':
+        chave = Chave.objects.filter(ambientes__id=id).first()
 
         if chave:
             return render(request, 'verifica_form.html', {'chave': chave})
 
-        if tipo == 'ambiente':
-            return redirect('chave_ambiente', ambiente_id=id)
-        else:
-            return redirect('chave_bloco', bloco_id=id)
+        return redirect('chave_ambiente', ambiente_id=id)
 
+    elif tipo == 'bloco':
+        chave = Chave.objects.filter(ambientes__bloco__id=id).first()
+
+        if chave:
+            return render(request, 'verifica_form.html', {'chave': chave})
+
+        return redirect('chave_bloco', bloco_id=id)
+
+    return redirect('chaves')

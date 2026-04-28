@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import ChavesListView, ChaveAddView, ChaveUpdateView, ChaveDeleteView, ChaveAmbienteAddView, ChaveBlocoAddView,verificacaoChaves
+from .views import (ChavesListView, ChaveAddView, ChaveUpdateView, ChaveDeleteView, ChaveAmbienteAddView,
+                    verificacaoChaves, ChaveBlocoAddView)
 
 urlpatterns = [
     path('chaves/', ChavesListView.as_view(), name='chaves'),
