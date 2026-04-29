@@ -72,8 +72,12 @@
                                   Chaves
                               </button>
                               <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'chaves_adicionar' %}">Cadastrar Chaves </a></li>
+<!--                                <li><a class="dropdown-item" href="{% url 'chaves_adicionar' %}">Cadastrar Chaves </a></li>-->
                                 <li><a class="dropdown-item" href="{% url 'chaves' %}">Listagem de Chaves</a></li>
+                                <li><a class="dropdown-item" href="#">--------------------------------------</a></li>
+                                <li><a class="dropdown-item" href="{% url 'copia_chaves_adicionar' %}">Cadastrar Copia Chave</a></li>
+                                <li><a class="dropdown-item" href="{% url 'copia_chaves' %}">Listagem das Copias das chaves</a></li>
+
                               </ul>
                         </div>
                         <div class="btn-group dropend mb-2 w-100">

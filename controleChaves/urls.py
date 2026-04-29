@@ -27,4 +27,5 @@ urlpatterns = [
     path('',include('chaves.urls')),
     path('',include('blocos.urls')),
     path('',include('emprestimo.urls')),
+    path('', include('copia_chave.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
