@@ -8,6 +8,7 @@
                 <p class="p-2 mt-2"><strong>Nome: </strong>{{object.nome}}</p>
                 <p class="p-2 mt-2"><strong>Email: </strong>{{object.email}}</p>
                <p class="p-2 mt-2"><strong>tipo: </strong>{{object.tipoUsuario}}</p>
+                <p class="p-2 mt-2"><strong>tipo: </strong>{{object.foto}}</p>
                 <p class="p-2 mt-2">Confirma a exclusão do usario: <strong>{{ object }}</strong>?</p>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}

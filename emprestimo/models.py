@@ -1,4 +1,6 @@
 from django.db import models
+from usuarios.models import Usuario
+from copia_chave.models import CopiaChave
 
 STATUS_CHOICES = [
     ('disponivel', 'Disponível'),
@@ -9,20 +11,24 @@ STATUS_CHOICES = [
 ]
 
 class Emprestimo(models.Model):
-    pessoa = models.CharField('Pessoa', max_length=100)
-    data_criacao = models.DateField('Data Criação', help_text='Data da criação do emprestimo')
-    data_prevista = models.DateField('Data Prevista', help_text='Data da prevista do emprestimo')
-    data_devolucao = models.DateField('Data Prevista', help_text='Data de Devolução do emprestimo')
-    status = models.CharField('Status',max_length=70, choices=STATUS_CHOICES)
-    hora = models.TimeField('Hora', help_text='Hora do emprestimo')
-
+    pessoa = models.ForeignKey(Usuario, verbose_name='Quem retirou', on_delete=models.CASCADE, related_name='emprestimos')
+    entregue_por = models.ForeignKey(Usuario, verbose_name='Entregue por', on_delete=models.SET_NULL, null=True, blank=True, related_name='emprestimos_entregues')
+    recebido_por = models.ForeignKey(Usuario, verbose_name='Recebido por', on_delete=models.SET_NULL, null=True, blank=True, related_name='emprestimos_recebidos')
+    copia_chave = models.ForeignKey(CopiaChave, verbose_name='Cópia da Chave', on_delete=models.CASCADE, related_name='emprestimos')
+    data_criacao = models.DateField('Data Criação', auto_now_add=True)
+    data_prevista = models.DateField('Data Prevista')
+    data_devolucao = models.DateField('Data Devolução', null=True, blank=True)
+    hora = models.TimeField('Hora de Retirada')
+    hora_prevista = models.TimeField('Hora Prevista de Devolução')
+    hora_devolucao = models.TimeField('Hora de Devolução', null=True, blank=True)
+    status = models.CharField('Status', max_length=70, choices=STATUS_CHOICES)
 
     class Meta:
-         verbose_name = 'emprestimo'
-         verbose_name_plural = 'emprestimos'
+        verbose_name = 'Emprestimo'
+        verbose_name_plural = 'Emprestimos'
 
     def __str__(self):
-           return self.pessoa
+        return f"{self.pessoa.nome} - {self.copia_chave}"
 
 
 

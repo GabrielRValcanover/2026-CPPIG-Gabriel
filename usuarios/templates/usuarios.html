@@ -28,6 +28,7 @@
                                 <th>Email</th>
                                 <th>senha</th>
                                  <th>Tipo de Usuarios</th>
+                                <th>Foto</th>
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
                             <tbody>
@@ -37,6 +38,12 @@
                                         <td> {{usuario.email}}</td>
                                         <td> {{usuario.senha}}</td>
                                        <td> {{usuario.tipoUsuario}}</td>
+                                        <td> {% if usuario.foto %}
+                                                    <img src="{{ usuario.foto.url }}" width="80" height="80" class="rounded-circle">
+                                                {% else %}
+                                                    Sem foto
+                                                {% endif %}</td>
+
                                          <td class="text-center">
                                             <a href="{% url 'usuario_editar' usuario.pk %}">
                                                 <i class="bi bi-pencil-square"></i>
@@ -45,6 +52,29 @@
                                                 <i class="bi bi-trash3"></i>
                                             </a>
                                         </td>
+                                        <td>
+                                          <div class="modal fade" tabindex="-1" id="modal{{ usuario.id }}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Usuário: {{ usuario.nome }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body d-flex justify-content-center">
+                                                            <div class="text-center">
+                                                                {% if usuario.foto %}
+                                                                    <img src="{{ usuario.foto.url }}"
+                                                                         class="img-thumbnail mb-2"
+                                                                         width="120" height="120" alt="Foto do usuário"/>
+                                                                {% else %}
+                                                                    <p>Sem foto</p>
+                                                                {% endif %}
+                                                                <h6><strong>Fone:</strong> {{ usuario.fone }}</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                     </tr>
                                 {% endfor %}
                             </tbody>
