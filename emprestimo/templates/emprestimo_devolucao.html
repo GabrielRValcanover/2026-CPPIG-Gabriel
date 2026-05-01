@@ -4,7 +4,7 @@
     <div class="card shadow m-3 col-md-6 mx-auto">
         <div class="card-body">
             <div class="row">
-                <h3 class="text-center">Dados do Empréstimo</h3>
+                <h3 class="text-center">Devolução de Empréstimo</h3>
                 <p class="p-2 mt-2"><strong>Número do Empréstimo: </strong>{{ object.id }}</p>
                 <p class="p-2 mt-2"><strong>Pessoa: </strong>{{ object.pessoa }}</p>
                 <p class="p-2 mt-2"><strong>Cópias das Chaves: </strong>
@@ -18,18 +18,16 @@
                         Nenhuma cópia registrada
                     {% endfor %}
                 </p>
-                <p class="p-2 mt-2"><strong>Entregue por: </strong>{{ object.entregue_por }}</p>
-                <p class="p-2 mt-2"><strong>Data Criação: </strong>{{ object.data_criacao }}</p>
                 <p class="p-2 mt-2"><strong>Data Prevista: </strong>{{ object.data_prevista }}</p>
-                <p class="p-2 mt-2"><strong>Data Devolução: </strong>{{ object.data_devolucao|default:"-" }}</p>
-                <p class="p-2 mt-2"><strong>Hora de Retirada: </strong>{{ object.hora }}</p>
                 <p class="p-2 mt-2"><strong>Hora Prevista: </strong>{{ object.hora_prevista }}</p>
-                <p class="p-2 mt-2"><strong>Status: </strong>{{ object.status }}</p>
-                <p class="p-2 mt-2">Confirma a exclusão do Empréstimo: <strong>{{ object }}</strong>?</p>
+                <p class="p-2 mt-2"><strong>Status Atual: </strong>{{ object.status }}</p>
+                <hr>
+                <h5 class="text-center mt-2">Registrar Devolução</h5>
                 <form method="POST">
                     {% csrf_token %}
+                    {% bootstrap_form form %}
                     <div class="text-end">
-                        {% bootstrap_button button_type="submit" content="Sim" %}
+                        {% bootstrap_button button_type="submit" content="Confirmar Devolução" %}
                         <a href="{% url 'emprestimos' %}" class="btn btn-secondary text-white" type="button">
                             <span class="text">Cancelar</span>
                         </a>

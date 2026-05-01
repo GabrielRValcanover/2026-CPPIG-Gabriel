@@ -95,21 +95,14 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
         return context
 
 def verificacaoChaves(request, tipo, id):
-
     if tipo == 'ambiente':
         chave = Chave.objects.filter(ambientes__id=id).first()
-
         if chave:
             return render(request, 'verifica_form.html', {'chave': chave})
-
         return redirect('chave_ambiente', ambiente_id=id)
-
     elif tipo == 'bloco':
         chave = Chave.objects.filter(ambientes__bloco__id=id).first()
-
         if chave:
             return render(request, 'verifica_form.html', {'chave': chave})
-
         return redirect('chave_bloco', bloco_id=id)
-
     return redirect('chaves')

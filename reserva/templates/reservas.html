@@ -46,12 +46,12 @@
                                         <td>{{ reserva.data_prevista }}</td>
                                         <td>{{ reserva.status }}</td>
                                         <td style="text-align: center">
-                                            <a href="{% url 'reserva-edit' reserva.pk %}">
+                                            <a href="{% url 'reserva_editar' reserva.pk %}">
                                                 <span class="icon">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </span>
                                             </a>
-                                            <a href="{% url 'reserva-delete' reserva.pk %}">
+                                            <a href="{% url 'reserva_apagar' reserva.pk %}">
                                                 <span class="icon">
                                                     <i class="bi bi-trash-fill"></i>
                                                 </span>

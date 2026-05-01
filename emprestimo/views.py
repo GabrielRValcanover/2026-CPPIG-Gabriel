@@ -17,7 +17,7 @@ class EmprestimoListView(ListView):
         buscar = self.request.GET.get('buscar')
         qs = super(EmprestimoListView, self).get_queryset()
         if buscar:
-            return qs.filter(nome__icontains=buscar)
+            return qs.filter(pessoa_nome__icontains=buscar)
 
         if qs.count()>0:
           paginator = Paginator(qs,2)
@@ -51,3 +51,13 @@ class EmprestimoDeleteView(SuccessMessageMixin,DeleteView):
     success_message= "Emprestimo Deletado com sucesso!"
 
 
+class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
+  model = Emprestimo
+  template_name = 'emprestimo_devolucao.html'
+  fields = ['recebido_por', 'data_devolucao', 'hora_devolucao']
+  success_url = reverse_lazy('emprestimos')
+  success_message = "Devolução registrada com sucesso!"
+
+  def form_valid(self, form):
+    form.instance.status = 'devolvida'
+    return super().form_valid(form)
