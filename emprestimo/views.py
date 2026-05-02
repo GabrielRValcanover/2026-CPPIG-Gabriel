@@ -25,7 +25,7 @@ class EmprestimoListView(ListView):
           return listagem
         else:
           return messages.info(self.request,'Não existem emprestomos cadastrados!')
-
+          return qs
 
 
 

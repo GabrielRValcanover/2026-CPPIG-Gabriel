@@ -29,7 +29,7 @@ class Emprestimo(models.Model):
     verbose_name_plural = 'Emprestimos'
 
   def __str__(self):
-    return f"{self.pessoa.nome} - {self.data_criacao}"
+    return f"{self.identificador} - {self.chave.descricao} ({self.get_status_display()})"
 
 
 

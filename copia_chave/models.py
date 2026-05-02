@@ -20,4 +20,4 @@ class CopiaChave(models.Model):
         verbose_name_plural = 'Cópias de Chaves'
 
     def __str__(self):
-        return f"{self.identificador} - {self.chave.descricao}"
+      return f"{self.identificador} - {self.chave.descricao} ({self.get_status_display()})"
