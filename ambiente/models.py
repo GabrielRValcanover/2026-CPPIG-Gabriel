@@ -1,4 +1,3 @@
-from ensurepip import bootstrap
 from blocos.models import Bloco
 from django.db import models
 

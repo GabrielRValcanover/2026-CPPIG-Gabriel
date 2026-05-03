@@ -34,6 +34,9 @@
                                 <th>Hora Retirada</th>
                                 <th>Hora Prevista</th>
                                 <th>Status</th>
+                                <th>Recebido por</th>
+                                <th>Hora Devolução</th>
+
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
                             <tbody>
@@ -59,6 +62,8 @@
                                         <td>{{ emprestimo.hora }}</td>
                                         <td>{{ emprestimo.hora_prevista }}</td>
                                         <td>{{ emprestimo.status }}</td>
+                                         <td>{{ emprestimo.recebido_por|default:"-" }}</td>
+                                        <td>{{ emprestimo.hora_devolucao|default:"-" }}</td>
                                         <td style="text-align: center">
                                             <a href="{% url 'emprestimo_editar' emprestimo.pk %}">
                                                 <span class="icon">

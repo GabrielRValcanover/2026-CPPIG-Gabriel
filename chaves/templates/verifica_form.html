@@ -5,13 +5,19 @@
     <div class="card-body">
         <h3 class="text-center">Atenção</h3>
         <p class="p-2 mt-3">
-            Já existe uma chave cadastrada para este local ( {{ chave.ambiente }} ||  {{ chave.bloco }} )
+            Já existe uma chave cadastrada para este local:
+            {% for ambiente in chave.ambientes.all %}
+                {{ ambiente }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
         </p>
         <p class="p-2">
             <strong>Descrição:</strong> {{ chave.descricao }}
         </p>
         <p class="p-2">
-            <strong>Código:</strong> {{ chave.pk }}
+            <strong>Tipo:</strong> {{ chave.get_tipo_display }}
+        </p>
+        <p class="p-2">
+            <strong>Status:</strong> {{ chave.get_status_display }}
         </p>
         <p class="p-2">
             Deseja alterar essa chave?

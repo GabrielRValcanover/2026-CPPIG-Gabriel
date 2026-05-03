@@ -29,8 +29,11 @@
                                 <th>Codigo indentificador</th>
                                 <th>Descrição</th>
                                 <th>Status</th>
-                                <th>Ambiente</th>
+                                <th>Ambientes</th>
                                 <th>Bloco</th>
+                                <th>Tipo</th>
+
+
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
                             <tbody>
@@ -39,6 +42,7 @@
                                          <td> {{chave.id}}</td>
                                          <td> {{chave.descricao}}</td>
                                         <td> {{chave.status}}</td>
+
                                         <td>
                                             {% for ambiente in chave.ambientes.all %}
                                                 {{ ambiente.nomenclatura }}
@@ -55,6 +59,7 @@
                                                     {% endif %}
                                                 {% endwith %}
                                             </td>
+                                       <td> {{chave.tipo}}</td>
                                         <td style="text-align: center">
                                             <a href="{% url 'chave_editar' chave.pk %}">
                                                 <span class="icon">

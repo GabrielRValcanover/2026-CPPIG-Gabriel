@@ -1,4 +1,4 @@
-from contextlib import redirect_stderr
+
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -41,6 +41,7 @@ class ChaveAddView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('chaves')
     success_message = 'Chave adicionada com sucesso!'
 
+
 class ChaveUpdateView(SuccessMessageMixin, UpdateView):
     model = Chave
     form_class = ChaveModelForm
@@ -82,27 +83,35 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
     success_message = 'Chave do bloco adicionada com sucesso no bloco!'
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        ambientes = Ambiente.objects.filter(
-            bloco_id=self.kwargs['bloco_id'])
-        for ambiente in ambientes:
-            self.object.ambientes.add(ambiente)
-        return response
+      chave_bloco = super().form_valid(form)
+      ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])
+      for ambiente in ambientes:
+        self.object.ambientes.add(ambiente)
+      self.object.tipo = 'mestra'
+      self.object.save()
+      return chave_bloco
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['bloco'] = Bloco.objects.get(id=self.kwargs['bloco_id'])
         return context
 
+
 def verificacaoChaves(request, tipo, id):
-    if tipo == 'ambiente':
-        chave = Chave.objects.filter(ambientes__id=id).first()
-        if chave:
-            return render(request, 'verifica_form.html', {'chave': chave})
-        return redirect('chave_ambiente', ambiente_id=id)
-    elif tipo == 'bloco':
-        chave = Chave.objects.filter(ambientes__bloco__id=id).first()
-        if chave:
-            return render(request, 'verifica_form.html', {'chave': chave})
-        return redirect('chave_bloco', bloco_id=id)
-    return redirect('chaves')
+  if tipo == 'ambiente':
+    chave = Chave.objects.filter(ambientes__id=id).first()
+    if chave:
+      ambiente = Ambiente.objects.get(id=id)
+      return render(request, 'verifica_form.html', {'chave': chave, 'local': ambiente.nomenclatura})
+    return redirect('chave_ambiente', ambiente_id=id)
+  elif tipo == 'bloco':
+    chave = Chave.objects.filter(
+      ambientes__bloco__id=id,
+      tipo='mestra'
+    ).first()
+    if chave:
+      bloco = Bloco.objects.get(id=id)
+      return render(request, 'verifica_form.html', {'chave': chave, 'local': bloco.nome})
+    return redirect('chave_bloco', bloco_id=id)
+
+  return redirect('chaves')
