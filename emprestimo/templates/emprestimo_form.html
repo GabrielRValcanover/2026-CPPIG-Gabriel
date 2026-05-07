@@ -8,7 +8,6 @@
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% bootstrap_form form %}
-                    <div class="text-end">
                       {% bootstrap_button button_type="submit" content="Salvar" %}
                         <a href="{% url 'emprestimos' %}" class="btn btn-secondary text-white" type="button">
                            <span class="text">Cancelar</span>

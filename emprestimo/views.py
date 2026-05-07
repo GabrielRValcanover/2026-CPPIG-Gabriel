@@ -45,24 +45,16 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
           form.add_error('copias_chave', f'A cópia "{copia}" já está emprestada!')
           return self.form_invalid(form)
 
-        reserva_ativa = Reserva.objects.filter(
-          chaves=copia.chave,
-          data_prevista=data,
-          status__in=['pendente', 'confirmada']
-        ).exists()
+        reserva_ativa = Reserva.objects.filter(chaves=copia.chave, data_prevista=data,status__in=['pendente', 'confirmada']).exists()
         if reserva_ativa:
           form.add_error('copias_chave', f'A chave "{copia}" possui reserva ativa para essa data!')
           return self.form_invalid(form)
 
         for ambiente in copia.chave.ambientes.all():
           if ambiente.bloco:
-            chave_mestra = Chave.objects.filter(
-              ambientes__bloco=ambiente.bloco,
-              tipo='mestra'
-            ).first()
+            chave_mestra = Chave.objects.filter(ambientes__bloco=ambiente.bloco, tipo='mestra').first()
             if chave_mestra:
-              form.add_error('copias_chave',
-                             f'Para acessar {ambiente.nomenclatura} pegue também a chave mestra: {chave_mestra.descricao}')
+              form.add_error('copias_chave', f'Para acessar {ambiente.nomenclatura} pegue também a chave mestra: {chave_mestra.descricao}')
               return self.form_invalid(form)
 
       form.instance.status = 'emprestada'

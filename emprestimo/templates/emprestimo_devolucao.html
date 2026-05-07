@@ -18,12 +18,13 @@
                         Nenhuma cópia registrada
                     {% endfor %}
                 </p>
-                <p class="p-2 mt-2"><strong>Data Prevista: </strong>{{ object.data_prevista }}</p>
+                <p class="p-2 mt-2"><strong>Data Previsão: </strong>{{ object.data_criacao }}</p>
                 <p class="p-2 mt-2"><strong>Hora Prevista: </strong>{{ object.hora_prevista }}</p>
                 <p class="p-2 mt-2"><strong>Status Atual: </strong>{{ object.status }}</p>
                 <hr>
                 <h5 class="text-center mt-2">Registrar Devolução</h5>
                 <form method="POST">
+                    <p class="p-2 mt-2"><strong>Data Prevista: </strong>{{ object.data_prevista }}</p>
                     {% csrf_token %}
                     {% bootstrap_form form %}
                     <div class="text-end">
