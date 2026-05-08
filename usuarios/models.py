@@ -13,6 +13,8 @@ class Usuario(models.Model):
     senha = models.CharField('Senha',max_length=70, help_text='senha do Fornecedor')
     tipoUsuario = models.CharField('tipoUsuario', max_length=70, choices=TIPO_CHOICES, default='secretaria')
     foto = StdImageField('Foto',upload_to='usuarios',delete_orphans=True, blank=True)
+    bloqueado_ate = models.DateField('Bloqueado até', null=True, blank=True)
+
     class Meta:
          verbose_name = 'Usuario'
          verbose_name_plural = 'Usuarios'

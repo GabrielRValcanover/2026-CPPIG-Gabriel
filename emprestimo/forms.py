@@ -9,6 +9,14 @@ class EmprestimoModelForm(forms.ModelForm):
         model = Emprestimo
         fields = ['pessoa', 'copias_chave', 'entregue_por', 'data_prevista', 'hora', 'hora_prevista']
 
+        widgets = {
+            'status': forms.Select(choices=[
+                ('disponivel', 'Disponível'),
+                ('manutencao', 'Manutenção'),
+                ('perdida', 'Perdida'),
+            ])
+        }
+
         error_messages = {
             'pessoa': {'required': 'A pessoa é um campo obrigatório'},
             'copias_chave': {'required': 'Selecione ao menos uma cópia de chave'},
@@ -32,7 +40,7 @@ class EmprestimoModelForm(forms.ModelForm):
 class EmprestimoDevolucaoForm(forms.ModelForm):
     class Meta:
         model = Emprestimo
-        fields = ['recebido_por', 'data_devolucao', 'hora_devolucao']
+        fields = ['recebido_por', 'data_devolucao', 'hora_devolucao','status']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -41,3 +49,5 @@ class EmprestimoDevolucaoForm(forms.ModelForm):
             self.fields['recebido_por'].queryset = inspetores
         else:
             self.fields['recebido_por'].queryset = Usuario.objects.filter(tipoUsuario='secretaria')
+
+

@@ -18,14 +18,35 @@
                         Nenhuma cópia registrada
                     {% endfor %}
                 </p>
-                <p class="p-2 mt-2"><strong>Data Prevista: </strong>{{ object.data_prevista }}</p>
                 <p class="p-2 mt-2"><strong>Hora Prevista: </strong>{{ object.hora_prevista }}</p>
                 <p class="p-2 mt-2"><strong>Status Atual: </strong>{{ object.status }}</p>
                 <hr>
                 <h5 class="text-center mt-2">Registrar Devolução</h5>
                 <form method="POST">
+                    <p class="p-2 mt-2"><strong>Data de Retirada: </strong>{{ object.data_criacao }}</p>
+                    <p class="p-2 mt-2"><strong>Data Prevista: </strong>{{ object.data_prevista }}</p>
+                    <p class="p-2 mt-2"><strong>Hora de Retirada: </strong>{{ object.hora }}</p>
+                    <p class="p-2 mt-2"><strong>Cópias das Chaves: </strong>
+                        {% for copia in object.copias_chave.all %}
+                            <span class="badge
+                                {% if copia.status == 'disponivel' %}bg-success
+                                {% elif copia.status == 'emprestada' %}bg-danger
+                                {% elif copia.status == 'reservada' %}bg-warning text-dark
+                                {% elif copia.status == 'manutencao' %}bg-secondary
+                                {% elif copia.status == 'perdida' %}bg-dark
+                                {% endif %}">
+                                {{ copia }} — {{ copia.get_status_display }}
+                            </span>
+                        {% endfor %}
+                    </p>
                     {% csrf_token %}
-                    {% bootstrap_form form %}
+                    {% bootstrap_field form.recebido_por %}
+                    {% bootstrap_field form.data_devolucao %}
+                    {% bootstrap_field form.hora_devolucao %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status da Chave após devolução</label>
+                        {% bootstrap_field form.status show_label=False %}
+                    </div>
                     <div class="text-end">
                         {% bootstrap_button button_type="submit" content="Confirmar Devolução" %}
                         <a href="{% url 'emprestimos' %}" class="btn btn-secondary text-white" type="button">

@@ -12,19 +12,17 @@ class BlocoListView(ListView):
     model = Bloco
     template_name = 'blocos.html'
 
-
     def get_queryset(self):
         buscar = self.request.GET.get('buscar')
-        qs = super(BlocoListView, self).get_queryset()
+        qs = super().get_queryset().prefetch_related('ambientes__chaves')
         if buscar:
             return qs.filter(nome__icontains=buscar)
-
-        if qs.count()>0:
-          paginator = Paginator(qs,10)
-          listagem = paginator.get_page(self.request.GET.get('page'))
-          return listagem
+        if qs.count() > 0:
+            paginator = Paginator(qs, 10)
+            listagem = paginator.get_page(self.request.GET.get('page'))
+            return listagem
         else:
-          return messages.info(self.request,'Não existem blocos cadastrados!')
+            return messages.info(self.request, 'Não existem blocos cadastrados!')
 
 
 

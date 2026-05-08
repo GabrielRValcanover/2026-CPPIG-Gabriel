@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
@@ -37,42 +38,38 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
     success_message = "Emprestimo Cadastrado com sucesso!"
 
     def form_valid(self, form):
-      copias = form.cleaned_data['copias_chave']
-      data = form.cleaned_data['data_prevista']
+        usuario = form.cleaned_data['pessoa']
+        chaves_pedida = Emprestimo.objects.filter( pessoa=usuario,status='perdida').count()
+        if chaves_pedida >= 3:
+            form.add_error( 'pessoa',f'{usuario.nome} você está bloqueado por 7 dias devido à perda de 3 chaves.')
+            return self.form_invalid(form)
 
-      for copia in copias:
-        if copia.status == 'emprestada':
-          form.add_error('copias_chave', f'A cópia "{copia}" já está emprestada!')
-          return self.form_invalid(form)
+        elif chaves_pedida >= 1:
+            form.add_error( 'pessoa',f'{usuario.nome} você está bloqueado por 24 horas devido à perda de chave.')
+            return self.form_invalid(form)
 
-        reserva_ativa = Reserva.objects.filter(
-          chaves=copia.chave,
-          data_prevista=data,
-          status__in=['pendente', 'confirmada']
-        ).exists()
-        if reserva_ativa:
-          form.add_error('copias_chave', f'A chave "{copia}" possui reserva ativa para essa data!')
-          return self.form_invalid(form)
+        copias = form.cleaned_data['copias_chave']
+        data = form.cleaned_data['data_prevista']
+        for copia in copias:
 
-        for ambiente in copia.chave.ambientes.all():
-          if ambiente.bloco:
-            chave_mestra = Chave.objects.filter(
-              ambientes__bloco=ambiente.bloco,
-              tipo='mestra'
-            ).first()
-            if chave_mestra:
-              form.add_error('copias_chave',
-                             f'Para acessar {ambiente.nomenclatura} pegue também a chave mestra: {chave_mestra.descricao}')
-              return self.form_invalid(form)
+            if copia.status == 'emprestada':
+                form.add_error('copias_chave',f'A cópia "{copia}" já está emprestada!')
+                return self.form_invalid(form)
 
-      form.instance.status = 'emprestada'
-      response = super().form_valid(form)
+            reserva_ativa = Reserva.objects.filter(chaves=copia.chave,data_prevista=data,status__in=['pendente', 'confirmada']).exists()
 
-      for copia in self.object.copias_chave.all():
-        copia.status = 'emprestada'
-        copia.save()
+            if reserva_ativa:
+                form.add_error( 'copias_chave',f'A chave "{copia}" possui reserva ativa para essa data!')
+                return self.form_invalid(form)
 
-      return response
+        form.instance.status = 'emprestada'
+        response = super().form_valid(form)
+        for copia in self.object.copias_chave.all():
+            copia.status = 'emprestada'
+            copia.save()
+
+        return response
+
 
 class EmprestimoUpdateView(SuccessMessageMixin, UpdateView):
     model = Emprestimo
@@ -89,10 +86,10 @@ class EmprestimoDeleteView(SuccessMessageMixin, DeleteView):
     success_message = "Emprestimo Deletado com sucesso!"
 
     def form_valid(self, form):
-      for copia in self.object.copias_chave.all():
-        copia.status = 'disponivel'
-        copia.save()
-      return super().form_valid(form)
+        for copia in self.object.copias_chave.all():
+            copia.status = 'disponivel'
+            copia.save()
+        return super().form_valid(form)
 
 
 class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
@@ -103,9 +100,19 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
     success_message = "Devolução registrada com sucesso!"
 
     def form_valid(self, form):
-        form.instance.status = 'devolvida'
+        novo_status = form.cleaned_data['status']
+        verificacao_perdida = form.cleaned_data['status']
         response = super().form_valid(form)
         for copia in self.object.copias_chave.all():
-            copia.status = 'disponivel'
+            copia.status = novo_status
             copia.save()
+
+        if verificacao_perdida == 'perdida':
+            usuario = self.object.pessoa
+            chaves_pedida = Emprestimo.objects.filter(pessoa=usuario, status='perdida').count()
+            if chaves_pedida >= 3:
+                messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7  dias após perder 3 chave')
+            elif chaves_pedida >= 1:
+                messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas após perder 1 chave')
+
         return response
