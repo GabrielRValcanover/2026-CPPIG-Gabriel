@@ -13,6 +13,14 @@ class UsuariosListView(ListView):
     model = Usuario
     template_name = 'usuarios.html'
 
+    def get_context_data(self, **kwargs):
+        contador = super().get_context_data(**kwargs)
+        usuarios_bloqueados = []   # coloco os usuarios em uma lista para contar
+        for usuario in Usuario.objects.all():
+            if usuario.bloqueado_ate:
+                usuarios_bloqueados.append(usuario)  # uso o append para  por um incone no final da lista
+        contador['usuarios_bloqueados'] = len(usuarios_bloqueados)
+        return contador
 
     def get_queryset(self):
         buscar = self.request.GET.get('buscar')
@@ -27,11 +35,6 @@ class UsuariosListView(ListView):
         else:
             messages.info(self.request,'Não existem usuarios cadastrados!')
         return qs
-
-
-
-
-
 
 class UsuarioAddView(SuccessMessageMixin,CreateView):
     model = Usuario
@@ -53,3 +56,15 @@ class UsuarioDeleteView(SuccessMessageMixin,DeleteView):
     template_name = 'usuarios_apagar.html'
     success_url = reverse_lazy('usuarios')
     success_message= "Usuario Deletado com sucesso!"
+
+
+class UsuariosBloqueadosListView(ListView):
+    model = Usuario
+    template_name = 'usuarios_bloqueados.html'
+
+    def get_queryset(self, **kwargs):
+        usuarios_bloqueados = []
+        for usuario in Usuario.objects.all():
+            if usuario.bloqueado_ate:
+                usuarios_bloqueados.append(usuario)
+        return usuarios_bloqueados

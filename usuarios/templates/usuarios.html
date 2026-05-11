@@ -15,9 +15,23 @@
                         <button type="submit" class="btn btn-primary">
                             Buscar
                         </button>
+
                     </div>
+
                 </div>
+
             </form>
+            <div>
+                <a href="{% url 'usuarios_bloqueados' %}">
+                <button type="button" class="btn btn-primary position-relative">
+                                      Usuarios Bloqueados
+                                      <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                        <span class="visually-hidden">New alerts</span>
+                                           {{ usuarios_bloqueados }}
+                                      </span>
+                                    </button>
+                    </a>
+            </div>
             {% if object_list %}
                 <div class="card-body">
                     <h3 class="text-center">Usuarios Cadastrados</h3>
@@ -31,6 +45,7 @@
                                 <th>Foto</th>
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
+
                             <tbody>
                                  {% for usuario in object_list %}
                                     <tr>

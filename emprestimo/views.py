@@ -133,8 +133,12 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
             usuario = self.object.pessoa
             chaves_pedida = Emprestimo.objects.filter(pessoa=usuario, status='perdida').count()
             if chaves_pedida >= 3:
+                usuario.bloqueado_ate = self.object.data_prevista
+                usuario.save()  # tive que salvar para conseguir visualizar os usuarios bloqueado
                 messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7  dias, após perder 3 chave')
             elif chaves_pedida >= 1:
+                usuario.bloqueado_ate = self.object.data_prevista
+                usuario.save()
                 messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder 1 chave')
 
         return response

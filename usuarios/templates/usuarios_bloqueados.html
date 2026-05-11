@@ -1,0 +1,110 @@
+{% extends 'index.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+
+        <form action="" method="GET">
+            <div class="form-group row p-3">
+                <label class="col-sm-2 col-form-label">Nome do Usuário:</label>
+
+                <div class="col-sm-8">
+                    <input class="form-control"
+                           type="text"
+                           name="buscar"
+                           value="{{ request.GET.buscar }}"
+                           placeholder="Digite o nome do usuário">
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary">
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        {% if object_list %}
+            <div class="card shadow">
+                <div class="card-body">
+
+                    <h3 class="text-center mb-4">
+                        Usuários Bloqueados
+                    </h3>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+
+                            <thead class="table-danger">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Foto</th>
+                                    <th>Status</th>
+                                    <th>Motivo</th>
+                                    <th>Bloqueio</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for usuario in object_list %}
+                                    <tr>
+
+                                        <td>{{ usuario.nome }}</td>
+
+                                        <td>
+                                            {% if usuario.foto %}
+                                                <img src="{{ usuario.foto.url }}"
+                                                     width="60"
+                                                     height="60"
+                                                     class="rounded-circle">
+                                            {% else %}
+                                                Sem foto
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-danger">
+                                                Bloqueado
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            {% if usuario.total_perdas >= 3 %}
+                                                Perdeu 3 chaves
+                                            {% else %}
+                                                Perda de chave
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if usuario.total_perdas >= 3 %}
+                                                7 dias
+                                            {% else %}
+                                                24 horas
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="text-center">
+                                            <a href="{% url 'usuario_editar' usuario.pk %}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+
+                                            <a href="{% url 'usuario_apagar' usuario.pk %}">
+                                                <i class="bi bi-trash3"></i>
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+</section>
+{% endblock %}
