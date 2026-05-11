@@ -123,22 +123,22 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
     success_message = "Devolução registrada com sucesso!"
 
     def form_valid(self, form):
-        verificacao_perdida = form.cleaned_data['status']
         response = super().form_valid(form)
         for copia in self.object.copias_chave.all():
+            verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
             copia.status = verificacao_perdida
             copia.save()
 
-        if verificacao_perdida == 'perdida':
-            usuario = self.object.pessoa
-            chaves_pedida = Emprestimo.objects.filter(pessoa=usuario, status='perdida').count()
-            if chaves_pedida >= 3:
-                usuario.bloqueado_ate = self.object.data_prevista
-                usuario.save()  # tive que salvar para conseguir visualizar os usuarios bloqueado
-                messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7  dias, após perder 3 chave')
-            elif chaves_pedida >= 1:
-                usuario.bloqueado_ate = self.object.data_prevista
-                usuario.save()
-                messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder 1 chave')
+            if verificacao_perdida == 'perdida':
+                usuario = self.object.pessoa
+                chaves_pedida = Emprestimo.objects.filter(pessoa=usuario, status='perdida').count()
+                if chaves_pedida >= 3:
+                   usuario.bloqueado_ate = self.object.data_prevista
+                   usuario.save()  # tive que salvar para conseguir visualizar os usuarios bloqueado
+                   messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7  dias, após perder 3 chave')
+                elif chaves_pedida >= 1:
+                   usuario.bloqueado_ate = self.object.data_prevista
+                   usuario.save()
+                   messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder 1 chave')
 
         return response

@@ -47,9 +47,9 @@
                                         <td>
                                             {% for copia in emprestimo.copias_chave.all %}
                                                 {% if forloop.last %}
-                                                    {{ copia }} ({{ copia.get_status_display}})
+                                                    {{ copia.identificador }}
                                                 {% else %}
-                                                    {{ copia }} ({{ copia.get_status_display}}),
+                                                    {{ copia.identificador }} ,
                                                 {% endif %}
                                             {% empty %}
                                                 <p class="text-center mt-4">Nenhum empréstimo cadastrado.</p>
