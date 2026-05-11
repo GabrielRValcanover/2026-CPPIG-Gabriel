@@ -18,7 +18,7 @@ class UsuariosListView(ListView):
         buscar = self.request.GET.get('buscar')
         qs = super(UsuariosListView, self).get_queryset()
         if buscar:
-            return qs.filter(pessoa__nome__icontains=buscar)
+            return qs.filter(nome__icontains=buscar)
 
         if qs.count()>0:
           paginator = Paginator(qs,10)
