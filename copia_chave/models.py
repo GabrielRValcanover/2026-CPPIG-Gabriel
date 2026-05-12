@@ -7,6 +7,7 @@ STATUS_CHOICES = [
     ('reservada', 'Reservada'),
     ('manutencao', 'Manutenção'),
     ('perdida', 'Perdida'),
+    ('danificada', 'Danificada'),
 ]
 
 

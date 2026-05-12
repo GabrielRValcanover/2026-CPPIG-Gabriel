@@ -53,3 +53,11 @@ class CopiaChaveDeleteView(SuccessMessageMixin, DeleteView):
     template_name = 'copia_chave_apagar.html'
     success_url = reverse_lazy('copia_chaves')
     success_message = 'Cópia excluída com sucesso!'
+
+
+class ChavesPerdidasListView(ListView):
+    model = CopiaChave
+    template_name = 'copias_perdidas.html'
+
+    def get_queryset(self):
+        return CopiaChave.objects.filter(status_in = ['perdida','danificada']) # status_in para pegar os 2 valores do status, pq "status =" pegaria so um valor

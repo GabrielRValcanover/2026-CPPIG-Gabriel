@@ -21,6 +21,17 @@
             </div>
         </div>
     </form>
+     <div>
+                <a href="{% url 'copias_perdidas' %}">
+                <button type="button" class="btn btn-primary position-relative">
+                                     Chaves Perdidas ou Danificadas
+                                      <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                        <span class="visually-hidden">New alerts</span>
+                                           {{ copias_perdidas }}
+                                      </span>
+                                    </button>
+                    </a>
+            </div>
     <div class="mb-3 text-end">
         <a href="{% url 'copia_chaves_adicionar' %}" class="btn btn-success">
             <i class="bi bi-plus-circle"></i> Nova Cópia

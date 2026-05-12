@@ -48,8 +48,7 @@
                             {% for copia in object.copias_chave.all %}
                                 <div class="mb-2">
                                     <label class="form-label">{{ copia.identificador }}</label>
-                                    <select name="status_copia_{{ copia.id }}" class="form-select">
-                                        <option value="disponivel">Disponível</option>
+                                    <select name="verificacao_perdida_{{ copia.id }}" class="form-select">                                        <option value="disponivel">Disponível</option>
                                         <option value="emprestada">Emprestada</option>
                                         <option value="manutencao">Manutenção</option>
                                         <option value="perdida">Perdida</option>

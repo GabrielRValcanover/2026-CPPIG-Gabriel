@@ -40,7 +40,7 @@ class EmprestimoModelForm(forms.ModelForm):
 class EmprestimoDevolucaoForm(forms.ModelForm):
     class Meta:
         model = Emprestimo
-        fields = ['recebido_por', 'data_devolucao', 'hora_devolucao','status']
+        fields = ['recebido_por', 'data_devolucao', 'hora_devolucao']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

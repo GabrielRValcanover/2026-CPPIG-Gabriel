@@ -40,11 +40,10 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         usuario = form.cleaned_data['pessoa']
-        chaves_pedida = Emprestimo.objects.filter( pessoa=usuario,status='perdida').count()
+        chaves_pedida = Emprestimo.objects.filter( pessoa=usuario,copias_chave__status='perdida').distinct().count()
         if chaves_pedida >= 3:
             form.add_error( 'pessoa',f'{usuario.nome} você está bloqueado por 7 dias devido à perda de 3 chaves.')
             return self.form_invalid(form)
-
         elif chaves_pedida >= 1:
             form.add_error( 'pessoa',f'{usuario.nome} você está bloqueado por 24 horas devido à perda de chave.')
             return self.form_invalid(form)
@@ -55,6 +54,10 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
         for copia in copias:
             if copia.status == 'emprestada':
                 form.add_error('copias_chave',f'A cópia "{copia}" já está emprestada!')
+                return self.form_invalid(form)
+
+            if copia.status == 'perdida':
+                form.add_error('copias_chave', f'A cópia"{copia}" foi PERDIDA!! entre em contato com a direção')
                 return self.form_invalid(form)
 
             reserva_ativa = Reserva.objects.filter(chaves=copia.chave,data_prevista=data,status__in=['pendente', 'confirmada']).exists()
@@ -126,6 +129,7 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
         response = super().form_valid(form)
         for copia in self.object.copias_chave.all():
             verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
+            print(f'copia {copia.id} -> {verificacao_perdida}')
             copia.status = verificacao_perdida
             copia.save()
 
@@ -140,5 +144,7 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
                    usuario.bloqueado_ate = self.object.data_prevista
                    usuario.save()
                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder 1 chave')
+        self.object.status = 'devolvido' # usei pq é necesario para mudar o status na devolução da chave
+        self.object.save()
 
         return response
