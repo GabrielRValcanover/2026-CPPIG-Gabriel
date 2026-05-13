@@ -1,3 +1,5 @@
+from datetime import timedelta, date
+
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
@@ -9,6 +11,7 @@ from chaves.models import Chave
 from .models import Emprestimo
 from reserva.models import Reserva
 from .forms import EmprestimoModelForm, EmprestimoDevolucaoForm
+from copia_chave.models import CopiaChave
 
 
 class EmprestimoListView(ListView):
@@ -40,14 +43,16 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         usuario = form.cleaned_data['pessoa']
-        chaves_pedida = Emprestimo.objects.filter( pessoa=usuario,copias_chave__status='perdida').distinct().count()
-        if chaves_pedida >= 3:
-            form.add_error( 'pessoa',f'{usuario.nome} você está bloqueado por 7 dias devido à perda de 3 chaves.')
+        # chaves_pedida = Emprestimo.objects.filter( pessoa=usuario,copias_chave__status='perdida').distinct().count()
+        # if chaves_pedida >= 3:
+        #     form.add_error( 'pessoa',f'{usuario.nome} você está bloqueado por 7 dias devido à perda de 3 chaves.')
+        #     return self.form_invalid(form)
+        # elif chaves_pedida >= 1:
+        #     form.add_error( 'pessoa',f'{usuario.nome} você está bloqueado por 24 horas devido à perda de chave.')
+        #     return self.form_invalid(form)
+        if usuario.bloqueado_ate and usuario.bloqueado_ate >= date.today():
+            form.add_error('pessoa', f'{usuario.nome} está bloqueado até {usuario.bloqueado_ate}.')
             return self.form_invalid(form)
-        elif chaves_pedida >= 1:
-            form.add_error( 'pessoa',f'{usuario.nome} você está bloqueado por 24 horas devido à perda de chave.')
-            return self.form_invalid(form)
-
 #-----------------------------------------------------------------------------------------------------------------------------#
         copias = form.cleaned_data['copias_chave']
         data = form.cleaned_data['data_prevista']
@@ -60,7 +65,7 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
                 form.add_error('copias_chave', f'A cópia"{copia}" foi PERDIDA!! entre em contato com a direção')
                 return self.form_invalid(form)
 
-            reserva_ativa = Reserva.objects.filter(chaves=copia.chave,data_prevista=data,status__in=['pendente', 'confirmada']).exists()
+            reserva_ativa = Reserva.objects.filter(chaves=copia.chave,data_prevista=data,status__in=['pendente', 'confirmada']).exists() # status__in para consegui peagar dois valores
 
             if reserva_ativa:
                 form.add_error( 'copias_chave',f'A chave "{copia}" possui reserva ativa para essa data!')
@@ -68,16 +73,27 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
 
  # https: // swesadiqul.medium.com / mastering - the - distinct - method - 12 d2cad2abda link que eu achei o significado do distinct() para nao entrar duplicado
 
-            if copia.chave.ambientes.count() == 1:
-                precisa_chave_mestra = Chave.objects.filter(ambientes__in=copia.chave.ambientes.all()).distinct()
-                for chave in precisa_chave_mestra:
-                    if chave.ambientes.count() > 1:
-                        if chave.copias.filter(status='emprestada').exists(): # coloquei essa verificação para ver se alguem ja tinha retirado a chave mestra
-                            continue
-                        if not copias.filter(chave=chave).exists(): # precisa do not ( após quebrar a cabeça) para verificar se a chave precisa da mestra
-                            form.add_error('copias_chave',' Essa chave precisa da mestra para acessar ao ambiente')
-                            return self.form_invalid(form)
+            # if copia.chave.ambientes.count() == 1:
+            #     precisa_chave_mestra = Chave.objects.filter(ambientes__in=copia.chave.ambientes.all()).distinct()
+            #     for chave in precisa_chave_mestra:
+            #         if chave.ambientes.count() > 1:
+            #             if chave.copias.filter(status='emprestada').exists(): # coloquei essa verificação para ver se alguem ja tinha retirado a chave mestra
+            #                 continue
+            #             if not copias.filter(chave=chave).exists(): # precisa do not ( após quebrar a cabeça) para verificar se a chave precisa da mestra
+            #                 form.add_error('copias_chave',' Essa chave precisa da mestra para acessar ao ambiente')
+            #                 return self.form_invalid(form)
 
+        for copia in copias:
+            ambientes = copia.chave.ambientes.all()
+            for ambiente in ambientes:
+                bloco = ambiente.bloco
+                if bloco:
+                    existe_mestra_no_bloco = Chave.objects.filter( ambientes__bloco=bloco,tipo='mestra' ).exists()
+                    if existe_mestra_no_bloco:
+                        chave_mestra_selecionada = copias.filter(chave__tipo='mestra', chave__ambientes__bloco=bloco).exists()
+                        if not chave_mestra_selecionada:
+                            form.add_error('copias_chave',f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra.')
+                            return self.form_invalid(form)
 # regra de quantidade de copias permitidas
         chaves_por_emprestimo = 0
         quantidade_chaves = Emprestimo.objects.filter(pessoa=usuario,data_devolucao__isnull=True)
@@ -129,21 +145,22 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
         response = super().form_valid(form)
         for copia in self.object.copias_chave.all():
             verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
-            print(f'copia {copia.id} -> {verificacao_perdida}')
             copia.status = verificacao_perdida
             copia.save()
-
+ #https: // docs.djangoproject.com / en / 6.0 / topics / i18n / timezones /  link do timedelta , usei o today para pegar a data de hoje e timedelta para ver a quantidade de duração
             if verificacao_perdida == 'perdida':
                 usuario = self.object.pessoa
-                chaves_pedida = Emprestimo.objects.filter(pessoa=usuario, status='perdida').count()
+                chaves_pedida = Emprestimo.objects.filter(pessoa=usuario).filter(copias_chave__status='perdida').distinct().count()
                 if chaves_pedida >= 3:
-                   usuario.bloqueado_ate = self.object.data_prevista
+                    # usuario.bloqueado_ate = self.object.data_prevista
+                   usuario.bloqueado_ate = date.today() + timedelta(days=7)
                    usuario.save()  # tive que salvar para conseguir visualizar os usuarios bloqueado
                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7  dias, após perder 3 chave')
                 elif chaves_pedida >= 1:
-                   usuario.bloqueado_ate = self.object.data_prevista
-                   usuario.save()
-                   messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder 1 chave')
+                    # usuario.bloqueado_ate = self.object.data_prevista assim dava erro
+                    usuario.bloqueado_ate = date.today() + timedelta(days=1)
+                    usuario.save()
+                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder 1 chave')
         self.object.status = 'devolvido' # usei pq é necesario para mudar o status na devolução da chave
         self.object.save()
 

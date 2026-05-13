@@ -12,6 +12,7 @@ class Chave(models.Model):
         ('disponivel', 'Disponível'),
         ('manutencao', 'Manutenção'),
         ('perdida', 'Perdida'),
+        ('danificada', 'Danificada'),
     ]
     descricao = models.CharField('Descrição:',max_length=70, help_text='Nome da Chave')
     status = models.CharField('Status',max_length=70, choices=STATUS_CHOICES)

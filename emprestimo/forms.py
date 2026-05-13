@@ -14,6 +14,7 @@ class EmprestimoModelForm(forms.ModelForm):
                 ('disponivel', 'Disponível'),
                 ('manutencao', 'Manutenção'),
                 ('perdida', 'Perdida'),
+                ('danificada', 'Danificada'),
             ])
         }
 

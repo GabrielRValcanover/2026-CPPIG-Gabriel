@@ -60,4 +60,4 @@ class ChavesPerdidasListView(ListView):
     template_name = 'copias_perdidas.html'
 
     def get_queryset(self):
-        return CopiaChave.objects.filter(status_in = ['perdida','danificada']) # status_in para pegar os 2 valores do status, pq "status =" pegaria so um valor
+        return CopiaChave.objects.filter(status__in = ['perdida','danificada']) # status_in para pegar os 2 valores do status, pq "status =" pegaria so um valor
