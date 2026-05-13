@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lembrete de Devolução</title>
+</head>
+<body>
+
+    <h2>Olá {{ usuario.nome }},</h2>
+
+    <p>
+        Estamos enviando este e-mail para informar que o prazo do seu empréstimo
+        está próximo de expirar.
+    </p>
+
+    <h3>Dados do Empréstimo:</h3>
+
+    <p>
+        <strong>Horário previsto para devolução:</strong> {{ hora_previsao }}
+    </p>
+
+    <p>
+        Informamos que restam aproximadamente <strong>30 minutos</strong>
+        para o encerramento do prazo de devolução da chave.
+    </p>
+
+    <p>
+        Pedimos, por gentileza, que a devolução seja realizada dentro do horário previsto.
+    </p>
+
+    <br>
+
+    <p>
+        Atenciosamente,<br>
+        E.E.E.F Maria Lucia
+    </p>
+
+</body>
+</html>

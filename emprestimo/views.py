@@ -148,9 +148,11 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
             copia.status = verificacao_perdida
             copia.save()
  #https: // docs.djangoproject.com / en / 6.0 / topics / i18n / timezones /  link do timedelta , usei o today para pegar a data de hoje e timedelta para ver a quantidade de duração
+ # https: // www.w3schools.com / django / ref_lookups_gte.php , onde eu li sobre o gte, para obter maiores ou iguias aos valores ( usei na data)
             if verificacao_perdida == 'perdida':
                 usuario = self.object.pessoa
-                chaves_pedida = Emprestimo.objects.filter(pessoa=usuario).filter(copias_chave__status='perdida').distinct().count()
+                mes = date.today() - timedelta(days=30)
+                chaves_pedida = Emprestimo.objects.filter(pessoa=usuario,data_devolucao__gte=mes,copias_chave__status='perdida').distinct().count()
                 if chaves_pedida >= 3:
                     # usuario.bloqueado_ate = self.object.data_prevista
                    usuario.bloqueado_ate = date.today() + timedelta(days=7)

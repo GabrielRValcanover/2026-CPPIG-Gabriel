@@ -1,0 +1,13 @@
+Olá {{Usuario}}
+
+Estamos enviando este email para avisar que sua emprega do emprestimo esta perto de expirar!
+
+Dados do Emprestimo:
+
+Horário : {{hora_previsao}}
+
+Informamos que o seu emprestimo esta a 30 min de terminar.
+
+Agradecemos que a horario seja comprido
+
+E.E.E.F Maria Lucia
