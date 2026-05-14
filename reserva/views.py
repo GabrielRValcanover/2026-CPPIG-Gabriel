@@ -7,28 +7,24 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-
 from .models import Reserva
 from .forms import ReservaModelForm
-
-
-
 
 class ReservaListView(ListView):
     model = Reserva
     template_name = 'reservas.html'
     context_object_name = 'reservas'
 
-
+#https://docs.djangoproject.com/en/6.0/topics/i18n/timezones/ link do now w today()
+#https: // academify.com.br / datas - e - horas - no - python - com - datetime /
     def get_queryset(self):
-        hora_atual = now()
-        for reserva in Reserva.objects.filter(status = 'pendente', hora_prevista__isnull = False):
-            if reserva.data_prevista == date.today():
-                cancelamento = hora_atual.hour * 60 + hora_atual.minute - (
-                            reserva.hora_prevista.hour * 60 + reserva.hora_prevista.minute)
-                if cancelamento >=15:
-                    reserva.status = 'cancelada'
-                    reserva.save()
+        # hora_atual = now()
+        # for reserva in Reserva.objects.filter(status = 'pendente', hora_prevista__isnull = False):
+        #     if reserva.data_prevista == date.today():
+        #         cancelamento = hora_atual.hour * 60 + hora_atual.minute - (reserva.hora_prevista.hour * 60 + reserva.hora_prevista.minute)
+        #         if cancelamento >=15:
+        #             reserva.status = 'cancelada'
+        #             reserva.save()
 
         buscar = self.request.GET.get('buscar')
         qs = super(ReservaListView, self).get_queryset()
@@ -53,6 +49,7 @@ class ReservaAddView(SuccessMessageMixin, CreateView):
 
   def form_valid(self, form):
     form.instance.status = 'pendente'
+    #chamer a job aqui
     return super().form_valid(form)
 
 

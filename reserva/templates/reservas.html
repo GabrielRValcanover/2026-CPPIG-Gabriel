@@ -44,8 +44,7 @@
                                             {% endfor %}
                                         </td>
                                         <td>{{ reserva.data_reserva }}</td>
-                                        <td>{{ reserva.data_prevista }}</td>
-                                        <td>{{ reserva.hora_prevista }}</td>
+                                        <td>{{ reserva.datahora_prevista }}</td>
                                         <td>{{ reserva.status }}</td>
                                         <td style="text-align: center">
                                             <a href="{% url 'reserva_editar' reserva.pk %}">

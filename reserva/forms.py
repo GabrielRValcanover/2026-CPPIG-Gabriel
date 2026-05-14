@@ -5,7 +5,7 @@ from chaves.models import Chave
 class ReservaModelForm(forms.ModelForm):
     class Meta:
         model = Reserva
-        fields = ['pessoa', 'chaves', 'data_reserva', 'data_prevista',  'hora_prevista', 'status']
+        fields = ['pessoa', 'chaves', 'data_reserva', 'datahora_prevista', 'status']
 
         error_messages = {
             'pessoa': {'required': 'A pessoa é um campo obrigatório'},
