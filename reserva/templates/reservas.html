@@ -29,6 +29,7 @@
                                 <th>Chaves</th>
                                 <th>Data da Reserva</th>
                                 <th>Data Prevista de Uso</th>
+                                <th>Hora Prevista</th>
                                 <th>Status</th>
                                 <th style="width: 100px; text-align: center">Ações</th>
                             </thead>
@@ -44,6 +45,7 @@
                                         </td>
                                         <td>{{ reserva.data_reserva }}</td>
                                         <td>{{ reserva.data_prevista }}</td>
+                                        <td>{{ reserva.hora_prevista }}</td>
                                         <td>{{ reserva.status }}</td>
                                         <td style="text-align: center">
                                             <a href="{% url 'reserva_editar' reserva.pk %}">

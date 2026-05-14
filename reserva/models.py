@@ -14,6 +14,7 @@ class Reserva(models.Model):
     chaves = models.ManyToManyField(Chave, verbose_name='Chaves', related_name='reservas')
     data_reserva = models.DateField('Data da Reserva')
     data_prevista = models.DateField('Data Prevista de Uso')
+    hora_prevista = models.TimeField('Hora Prevista de Retirada', null=True, blank=True)
     status = models.CharField('Status', max_length=20, choices=STATUS_CHOICES, default='pendente')
 
     class Meta:

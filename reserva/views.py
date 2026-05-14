@@ -1,3 +1,6 @@
+from datetime import date
+
+from django.utils.timezone import now
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
@@ -18,6 +21,15 @@ class ReservaListView(ListView):
 
 
     def get_queryset(self):
+        hora_atual = now()
+        for reserva in Reserva.objects.filter(status = 'pendente', hora_prevista__isnull = False):
+            if reserva.data_prevista == date.today():
+                cancelamento = hora_atual.hour * 60 + hora_atual.minute - (
+                            reserva.hora_prevista.hour * 60 + reserva.hora_prevista.minute)
+                if cancelamento >=15:
+                    reserva.status = 'cancelada'
+                    reserva.save()
+
         buscar = self.request.GET.get('buscar')
         qs = super(ReservaListView, self).get_queryset()
         if buscar:
