@@ -152,13 +152,14 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
             if verificacao_perdida == 'perdida':
                 usuario = self.object.pessoa
                 mes = date.today() - timedelta(days=30)
-                chaves_pedida = Emprestimo.objects.filter(pessoa=usuario,data_devolucao__gte=mes,copias_chave__status='perdida').distinct().count()
-                if chaves_pedida >= 3:
+                # chaves_pedida = Emprestimo.objects.filter(pessoa=usuario,data_devolucao__gte=mes,copias_chave__status='perdida').distinct().count()
+                chaves_perdida = CopiaChave.objects.filter(emprestimos__pessoa=usuario,emprestimos__data_criacao__gte=mes,status = 'perdida').distinct().count()
+                if chaves_perdida >= 3:
                     # usuario.bloqueado_ate = self.object.data_prevista
                    usuario.bloqueado_ate = date.today() + timedelta(days=7)
                    usuario.save()  # tive que salvar para conseguir visualizar os usuarios bloqueado
                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7  dias, após perder 3 chave')
-                elif chaves_pedida >= 1:
+                elif chaves_perdida >= 1:
                     # usuario.bloqueado_ate = self.object.data_prevista assim dava erro
                     usuario.bloqueado_ate = date.today() + timedelta(days=1)
                     usuario.save()
