@@ -13,7 +13,7 @@ class Reserva(models.Model):
     pessoa = models.ForeignKey(Usuario, verbose_name='Pessoa', on_delete=models.CASCADE, related_name='reservas')
     chaves = models.ManyToManyField(Chave, verbose_name='Chaves', related_name='reservas')
     data_reserva = models.DateField('Data da Reserva')
-    datahora_prevista = models.DateField('Data Prevista de Uso')
+    datahora_prevista = models.DateTimeField('Data e hora Prevista de Uso')
     status = models.CharField('Status', max_length=20, choices=STATUS_CHOICES, default='pendente')
 
     class Meta:
@@ -21,4 +21,4 @@ class Reserva(models.Model):
         verbose_name_plural = 'Reservas'
 
     def __str__(self):
-        return f"{self.pessoa.nome} - {self.data_reserva}"
+        return f"{self.pessoa.nome} - {self.datahora_prevista}"

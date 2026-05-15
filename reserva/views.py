@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.paginator import Paginator
 
+from .utils.utils import adiciona_job
 from .models import Reserva
 from .forms import ReservaModelForm
 
@@ -49,8 +50,9 @@ class ReservaAddView(SuccessMessageMixin, CreateView):
 
   def form_valid(self, form):
     form.instance.status = 'pendente'
-    #chamer a job aqui
-    return super().form_valid(form)
+    response = super().form_valid(form)
+    adiciona_job(self.object)
+    return response
 
 
 class ReservaUpdateView(SuccessMessageMixin, UpdateView):

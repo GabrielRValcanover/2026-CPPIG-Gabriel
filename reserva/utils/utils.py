@@ -1,31 +1,28 @@
-from datetime import datetime, date, timedelta
 
+from datetime import timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-from reserva.models import Reserva
 
+scheduler = BackgroundScheduler()
 
-def cancelar_reserva(reserva):
+def cancelar_reserva(reserva_id):
+    from reserva.models import Reserva
     try:
-        reserva = Reserva.objects.get(id=reserva_id,status='pendente')
-        reserva.status = 'Cancelado'
+        reserva = Reserva.objects.get(id=reserva_id, status='pendente')
+        reserva.status = 'cancelada'
         reserva.save()
     except Reserva.DoesNotExist:
         pass
 
-
 def adiciona_job(reserva):
     cancelamento = reserva.datahora_prevista + timedelta(minutes=15)
-
-    scheduler = BackgroundScheduler()
     scheduler.add_job(
         cancelar_reserva,
-        trigger='date',  # One-time execution
-        run_date=cancelamento,  # Exact date/time to run
-        id=reserva.id,  # Optional job ID,
+        trigger='date',
+        run_date=cancelamento,
+        id=str(reserva.id),
         args=[reserva.id]
     )
 
-
 def start():
-    scheduler = BackgroundScheduler()
-    scheduler.start()
+    if not scheduler.running:
+        scheduler.start()
