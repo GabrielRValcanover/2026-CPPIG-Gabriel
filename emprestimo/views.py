@@ -12,6 +12,7 @@ from .models import Emprestimo
 from reserva.models import Reserva
 from .forms import EmprestimoModelForm, EmprestimoDevolucaoForm
 from copia_chave.models import CopiaChave
+from emprestimo.jobs import lembrete_email
 
 
 class EmprestimoListView(ListView):
@@ -65,7 +66,11 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
                 form.add_error('copias_chave', f'A cópia"{copia}" foi PERDIDA!! entre em contato com a direção')
                 return self.form_invalid(form)
 
-            reserva_ativa = Reserva.objects.filter(chaves=copia.chave,data_prevista=data,status__in=['pendente', 'confirmada']).exists() # status__in para consegui peagar dois valores
+            reserva_ativa = Reserva.objects.filter(
+                chaves=copia.chave,
+                datahora_prevista=data,
+                status__in=['pendente', 'confirmada']
+            ).exists()
 
             if reserva_ativa:
                 form.add_error( 'copias_chave',f'A chave "{copia}" possui reserva ativa para essa data!')
@@ -106,6 +111,7 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
 
         form.instance.status = 'emprestada'
         response = super().form_valid(form)
+        lembrete_email(self.object) # função para mandar o email de 30 min
         for copia in self.object.copias_chave.all():
             copia.status = 'emprestada'
             copia.save()

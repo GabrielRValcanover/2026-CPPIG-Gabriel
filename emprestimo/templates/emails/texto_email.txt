@@ -6,8 +6,9 @@ Dados do Emprestimo:
 
 Horário : {{hora_previsao}}
 
-Informamos que o seu emprestimo esta a 30 min de terminar.
+Informamos que restam aproximadamente {{ tempo_aviso }} para o encerramento do prazo de devolução da chave.
 
-Agradecemos que a horario seja comprido
+Pedimos, por gentileza, que a devolução seja realizada dentro do horário previsto.
 
+Atenciosamente,
 E.E.E.F Maria Lucia
