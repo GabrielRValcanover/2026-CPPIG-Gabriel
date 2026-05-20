@@ -53,7 +53,7 @@ class UsuarioAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
 
 
 class UsuarioUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
-    permission_required = 'usuarios.update_usuario'
+    permission_required = 'usuarios.change_usuario'
     peemissiom_denied_message = 'Editar Usuario'
     model = Usuario
     form_class = UsuarioModelForm

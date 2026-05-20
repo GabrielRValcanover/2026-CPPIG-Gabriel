@@ -17,8 +17,8 @@ from emprestimo.jobs import lembrete_email
 
 
 class EmprestimoListView(PermissionRequiredMixin,ListView):
-    permission_required = 'emprestimos.view_emprestimo'
-    peemissiom_denied_message = 'Visualizar emprestimo'
+    permission_required = 'emprestimo.view_emprestimo'
+    permission_denied_message = 'Visualizar emprestimo'
     model = Emprestimo
     template_name = 'emprestimos.html'
 
@@ -38,8 +38,8 @@ class EmprestimoListView(PermissionRequiredMixin,ListView):
 
 # https://docs.djangoproject.com/en/6.0/ref/forms/api/#django.forms. Form.add_error  || fonte do Form.add_erro onde eu encontrei
 class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
-    permission_required = 'emprestimos.add_emprestimo'
-    peemissiom_denied_message = 'Cadastrar emprestimo'
+    permission_required = 'emprestimo.add_emprestimo'
+    permission_denied_message = 'Cadastrar emprestimo'
     model = Emprestimo
     form_class = EmprestimoModelForm
     template_name = 'emprestimo_form.html'
@@ -125,8 +125,8 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
 
 
 class EmprestimoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
-    permission_required = 'emprestimos.update_emprestimo'
-    peemissiom_denied_message = 'Edidar emprestimo'
+    permission_required = 'emprestimo.change_emprestimo'
+    permission_denied_message = 'Edidar emprestimo'
     model = Emprestimo
     form_class = EmprestimoModelForm
     template_name = 'emprestimo_form.html'
@@ -135,8 +135,8 @@ class EmprestimoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateVi
 
 
 class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
-    permission_required = 'emprestimos.delete_emprestimo'
-    peemissiom_denied_message = 'Ecluir emprestimo'
+    permission_required = 'emprestimo.delete_emprestimo'
+    permission_denied_message = 'Ecluir emprestimo'
     model = Emprestimo
     template_name = 'emprestimos_apagar.html'
     success_url = reverse_lazy('emprestimos')

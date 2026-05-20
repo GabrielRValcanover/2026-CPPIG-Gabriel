@@ -11,8 +11,8 @@ from .models import Ambiente
 
 
 class AmbientesListView(PermissionRequiredMixin,ListView):
-    permission_required = 'ambientes.view_ambiente'
-    peemissiom_denied_message = 'Visualizar ambiente'
+    permission_required = 'ambiente.view_ambiente'
+    permission_denied_message = 'Visualizar ambiente'
     model = Ambiente
     template_name = 'ambientes.html'
 
@@ -34,8 +34,8 @@ class AmbientesListView(PermissionRequiredMixin,ListView):
 
 
 class AmbienteAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
-    permission_required = 'ambientes.add_ambiente'
-    peemissiom_denied_message = 'Cadastrar ambiente'
+    permission_required = 'ambiente.add_ambiente'
+    permissiom_denied_message = 'Cadastrar ambiente'
     model = Ambiente
     form_class = AmbienteModelForm
     template_name = 'ambiente_form.html'
@@ -44,8 +44,8 @@ class AmbienteAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
 
 
 class AmbienteUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
-    permission_required = 'ambientes.update_ambiente'
-    peemissiom_denied_message = 'Editar ambiente'
+    permission_required = 'ambiente.update_ambiente'
+    permissiom_denied_message = 'Editar ambiente'
 
     model = Ambiente
     form_class = AmbienteModelForm
@@ -54,8 +54,8 @@ class AmbienteUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView)
     success_message = "Ambiente Atualizado com sucesso!"
 
 class AmbienteDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
-    permission_required = 'ambientes.delete_ambiente'
-    peemissiom_denied_message = 'Excluir ambiente'
+    permission_required = 'ambiente.delete_ambiente'
+    permissiom_denied_message = 'Excluir ambiente'
     model = Ambiente
     template_name = 'ambientes_apagar.html'
     success_url = reverse_lazy('ambientes')

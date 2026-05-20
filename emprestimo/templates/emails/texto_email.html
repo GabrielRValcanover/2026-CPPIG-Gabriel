@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Lembrete de Devolução</title>
 </head>
-<body>
+
+<body style="font-family: Arial, sans-serif; color: #333;">
 
     <h2>Olá {{ usuario.nome }},</h2>
 
@@ -16,11 +18,13 @@
     <h3>Dados do Empréstimo:</h3>
 
     <p>
-        <strong>Horário previsto para devolução:</strong> {{ hora_previsao }}
+        <strong>Horário previsto para devolução:</strong>
+        {{ hora_prevista }}
     </p>
 
     <p>
-        Informamos que restam aproximadamente <strong>{{ tempo_aviso }}</strong>
+        Informamos que restam aproximadamente
+        <strong>{{ tempo_aviso }}</strong>
         para o encerramento do prazo de devolução da chave.
     </p>
 
@@ -32,8 +36,9 @@
 
     <p>
         Atenciosamente,<br>
-        E.E.E.F Maria Lucia
+        <strong>E.E.E.F Maria Lucia</strong>
     </p>
 
 </body>
+
 </html>

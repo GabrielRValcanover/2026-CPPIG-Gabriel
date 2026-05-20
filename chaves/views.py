@@ -48,7 +48,7 @@ class ChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
 
 
 class ChaveUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
-    permission_required = 'chaves.update_chave'
+    permission_required = 'chaves.chage_chave'
     peemissiom_denied_message = 'Editar chave'
     model = Chave
     form_class = ChaveModelForm

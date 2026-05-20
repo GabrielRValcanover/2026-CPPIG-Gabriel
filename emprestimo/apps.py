@@ -6,6 +6,5 @@ class EmprestimoConfig(AppConfig):
     name = 'emprestimo'
 
     def ready(self):
-        from emprestimo.jobs import start
+        from .jobs import start
         start()
-

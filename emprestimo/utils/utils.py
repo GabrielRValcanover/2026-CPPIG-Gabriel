@@ -29,12 +29,12 @@ def lembrete(emprestimo_id):
             tipo_lembrete = '30 minutos'
 
         dados = {
-            'Usuario': usuario.nome,
+            'usuario': usuario,
             'hora_prevista': emprestimo.hora_prevista,
-            'lembrete': tipo_lembrete,
+            'tempo_aviso': tipo_lembrete,
         }
         texto_email = render_to_string( 'emails/texto_email.txt',dados )
-        html_email = render_to_string('emails/html_email.html',dados)
+        html_email = render_to_string('emails/texto_email.html',dados)
 
         emails = [
             usuario.email,

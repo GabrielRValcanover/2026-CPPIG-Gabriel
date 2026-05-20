@@ -10,8 +10,8 @@ from .models import CopiaChave
 from .forms import CopiaChaveModelForm
 
 class CopiaChaveListView(PermissionRequiredMixin,ListView):
-    permission_required = 'copias_chaves.view_copia_chave'
-    peemissiom_denied_message = 'Visualizar copia_chave'
+    permission_required = 'copia_chave.view_copiachave'
+    permission_denied_message = 'Visualizar copia_chave'
     model = CopiaChave
     template_name = 'copias.html'
 
@@ -34,8 +34,8 @@ class CopiaChaveListView(PermissionRequiredMixin,ListView):
 
 
 class CopiaChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
-    permission_required = 'copias_chaves.add_copia_chave'
-    peemissiom_denied_message = 'Cadastrar copia_chave'
+    permission_required = 'copia_chave.add_copiachave'
+    permission_denied_message = 'Visualizar copia_chave'
     model = CopiaChave
     form_class = CopiaChaveModelForm
     template_name = 'copia_chave_form.html'
@@ -45,8 +45,8 @@ class CopiaChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
 
 
 class CopiaChaveUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
-    permission_required = 'copias_chaves.udpate_copia_chave'
-    peemissiom_denied_message = 'Editar copia_chave'
+    permission_required = 'copia_chave.change_copiachave'
+    permission_denied_message = 'Editar copia_chave'
     model = CopiaChave
     form_class = CopiaChaveModelForm
     template_name = 'copia_chave_form.html'
@@ -56,8 +56,8 @@ class CopiaChaveUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateVi
 
 
 class CopiaChaveDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
-    permission_required = 'copias_chaves.delete_copia_chave'
-    peemissiom_denied_message = 'Excluir copia_chave'
+    permission_required = 'copia_chave.delete_copiachave'
+    permission_denied_message= 'Excluir copia_chave'
     model = CopiaChave
     template_name = 'copia_chave_apagar.html'
     success_url = reverse_lazy('copia_chaves')

@@ -13,8 +13,8 @@ from .models import Reserva
 from .forms import ReservaModelForm
 
 class ReservaListView(PermissionRequiredMixin,ListView):
-    permission_required = 'reservas.view_reserva'
-    peemissiom_denied_message = 'Visualizar reserva'
+    permission_required = 'reserva.view_reserva'
+    permission_denied_message = 'Visualizar reserva'
     model = Reserva
     template_name = 'reservas.html'
     context_object_name = 'reservas'
@@ -45,8 +45,8 @@ class ReservaListView(PermissionRequiredMixin,ListView):
 
 
 class ReservaAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
-  permission_required = 'reservas.add_reserva'
-  peemissiom_denied_message = 'Cadastrar reserva'
+  permission_required = 'reserva.add_reserva'
+  permission_denied_message = 'Cadastrar reserva'
   model = Reserva
   form_class = ReservaModelForm
   template_name = 'reserva_form.html'
@@ -61,8 +61,8 @@ class ReservaAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
 
 
 class ReservaUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
-    permission_required = 'reservas.update_reserva'
-    peemissiom_denied_message = 'Editar reservva'
+    permission_required = 'reserva.update_reserva'
+    permission_denied_message = 'Editar reservva'
     model = Reserva
     form_class = ReservaModelForm
     template_name = 'reserva_form.html'
@@ -71,8 +71,8 @@ class ReservaUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView)
 
 
 class ReservaDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
-    permission_required = 'reservas.delete_reserva'
-    peemissiom_denied_message = 'Excluir reservva'
+    permission_required = 'reserva.delete_reserva'
+    peRmission_denied_message = 'Excluir reservva'
     model = Reserva
     template_name = 'reservas_apagar.html'
     success_url = reverse_lazy('reservas')
