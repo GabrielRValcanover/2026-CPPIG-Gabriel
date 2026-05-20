@@ -4,11 +4,14 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .models import CopiaChave
 from .forms import CopiaChaveModelForm
 
-class CopiaChaveListView(ListView):
+class CopiaChaveListView(PermissionRequiredMixin,ListView):
+    permission_required = 'copias_chaves.view_copia_chave'
+    peemissiom_denied_message = 'Visualizar copia_chave'
     model = CopiaChave
     template_name = 'copias.html'
 
@@ -30,7 +33,9 @@ class CopiaChaveListView(ListView):
 
 
 
-class CopiaChaveAddView(SuccessMessageMixin, CreateView):
+class CopiaChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+    permission_required = 'copias_chaves.add_copia_chave'
+    peemissiom_denied_message = 'Cadastrar copia_chave'
     model = CopiaChave
     form_class = CopiaChaveModelForm
     template_name = 'copia_chave_form.html'
@@ -39,7 +44,9 @@ class CopiaChaveAddView(SuccessMessageMixin, CreateView):
 
 
 
-class CopiaChaveUpdateView(SuccessMessageMixin, UpdateView):
+class CopiaChaveUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
+    permission_required = 'copias_chaves.udpate_copia_chave'
+    peemissiom_denied_message = 'Editar copia_chave'
     model = CopiaChave
     form_class = CopiaChaveModelForm
     template_name = 'copia_chave_form.html'
@@ -48,7 +55,9 @@ class CopiaChaveUpdateView(SuccessMessageMixin, UpdateView):
 
 
 
-class CopiaChaveDeleteView(SuccessMessageMixin, DeleteView):
+class CopiaChaveDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
+    permission_required = 'copias_chaves.delete_copia_chave'
+    peemissiom_denied_message = 'Excluir copia_chave'
     model = CopiaChave
     template_name = 'copia_chave_apagar.html'
     success_url = reverse_lazy('copia_chaves')

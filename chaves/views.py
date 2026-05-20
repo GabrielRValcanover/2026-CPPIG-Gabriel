@@ -12,8 +12,11 @@ from chaves.models import Chave
 from ambiente.models import Ambiente
 from blocos.models import Bloco
 from .forms import ChaveModelForm
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
-class ChavesListView(ListView):
+class ChavesListView(PermissionRequiredMixin,ListView):
+    permission_required = 'chaves.view_chave'
+    peemissiom_denied_message = 'Visualizar chave'
     model = Chave
     template_name = 'chaves.html'
 
@@ -34,7 +37,9 @@ class ChavesListView(ListView):
             return messages.info(self.request, 'Não existem chaves cadastradas!')
 
 
-class ChaveAddView(SuccessMessageMixin, CreateView):
+class ChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+    permission_required = 'chaves.add_chave'
+    peemissiom_denied_message = 'Cadastrar chave'
     model = Chave
     form_class = ChaveModelForm
     template_name = 'chave_form.html'
@@ -42,14 +47,18 @@ class ChaveAddView(SuccessMessageMixin, CreateView):
     success_message = 'Chave adicionada com sucesso!'
 
 
-class ChaveUpdateView(SuccessMessageMixin, UpdateView):
+class ChaveUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
+    permission_required = 'chaves.update_chave'
+    peemissiom_denied_message = 'Editar chave'
     model = Chave
     form_class = ChaveModelForm
     template_name = 'chave_form.html'
     success_url = reverse_lazy('chaves')
     success_message = 'Chaves Alterada com sucesso!'
 
-class ChaveDeleteView(SuccessMessageMixin, DeleteView):
+class ChaveDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
+    permission_required = 'chaves.delete_chave'
+    peemissiom_denied_message = 'Exclusão chave'
     model = Chave
     template_name = 'chaves_apagar.html'
     success_url = reverse_lazy('chaves')

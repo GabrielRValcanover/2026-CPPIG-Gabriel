@@ -6,6 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from chaves.models import Chave
 from .models import Emprestimo
@@ -15,7 +16,9 @@ from copia_chave.models import CopiaChave
 from emprestimo.jobs import lembrete_email
 
 
-class EmprestimoListView(ListView):
+class EmprestimoListView(PermissionRequiredMixin,ListView):
+    permission_required = 'emprestimos.view_emprestimo'
+    peemissiom_denied_message = 'Visualizar emprestimo'
     model = Emprestimo
     template_name = 'emprestimos.html'
 
@@ -34,7 +37,9 @@ class EmprestimoListView(ListView):
             return qs
 
 # https://docs.djangoproject.com/en/6.0/ref/forms/api/#django.forms. Form.add_error  || fonte do Form.add_erro onde eu encontrei
-class EmprestimoAddView(SuccessMessageMixin, CreateView):
+class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+    permission_required = 'emprestimos.add_emprestimo'
+    peemissiom_denied_message = 'Cadastrar emprestimo'
     model = Emprestimo
     form_class = EmprestimoModelForm
     template_name = 'emprestimo_form.html'
@@ -119,7 +124,9 @@ class EmprestimoAddView(SuccessMessageMixin, CreateView):
         return response
 
 
-class EmprestimoUpdateView(SuccessMessageMixin, UpdateView):
+class EmprestimoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
+    permission_required = 'emprestimos.update_emprestimo'
+    peemissiom_denied_message = 'Edidar emprestimo'
     model = Emprestimo
     form_class = EmprestimoModelForm
     template_name = 'emprestimo_form.html'
@@ -127,7 +134,9 @@ class EmprestimoUpdateView(SuccessMessageMixin, UpdateView):
     success_message = "Emprestimo Atualizado com sucesso!"
 
 
-class EmprestimoDeleteView(SuccessMessageMixin, DeleteView):
+class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
+    permission_required = 'emprestimos.delete_emprestimo'
+    peemissiom_denied_message = 'Ecluir emprestimo'
     model = Emprestimo
     template_name = 'emprestimos_apagar.html'
     success_url = reverse_lazy('emprestimos')

@@ -4,11 +4,14 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .forms import BlocoModelForm
 from .models import Bloco
 
-class BlocoListView(ListView):
+class BlocoListView(PermissionRequiredMixin,ListView):
+    permission_required = 'blocos.view_ambiente'
+    peemissiom_denied_message = 'Visualizar bloco'
     model = Bloco
     template_name = 'blocos.html'
 
@@ -27,7 +30,9 @@ class BlocoListView(ListView):
 
 
 
-class BlocoAddView(SuccessMessageMixin,CreateView):
+class BlocoAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
+    permission_required = 'blocos.add_ambiente'
+    peemissiom_denied_message = 'Cadastrar bloco'
     model = Bloco
     form_class = BlocoModelForm
     template_name = 'bloco_form.html'
@@ -35,14 +40,18 @@ class BlocoAddView(SuccessMessageMixin,CreateView):
     success_message = "Bloco Cadastrado com sucesso!"
 
 
-class BlocoUpdateView(SuccessMessageMixin,UpdateView):
+class BlocoUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
+    permission_required = 'blocos.update_ambiente'
+    peemissiom_denied_message = 'Editar bloco'
     model = Bloco
     form_class = BlocoModelForm
     template_name = 'bloco_form.html'
     success_url = reverse_lazy('blocos')
     success_message = "Bloco Atualizado com sucesso!"
 
-class BlocoDeleteView(SuccessMessageMixin,DeleteView):
+class BlocoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
+    permission_required = 'blocos.delete_ambiente'
+    peemissiom_denied_message = 'Excluir bloco'
     model = Bloco
     template_name = 'bloco_apagar.html'
     success_url = reverse_lazy('blocos')

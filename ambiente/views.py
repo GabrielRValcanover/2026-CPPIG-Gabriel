@@ -4,12 +4,15 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .forms import AmbienteModelForm
 from .models import Ambiente
 
 
-class AmbientesListView(ListView):
+class AmbientesListView(PermissionRequiredMixin,ListView):
+    permission_required = 'ambientes.view_ambiente'
+    peemissiom_denied_message = 'Visualizar ambiente'
     model = Ambiente
     template_name = 'ambientes.html'
 
@@ -30,7 +33,9 @@ class AmbientesListView(ListView):
 
 
 
-class AmbienteAddView(SuccessMessageMixin,CreateView):
+class AmbienteAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
+    permission_required = 'ambientes.add_ambiente'
+    peemissiom_denied_message = 'Cadastrar ambiente'
     model = Ambiente
     form_class = AmbienteModelForm
     template_name = 'ambiente_form.html'
@@ -38,14 +43,19 @@ class AmbienteAddView(SuccessMessageMixin,CreateView):
     success_message = "ambiente Cadastrado com sucesso!"
 
 
-class AmbienteUpdateView(SuccessMessageMixin,UpdateView):
+class AmbienteUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
+    permission_required = 'ambientes.update_ambiente'
+    peemissiom_denied_message = 'Editar ambiente'
+
     model = Ambiente
     form_class = AmbienteModelForm
     template_name = 'ambiente_form.html'
     success_url = reverse_lazy('ambientes')
     success_message = "Ambiente Atualizado com sucesso!"
 
-class AmbienteDeleteView(SuccessMessageMixin,DeleteView):
+class AmbienteDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
+    permission_required = 'ambientes.delete_ambiente'
+    peemissiom_denied_message = 'Excluir ambiente'
     model = Ambiente
     template_name = 'ambientes_apagar.html'
     success_url = reverse_lazy('ambientes')

@@ -20,7 +20,7 @@
 
 <div class="container-fluid">
         <div class="row ">
-                    <div class="sidebar border border-right col-md-1 col-md-2 p-1 bg-body-tertiary d-flex flex-column gap-3">
+                    <div class="sidebar border border-right col-md-2 p-1 bg-body-tertiary d-flex flex-column gap-3">
                         <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu">
                         <div class="d-flex justify-content-center align-items-center" style="height: 170px;">
                            <img src="{% static 'img/logo.png' %}" alt="Logo" width="140">
@@ -28,6 +28,7 @@
 
                         <h3>E.E.E.F. Maria Lucia</h3>
                           <hr>
+                         {% if request.user.is_authenticated %}
                         <div class="btn-group dropend mb-2 w-100">
                                <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                  <i class="bi bi-person-fill-add"></i>
@@ -88,17 +89,36 @@
                                 <li><a class="dropdown-item" href="#">Menu item</a></li>
                               </ul>
                         </div>
-<!--                        <div class="btn-group dropend mb-2 w-100">-->
-<!--                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--                                  <i class="bi bi-arrows-move"></i>-->
-<!--                                  Painel ADM-->
-<!--                              </button>-->
-<!--                              <ul class="dropdown-menu">-->
-<!--                                <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Historico de movimentações  </a></li>-->
-<!--                                <li><a class="dropdown-item" href="{% url 'usuarios' %}">Listagem de Usuarios</a></li>-->
-<!--                                <li><a class="dropdown-item" href="#">Menu item</a></li>-->
-<!--                              </ul>-->
-<!--                        </div>-->
+                            <div>
+                            <li class=" nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarLogin" role="button"
+										data-bs-toggle="dropdown" aria-expanded="false">
+										Usuário: {{ request.user.username }}
+									</a>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar senha</a></li>
+										<li>
+											<form action="{% url 'logout' %}" method="post">
+												{% csrf_token %}
+												<button class="btn btn-link dropdown-item" type="submit">Log Out</button>
+											</form>
+										</li>
+									</ul>
+								</li>
+							{% else %}
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toddle" href="#" id="navbarAcesso" role="button"
+									   data-bs-toggle="dropdown" aria-expanded="false">
+										Acesso
+									</a>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+									</ul>
+
+								</li>
+							{% endif %}
+							</ul>
+                     </div>
                 </div>
          </div>
            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">

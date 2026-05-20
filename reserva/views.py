@@ -6,12 +6,15 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .utils.utils import adiciona_job
 from .models import Reserva
 from .forms import ReservaModelForm
 
-class ReservaListView(ListView):
+class ReservaListView(PermissionRequiredMixin,ListView):
+    permission_required = 'reservas.view_reserva'
+    peemissiom_denied_message = 'Visualizar reserva'
     model = Reserva
     template_name = 'reservas.html'
     context_object_name = 'reservas'
@@ -41,7 +44,9 @@ class ReservaListView(ListView):
         return qs
 
 
-class ReservaAddView(SuccessMessageMixin, CreateView):
+class ReservaAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
+  permission_required = 'reservas.add_reserva'
+  peemissiom_denied_message = 'Cadastrar reserva'
   model = Reserva
   form_class = ReservaModelForm
   template_name = 'reserva_form.html'
@@ -55,7 +60,9 @@ class ReservaAddView(SuccessMessageMixin, CreateView):
     return response
 
 
-class ReservaUpdateView(SuccessMessageMixin, UpdateView):
+class ReservaUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
+    permission_required = 'reservas.update_reserva'
+    peemissiom_denied_message = 'Editar reservva'
     model = Reserva
     form_class = ReservaModelForm
     template_name = 'reserva_form.html'
@@ -63,7 +70,9 @@ class ReservaUpdateView(SuccessMessageMixin, UpdateView):
     success_message = 'Reserva atualizada com sucesso!'
 
 
-class ReservaDeleteView(SuccessMessageMixin, DeleteView):
+class ReservaDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
+    permission_required = 'reservas.delete_reserva'
+    peemissiom_denied_message = 'Excluir reservva'
     model = Reserva
     template_name = 'reservas_apagar.html'
     success_url = reverse_lazy('reservas')

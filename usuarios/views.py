@@ -4,6 +4,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .forms import UsuarioModelForm
 from .models import Usuario
@@ -11,7 +12,9 @@ from datetime import date
 from django.views.generic import ListView
 
 
-class UsuariosListView(ListView):
+class UsuariosListView(PermissionRequiredMixin,ListView):
+    permission_required = 'usuarios.view_usuario'
+    peemissiom_denied_message = 'Visualizar Usuario'
     model = Usuario
     template_name = 'usuarios.html'
 
@@ -39,7 +42,9 @@ class UsuariosListView(ListView):
             messages.info(self.request,'Não existem usuarios cadastrados!')
         return qs
 
-class UsuarioAddView(SuccessMessageMixin,CreateView):
+class UsuarioAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
+    permission_required = 'usuarios.add_usuario'
+    peemissiom_denied_message = 'Cadastrar Usuario'
     model = Usuario
     form_class = UsuarioModelForm
     template_name = 'usuario_form.html'
@@ -47,14 +52,18 @@ class UsuarioAddView(SuccessMessageMixin,CreateView):
     success_message = "Usuario Cadastrado com sucesso!"
 
 
-class UsuarioUpdateView(SuccessMessageMixin,UpdateView):
+class UsuarioUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
+    permission_required = 'usuarios.update_usuario'
+    peemissiom_denied_message = 'Editar Usuario'
     model = Usuario
     form_class = UsuarioModelForm
     template_name = 'usuario_form.html'
     success_url = reverse_lazy('usuarios')
     success_message = "Usuario Atualizado com sucesso!"
 
-class UsuarioDeleteView(SuccessMessageMixin,DeleteView):
+class UsuarioDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
+    permission_required = 'usuarios.delete_usuario'
+    peemissiom_denied_message = 'Excluir Usuario'
     model = Usuario
     template_name = 'usuarios_apagar.html'
     success_url = reverse_lazy('usuarios')
