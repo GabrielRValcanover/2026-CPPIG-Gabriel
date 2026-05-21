@@ -26,7 +26,7 @@ class Emprestimo(models.Model):
   hora_prevista = models.TimeField('Hora Prevista de Devolução')
   hora_devolucao = models.TimeField('Hora de Devolução', null=True, blank=True)
   status = models.CharField('Status', max_length=70, choices=STATUS_CHOICES)
-
+  email_atraso = models.BooleanField(default=False)
   class Meta:
     verbose_name = 'Emprestimo'
     verbose_name_plural = 'Emprestimos'

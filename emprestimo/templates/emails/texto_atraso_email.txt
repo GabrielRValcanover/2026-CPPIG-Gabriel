@@ -1,0 +1,11 @@
+Olá {{ usuario.nome }}
+
+Identificamos que sua chave está em atraso.
+
+Data prevista: {{ data_prevista }}
+Hora prevista: {{ hora_prevista }}
+
+Pedimos que realize a devolução o quanto antes.
+
+Atenciosamente,
+E.E.E.F Maria Lucia

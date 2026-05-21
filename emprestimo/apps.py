@@ -1,3 +1,4 @@
+import os
 from django.apps import AppConfig
 
 
@@ -6,5 +7,8 @@ class EmprestimoConfig(AppConfig):
     name = 'emprestimo'
 
     def ready(self):
-        from .jobs import start
-        start()
+
+        if os.environ.get('RUN_MAIN') == 'true':
+            from .jobs import start
+            start()
+            print('APPS READY EXECUTADO')

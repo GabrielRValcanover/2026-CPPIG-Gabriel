@@ -8,21 +8,14 @@ from django.conf import settings
 
 
 def lembrete(emprestimo_id):
-    print('FUNÇÃO LEMBRETE EXECUTADA')
     from emprestimo.models import Emprestimo
 
     try:
 
-        emprestimo = Emprestimo.objects.get(
-            id=emprestimo_id,
-            status='emprestada'
-        )
-
+        emprestimo = Emprestimo.objects.get(id=emprestimo_id,status='emprestada')
         usuario = emprestimo.pessoa
-
         if not usuario.email:
             return
-
         if usuario.tipoUsuario == 'professor':
             tipo_lembrete = '1 dia'
         else:
@@ -38,8 +31,8 @@ def lembrete(emprestimo_id):
 
         emails = [
             usuario.email,
-            'secretaria@escola.com',
-            'inspetor@escola.com'
+            'secretaria@projetoI.com.br',
+            'inspetor@projetoI.com.br'
         ]
         send_mail(
             subject='E.E.E.F Maria Lucia - Lembrete',
@@ -49,7 +42,6 @@ def lembrete(emprestimo_id):
             html_message=html_email,
             fail_silently=False,
         )
-
         print(f'Email enviado para {usuario.nome}')
 
     except Emprestimo.DoesNotExist:
@@ -57,5 +49,39 @@ def lembrete(emprestimo_id):
         print('Emprestimo não encontrado')
 
 
+def chave_atrasada(emprestimo_id):
+    from emprestimo.models import Emprestimo
 
+    try:
+        emprestimo = Emprestimo.objects.get(id=emprestimo_id,status='emprestada')
+        usuario = emprestimo.pessoa
+        if not usuario.email:
+            return
+        dados = {
+            'usuario': usuario,
+            'data_prevista': emprestimo.data_prevista,
+            'hora_prevista': emprestimo.hora_prevista,
+        }
 
+        texto_email = render_to_string('emails/texto_atraso_email.txt',dados)
+        html_email = render_to_string('emails/texto_atraso_email.html',dados)
+
+        emails = [
+            usuario.email,
+            'secretaria@projetoI.com.br',
+            'inspetor@projetoI.com.br'
+        ]
+
+        send_mail(
+            subject='E.E.E.F Maria Lucia - Chave em atraso',
+            message=texto_email,
+            from_email='gabrielvalcanover@gmail.com',
+            recipient_list=emails,
+            html_message=html_email,
+            fail_silently=False,
+        )
+        print(f'Email de atraso enviado para {usuario.nome}')
+
+    except Emprestimo.DoesNotExist:
+
+        print('Emprestimo não encontrado')
