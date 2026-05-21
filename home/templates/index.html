@@ -20,7 +20,7 @@
 
 <div class="container-fluid">
         <div class="row ">
-                    <div class="sidebar border border-right col-md-2 p-1 bg-body-tertiary d-flex flex-column gap-3">
+                    <div class="sidebar border border-right col-md-2 p-3 bg-body-tertiary d-flex flex-column gap-3">
                         <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu">
                         <div class="d-flex justify-content-center align-items-center" style="height: 170px;">
                            <img src="{% static 'img/logo.png' %}" alt="Logo" width="140">
@@ -92,8 +92,8 @@
                             <div>
                             <li class="btn-group dropend mb-2 w-100">
 									 <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-calendar-plus"></i>
-										Usuário: {{ request.user.username }}
+                                <i class="bi bi-door-open"></i>
+										Usuário Logado: {{ request.user.username }}
                                      </button>
 									<ul class="dropdown-menu">
 										<li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar senha</a></li>
@@ -118,7 +118,11 @@
 								</li>
 							{% endif %}
 							</ul>
+
                      </div>
+                            <div class="btn-group dropend mb-2 w-100">
+
+                        </div>
                 </div>
          </div>
            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -144,10 +148,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</body>
- {% block footer %}
+{% block footer %}
         {% include "footer.html" %}
     {% endblock %}
+</body>
+
 </html>
 
 

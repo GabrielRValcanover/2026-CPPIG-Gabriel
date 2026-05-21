@@ -44,7 +44,7 @@ def start():
         scheduler.add_job(
             aviso_atraso,
             'interval',
-            seconds=10,
+            seconds=100,
             id='aviso_atraso'
         )
     if not scheduler.running:
