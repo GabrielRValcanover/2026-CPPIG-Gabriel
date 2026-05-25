@@ -91,14 +91,26 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('chaves')
     success_message = 'Chave do bloco adicionada com sucesso no bloco!'
 
+    # def form_valid(self, form):
+    #   chave_bloco = super().form_valid(form)
+    #   ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])
+    #   for ambiente in ambientes:
+    #     self.object.ambientes.add(ambiente)
+    #   self.object.tipo = 'mestra'
+    #   self.object.save()
+    #   return chave_bloco
+
     def form_valid(self, form):
-      chave_bloco = super().form_valid(form)
-      ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])
-      for ambiente in ambientes:
-        self.object.ambientes.add(ambiente)
-      self.object.tipo = 'mestra'
-      self.object.save()
-      return chave_bloco
+        chave_bloco = super().form_valid(form)
+        self.object.tipo = 'mestra'
+        self.object.bloco_id = self.kwargs['bloco_id']
+
+        ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])
+        for ambiente in ambientes:
+            self.object.ambientes.add(ambiente)
+
+        self.object.save()
+        return chave_bloco
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -115,7 +127,7 @@ def verificacaoChaves(request, tipo, id):
     return redirect('chave_ambiente', ambiente_id=id)
   elif tipo == 'bloco':
     chave = Chave.objects.filter(
-      ambientes__bloco__id=id,
+      bloco_id=id,
       tipo='mestra'
     ).first()
     if chave:

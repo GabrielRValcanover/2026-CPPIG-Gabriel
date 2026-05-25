@@ -1,3 +1,4 @@
+from http.client import responses
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -5,6 +6,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from chaves.models import Chave
 
 from .forms import AmbienteModelForm
 from .models import Ambiente
@@ -41,6 +43,18 @@ class AmbienteAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     template_name = 'ambiente_form.html'
     success_url = reverse_lazy('ambientes')
     success_message = "ambiente Cadastrado com sucesso!"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        chave_mestra = Chave.objects.filter(bloco= self.object.bloco, tipo='mestra').first()
+
+        if chave_mestra:
+            chave_mestra.ambientes.add(self.object)
+
+        return response
+
+
 
 
 class AmbienteUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
