@@ -5,7 +5,7 @@ from .models import CopiaChave
 class CopiaChaveModelForm(forms.ModelForm):
     class Meta:
         model = CopiaChave
-        fields = ['chave', 'identificador', 'status']
+        fields = ['chave','identificador','status']
 
         error_messages = {
             'chave': {'required': 'A chave é um campo obrigatória'},

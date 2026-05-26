@@ -18,6 +18,12 @@ class EmprestimoModelForm(forms.ModelForm):
             ])
         }
 
+        widgets = {
+            'data_prevista': forms.DateInput(attrs={'type': 'date'},format='%Y-%m-%d',),
+            'hora_prevista': forms.TimeInput(attrs={'type': 'time'},format='%H:%M',),
+            'hora': forms.TimeInput(attrs={'type': 'time'},format='%H:%M',),
+        }
+
         error_messages = {
             'pessoa': {'required': 'A pessoa é um campo obrigatório'},
             'copias_chave': {'required': 'Selecione ao menos uma cópia de chave'},

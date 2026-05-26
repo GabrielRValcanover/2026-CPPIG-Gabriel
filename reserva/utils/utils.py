@@ -1,4 +1,3 @@
-
 from datetime import timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -14,7 +13,7 @@ def cancelar_reserva(reserva_id):
         pass
 
 def adiciona_job(reserva):
-    cancelamento = reserva.datahora_prevista + timedelta(minutes=15)
+    cancelamento = reserva.datahora_prevista + timedelta(minutes=1)
     scheduler.add_job(
         cancelar_reserva,
         trigger='date',
@@ -26,3 +25,4 @@ def adiciona_job(reserva):
 def start():
     if not scheduler.running:
         scheduler.start()
+        print('tarefa de cancelar as reservas')

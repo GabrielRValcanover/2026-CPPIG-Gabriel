@@ -6,12 +6,22 @@ class ReservaModelForm(forms.ModelForm):
     class Meta:
         model = Reserva
         fields = ['pessoa', 'chaves', 'data_reserva', 'datahora_prevista', 'status']
+        widgets = {
+            'data_reserva': forms.DateInput(
+                attrs={'type': 'date'},
+                format='%Y-%m-%d'
+            ),
+            'datahora_prevista': forms.DateTimeInput(
+                attrs={'type': 'datetime-local'},
+                format='%Y-%m-%dT%H:%M'
+            ),
+        }
 
         error_messages = {
             'pessoa': {'required': 'A pessoa é um campo obrigatório'},
             'chaves': {'required': 'Selecione ao menos uma chave'},
             'data_reserva': {'required': 'A data da reserva é um campo obrigatório'},
-            'data_prevista': {'required': 'A data prevista é um campo obrigatório'},
+            'datahora_prevista': {'required': 'A data e a hora prevista é um campo obrigatório'},
             'status': {'required': 'O status é um campo obrigatório'},
         }
 

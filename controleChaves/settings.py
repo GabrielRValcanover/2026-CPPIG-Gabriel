@@ -144,3 +144,8 @@ DEFAULT_FROM_EMAIL = 'ProjetoIntegrador'
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
+
+
+# DATE_INPUT_FORMATS = ['%Y-%m-%d']
+# TIME_INPUT_FORMATS = ['%H:%M']
+# DATETIME_INPUT_FORMATS = ['%Y-%m-%dT%H:%M']
