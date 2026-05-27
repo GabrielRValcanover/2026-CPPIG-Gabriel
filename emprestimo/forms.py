@@ -1,8 +1,9 @@
 from django import forms
 from .models import Emprestimo
 from copia_chave.models import CopiaChave
-from usuarios.models import Usuario
+from django.contrib.auth import get_user_model
 
+Usuario = get_user_model()
 
 class EmprestimoModelForm(forms.ModelForm):
     class Meta:

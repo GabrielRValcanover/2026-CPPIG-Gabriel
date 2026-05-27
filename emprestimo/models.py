@@ -1,5 +1,5 @@
 from django.db import models
-from usuarios.models import Usuario
+from django.conf import settings
 from copia_chave.models import CopiaChave
 
 STATUS_CHOICES = [
@@ -15,9 +15,9 @@ STATUS_CHOICES = [
 
 
 class Emprestimo(models.Model):
-  pessoa = models.ForeignKey(Usuario, verbose_name='Quem retirou', on_delete=models.CASCADE, related_name='emprestimos')
-  entregue_por = models.ForeignKey(Usuario, verbose_name='Entregue por', on_delete=models.SET_NULL, null=True,blank=True, related_name='emprestimos_entregues')
-  recebido_por = models.ForeignKey(Usuario, verbose_name='Recebido por', on_delete=models.SET_NULL, null=True,blank=True, related_name='emprestimos_recebidos')
+  pessoa = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Quem retirou', on_delete=models.CASCADE, related_name='emprestimos')
+  entregue_por = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Entregue por', on_delete=models.SET_NULL, null=True,blank=True, related_name='emprestimos_entregues')
+  recebido_por = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Recebido por', on_delete=models.SET_NULL, null=True,blank=True, related_name='emprestimos_recebidos')
   copias_chave = models.ManyToManyField(CopiaChave, verbose_name='Cópias das Chaves',related_name='emprestimos')
   data_criacao = models.DateField('Data Criação', auto_now_add=True)
   data_prevista = models.DateField('Data Prevista')
@@ -32,7 +32,7 @@ class Emprestimo(models.Model):
     verbose_name_plural = 'Emprestimos'
 
   def __str__(self):
-    return f"{self.pessoa.nome} - {self.data_criacao}"
+    return f"{self.pessoa.get_full_name() or self.pessoa.username} - {self.data_criacao}"
 
 
 
