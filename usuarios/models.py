@@ -54,6 +54,7 @@ TIPO_CHOICES = [
 ]
 
 class UsuarioPersonalizado(AbstractUser):
+    nome= models.CharField(verbose_name='Nome', max_length=70)
     tipoUsuario = models.CharField('Tipo de Usuário', max_length=70, choices=TIPO_CHOICES, default='secretaria')
     foto = StdImageField('Foto', upload_to='usuarios', delete_orphans=True, blank=True)
     bloqueado_ate = models.DateField('Bloqueado até', null=True, blank=True)
