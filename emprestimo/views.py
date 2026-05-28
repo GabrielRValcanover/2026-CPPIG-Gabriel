@@ -1,13 +1,11 @@
 from datetime import timedelta, date
 
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
-
 from chaves.models import Chave
 from .models import Emprestimo
 from reserva.models import Reserva

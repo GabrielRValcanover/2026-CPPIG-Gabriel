@@ -1,5 +1,3 @@
-from http.client import responses
-
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
@@ -46,19 +44,16 @@ class AmbienteAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-
         chave_mestra = Chave.objects.filter(bloco= self.object.bloco, tipo='mestra').first()
-
         if chave_mestra:
             chave_mestra.ambientes.add(self.object)
-
         return response
 
 
 
 
 class AmbienteUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
-    permission_required = 'ambiente.update_ambiente'
+    permission_required = 'ambiente.change_ambiente'
     permissiom_denied_message = 'Editar ambiente'
 
     model = Ambiente

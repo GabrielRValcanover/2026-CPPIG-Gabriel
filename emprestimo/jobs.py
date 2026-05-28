@@ -36,7 +36,7 @@ def aviso_atraso():
             atrasados.append(emprestimo)
             print(f'ENVIANDO EMAIL {emprestimo.id}')
             chave_atrasada(emprestimo.id)
-            emprestimo.email_atraso_enviado = True
+            emprestimo.email_atraso = True
             emprestimo.save()
     print(atrasados)
 def start():

@@ -61,7 +61,7 @@ class ReservaAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
 
 
 class ReservaUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
-    permission_required = 'reserva.update_reserva'
+    permission_required = 'reserva.change_reserva'
     permission_denied_message = 'Editar reservva'
     model = Reserva
     form_class = ReservaModelForm
