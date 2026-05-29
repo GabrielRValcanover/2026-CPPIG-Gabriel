@@ -18,12 +18,18 @@ EXCLUSIVIDADE_CHOICES = [
     ('comunitarias', 'Comunitarias'),
 ]
 
-
+ACESSO_CHOICES = [
+    ('todos', 'Todos'),
+    ('secretaria', 'Secretaria'),
+    ('inspetor', 'Inspetor'),
+    ('professor', 'Professor'),
+]
 
 class Ambiente(models.Model):
     nome = models.CharField('Nome',max_length=20,  choices=NOME_CHOICES)
     nomenclatura = models.CharField('nomenclatura',max_length=70, help_text='nomenclatura do ambiente', unique=True)
     exclusividade = models.CharField('exclusividade', max_length=20, choices=EXCLUSIVIDADE_CHOICES)
+    acesso_permitido =models.CharField(' Acesso Permitido ' ,max_length=20, choices=ACESSO_CHOICES)
     bloco = models.ForeignKey('blocos.Bloco', verbose_name='Bloco',
                               help_text='Nome do bloco', on_delete=models.CASCADE, related_name='ambientes',
                               null=True, blank=True)

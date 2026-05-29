@@ -1,7 +1,4 @@
-import self
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-
 from .models import UsuarioPersonalizado
 
 class UsuarioModelForm(forms.ModelForm):
@@ -26,7 +23,7 @@ class UsuarioModelForm(forms.ModelForm):
     #         raise forms.ValidationError("senha nao correspondem")
     #     return cleaned_data
 
-        # usei o raise para interromper e nao deixar salvar
+        # usei o raise para interromper e nao deixar salvar e cleaned para verificar 2 valores
         def clean(self):
             cleaned_data = super().clean()
             senha = cleaned_data.get('senha')

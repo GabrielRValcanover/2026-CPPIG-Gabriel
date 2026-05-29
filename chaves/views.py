@@ -104,12 +104,12 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
         chave_bloco = super().form_valid(form)
         self.object.tipo = 'mestra'
         self.object.bloco_id = self.kwargs['bloco_id']
+        self.object.save()
 
         ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])
         for ambiente in ambientes:
             self.object.ambientes.add(ambiente)
-
-        self.object.save()
+        # self.object.save()
         return chave_bloco
 
     def get_context_data(self, **kwargs):

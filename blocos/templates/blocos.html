@@ -35,11 +35,11 @@
                                         <td> {{bloco.nome}}</td>
                                         <td> {{bloco.quantidade}}</td>
                                          <td>
-                                                {% for ambiente in bloco.ambientes.all %}
-                                                    {% for chave in ambiente.chaves.all %}
-                                                        {% if chave.tipo == 'mestra' %}{{ chave.descricao }}{% endif %}
+                                                {% for chave in bloco.chaves.all %}
+                                                        {% if chave.tipo == 'mestra' %}
+                                                            {{ chave.descricao }}
+                                                        {% endif %}
                                                     {% endfor %}
-                                                {% endfor %}
                                             </td>
                                         <td style="text-align: center">
                                             <a href="{% url 'bloco_editar' bloco.pk %}">

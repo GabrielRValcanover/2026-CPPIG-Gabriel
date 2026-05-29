@@ -71,13 +71,22 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
 
             reserva_ativa = Reserva.objects.filter(
                 chaves=copia.chave,
-                datahora_prevista=data,
+                datahora_prevista__date=data,
                 status__in=['pendente', 'confirmada']
             ).exists()
 
             if reserva_ativa:
                 form.add_error( 'copias_chave',f'A chave "{copia}" possui reserva ativa para essa data!')
                 return self.form_invalid(form)
+# -----------------------------------------------------------------------------------------------------------------------------#
+            # aqui faz a validação se é exclusiva ou cominitaria
+            for ambiente in copia.chave.ambientes.all:
+                if ambiente.exclusividade == 'exclusivas':
+                    acessar = ambiente.acesso_permitido
+                    if acessar != 'todos' and usuario.tipoUsuario != acessar:
+                        form.add_error('copias_chave',f'Ambiente "{ambiente.nomenclatura}" é um ambiente esclusivo'
+                                       f'para {ambiente.get_acesso_permitido_display()}')
+                        return self.form_invalid(form)
 
  # https: // swesadiqul.medium.com / mastering - the - distinct - method - 12 d2cad2abda link que eu achei o significado do distinct() para nao entrar duplicado
 
@@ -102,7 +111,10 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
                         if not chave_mestra_selecionada:
                             form.add_error('copias_chave',f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra.')
                             return self.form_invalid(form)
-# regra de quantidade de copias permitidas
+
+ # -----------------------------------------------------------------------------------------------------------------------------#
+
+        # regra de quantidade de copias permitidas
         chaves_por_emprestimo = 0
         quantidade_chaves = Emprestimo.objects.filter(pessoa=usuario,data_devolucao__isnull=True)
         for emprestimo in quantidade_chaves:
@@ -118,7 +130,6 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
         for copia in self.object.copias_chave.all():
             copia.status = 'emprestada'
             copia.save()
-
         return response
 
 
