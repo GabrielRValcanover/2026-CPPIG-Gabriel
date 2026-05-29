@@ -89,9 +89,7 @@ class UsuarioDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
 class UsuariosBloqueadosListView(ListView):
     # model = Usuario
     model = UsuarioPersonalizado
-
     template_name = 'usuarios_bloqueados.html'
-
     def get_queryset(self):
         queryset = UsuarioPersonalizado.objects.filter( bloqueado_ate__gte=date.today())
         buscar = self.request.GET.get('buscar')
