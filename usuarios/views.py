@@ -44,7 +44,7 @@ class UsuariosListView(PermissionRequiredMixin,ListView):
 
 class UsuarioAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     permission_required = 'usuarios.add_usuariopersonalizado'
-    permissiom_denied_message = 'Cadastrar Usuario'
+    permission_denied_message = 'Cadastrar Usuario'
     # model = Usuario
     model = UsuarioPersonalizado
     form_class = UsuarioModelForm
@@ -55,7 +55,7 @@ class UsuarioAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
 
 class UsuarioUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
     permission_required = 'usuarios.change_usuariopersonalizado'
-    permissiom_denied_message = 'Editar Usuario'
+    permission_denied_message = 'Editar Usuario'
     # model = Usuario
     model = UsuarioPersonalizado
     form_class = UsuarioModelForm
@@ -65,7 +65,7 @@ class UsuarioUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
 
 class UsuarioDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
     permission_required = 'usuarios.delete_usuariopersonalizado'
-    permissiom_denied_message = 'Excluir Usuario'
+    permission_denied_message = 'Excluir Usuario'
     # model = Usuario
     model = UsuarioPersonalizado
     template_name = 'usuarios_apagar.html'

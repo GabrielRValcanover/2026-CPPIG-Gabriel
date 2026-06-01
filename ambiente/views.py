@@ -35,7 +35,7 @@ class AmbientesListView(PermissionRequiredMixin,ListView):
 
 class AmbienteAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     permission_required = 'ambiente.add_ambiente'
-    permissiom_denied_message = 'Cadastrar ambiente'
+    permission_denied_message = 'Cadastrar ambiente'
     model = Ambiente
     form_class = AmbienteModelForm
     template_name = 'ambiente_form.html'
@@ -54,7 +54,7 @@ class AmbienteAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
 
 class AmbienteUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
     permission_required = 'ambiente.change_ambiente'
-    permissiom_denied_message = 'Editar ambiente'
+    permission_denied_message = 'Editar ambiente'
 
     model = Ambiente
     form_class = AmbienteModelForm
@@ -64,7 +64,7 @@ class AmbienteUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView)
 
 class AmbienteDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
     permission_required = 'ambiente.delete_ambiente'
-    permissiom_denied_message = 'Excluir ambiente'
+    permission_denied_message = 'Excluir ambiente'
     model = Ambiente
     template_name = 'ambientes_apagar.html'
     success_url = reverse_lazy('ambientes')

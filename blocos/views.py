@@ -11,7 +11,7 @@ from .models import Bloco
 
 class BlocoListView(PermissionRequiredMixin,ListView):
     permission_required = 'blocos.view_bloco'
-    peemissiom_denied_message = 'Visualizar bloco'
+    permission_denied_message = 'Visualizar bloco'
     model = Bloco
     template_name = 'blocos.html'
 
@@ -32,7 +32,7 @@ class BlocoListView(PermissionRequiredMixin,ListView):
 
 class BlocoAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     permission_required = 'blocos.add_bloco'
-    peemissiom_denied_message = 'Cadastrar bloco'
+    permission_denied_message = 'Cadastrar bloco'
     model = Bloco
     form_class = BlocoModelForm
     template_name = 'bloco_form.html'
@@ -42,7 +42,7 @@ class BlocoAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
 
 class BlocoUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
     permission_required = 'blocos.change_bloco'
-    peemissiom_denied_message = 'Editar bloco'
+    permission_denied_message = 'Editar bloco'
     model = Bloco
     form_class = BlocoModelForm
     template_name = 'bloco_form.html'
@@ -51,7 +51,7 @@ class BlocoUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
 
 class BlocoDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
     permission_required = 'blocos.delete_bloco'
-    peemissiom_denied_message = 'Excluir bloco'
+    permission_denied_message= 'Excluir bloco'
     model = Bloco
     template_name = 'bloco_apagar.html'
     success_url = reverse_lazy('blocos')

@@ -80,7 +80,7 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
                 return self.form_invalid(form)
 # -----------------------------------------------------------------------------------------------------------------------------#
             # aqui faz a validação se é exclusiva ou cominitaria
-            for ambiente in copia.chave.ambientes.all:
+            for ambiente in copia.chave.ambientes.all(): #
                 if ambiente.exclusividade == 'exclusivas':
                     acessar = ambiente.acesso_permitido
                     if acessar != 'todos' and usuario.tipoUsuario != acessar:

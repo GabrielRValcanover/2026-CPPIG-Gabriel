@@ -16,7 +16,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 class ChavesListView(PermissionRequiredMixin,ListView):
     permission_required = 'chaves.view_chave'
-    peemissiom_denied_message = 'Visualizar chave'
+    permission_denied_message = 'Visualizar chave'
     model = Chave
     template_name = 'chaves.html'
 
@@ -39,7 +39,7 @@ class ChavesListView(PermissionRequiredMixin,ListView):
 
 class ChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
     permission_required = 'chaves.add_chave'
-    peemissiom_denied_message = 'Cadastrar chave'
+    permission_denied_message = 'Cadastrar chave'
     model = Chave
     form_class = ChaveModelForm
     template_name = 'chave_form.html'
@@ -48,8 +48,8 @@ class ChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
 
 
 class ChaveUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
-    permission_required = 'chaves.chage_chave'
-    peemissiom_denied_message = 'Editar chave'
+    permission_required = 'chaves.change_chave'
+    permission_denied_message = 'Editar chave'
     model = Chave
     form_class = ChaveModelForm
     template_name = 'chave_form.html'
@@ -58,7 +58,7 @@ class ChaveUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
 
 class ChaveDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteView):
     permission_required = 'chaves.delete_chave'
-    peemissiom_denied_message = 'Exclusão chave'
+    permission_denied_message = 'Exclusão chave'
     model = Chave
     template_name = 'chaves_apagar.html'
     success_url = reverse_lazy('chaves')
