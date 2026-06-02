@@ -65,3 +65,22 @@ class UsuarioPersonalizado(AbstractUser):
 
     def __str__(self):
         return f"{self.nome} ({self.tipoUsuario})"
+
+
+class Secretaria(UsuarioPersonalizado):
+    class Meta:
+        proxy = True
+        verbose_name = 'Secretaria'
+        verbose_name_plural = 'Secretarias'
+
+class Inspetor(UsuarioPersonalizado):
+    class Meta:
+        proxy = True
+        verbose_name = 'Inspetor'
+        verbose_name_plural = 'Inspetores'
+
+class Professor(UsuarioPersonalizado):
+    class Meta:
+        proxy = True
+        verbose_name = 'Professor'
+        verbose_name_plural = 'Professores'
