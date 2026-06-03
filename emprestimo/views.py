@@ -105,12 +105,28 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
             for ambiente in ambientes:
                 bloco = ambiente.bloco
                 if bloco:
-                    existe_mestra_no_bloco = Chave.objects.filter( ambientes__bloco=bloco,tipo='mestra' ).exists()
+                    # existe_mestra_no_bloco = Chave.objects.filter( ambientes__bloco=bloco,tipo='mestra' ).exists()
+                    # if existe_mestra_no_bloco:
+                    #     chave_mestra_selecionada = copias.filter(chave__tipo='mestra', chave__ambientes__bloco=bloco).exists()
+                    #     if not chave_mestra_selecionada:
+                    #         form.add_error('copias_chave',f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra.')
+                    #         return self.form_invalid(form)
+                    existe_mestra_no_bloco = Chave.objects.filter(ambientes__bloco=bloco, tipo='mestra').exists()
                     if existe_mestra_no_bloco:
-                        chave_mestra_selecionada = copias.filter(chave__tipo='mestra', chave__ambientes__bloco=bloco).exists()
-                        if not chave_mestra_selecionada:
-                            form.add_error('copias_chave',f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra.')
-                            return self.form_invalid(form)
+                        mestra_ja_emprestada = CopiaChave.objects.filter(
+                            chave__tipo='mestra',
+                            chave__ambientes__bloco=bloco,
+                            status='emprestada'
+                        ).exists()
+                        if not mestra_ja_emprestada:
+                            chave_mestra_selecionada = copias.filter(
+                                chave__tipo='mestra',
+                                chave__ambientes__bloco=bloco
+                            ).exists()
+                            if not chave_mestra_selecionada:
+                                form.add_error('copias_chave',
+                                               f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra.')
+                                return self.form_invalid(form)
 
  # -----------------------------------------------------------------------------------------------------------------------------#
 
