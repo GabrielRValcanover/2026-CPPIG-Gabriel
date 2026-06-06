@@ -7,152 +7,145 @@
         {% include "head.html" %}
     {% endblock %}
 </head>
-<body>
+<body style="display:flex; flex-direction:column; min-height:100vh;">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"></script>
 
-    {% block header  %}
+    {% block header %}
         {% include "header.html" %}
     {% endblock %}
 
-<div class="container-fluid">
-        <div class="row ">
-                    <div class="sidebar border border-right col-md-2 p-3 bg-body-tertiary d-flex flex-column gap-3">
-                        <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu">
-                        <div class="d-flex justify-content-center align-items-center" style="height: 170px;">
-                           <img src="{% static 'img/logo.png' %}" alt="Logo" width="140">
-                         </div>
+    <div class="container-fluid flex-grow-1">
+        <div class="row">
 
-                        <h3>E.E.E.F. Maria Lucia</h3>
-                          <hr>
-                         {% if request.user.is_authenticated %}
-                        <div class="btn-group dropend mb-2 w-100">
-                               <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                 <i class="bi bi-person-fill-add"></i>
-                                   Cadastrar Usuarios
-                                   </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Cadastrar Usuario </a></li>
-                                <li><a class="dropdown-item" href="{% url 'usuarios' %}">Listagem de Usuarios</a></li>
-                              </ul>
-                            </div>
+            <div class="sidebar border border-right col-md-2 p-3 bg-body-tertiary d-flex flex-column gap-3">
+                <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu">
+                <div class="d-flex justify-content-center align-items-center" style="height: 170px;">
+                   <img src="{% static 'img/logo.png' %}" alt="Logo" width="140">
+                 </div>
 
-                        <div class="btn-group dropend mb-2 w-100">
-                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-buildings"></i>
-                                  Ambientes
-                              </button>
-                              <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'ambiente_adicionar' %}">Cadastrar Ambiente </a></li>
-                                <li><a class="dropdown-item" href="{% url 'ambientes' %}">Listagem de Ambientes</a></li>
-                                  <li><a class="dropdown-item" href="#">--------------------------------------</a></li>
-                                <li><a class="dropdown-item" href="{% url 'bloco_adicionar' %}">Cadastrar Bloco </a></li>
-                                <li><a class="dropdown-item" href="{% url 'blocos' %}">Listagem dos blocos</a></li>
+                <h3>E.E.E.F. Maria Lucia</h3>
+                  <hr>
+                 {% if request.user.is_authenticated %}
+                <div class="btn-group dropend mb-2 w-100">
+                       <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                         <i class="bi bi-person-fill-add"></i>
+                           Cadastrar Usuarios
+                           </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'usuario_adicionar' %}">Cadastrar Usuario </a></li>
+                        <li><a class="dropdown-item" href="{% url 'usuarios' %}">Listagem de Usuarios</a></li>
+                      </ul>
+                    </div>
 
-                              </ul>
-                        </div>
-                        <div class="btn-group dropend mb-2 w-100">
-                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-key"></i>
-                                  Chaves
-                              </button>
-                              <ul class="dropdown-menu">
-<!--                                <li><a class="dropdown-item" href="{% url 'chaves_adicionar' %}">Cadastrar Chaves </a></li>-->
-                                <li><a class="dropdown-item" href="{% url 'chaves' %}">Listagem de Chaves</a></li>
-                                <li><a class="dropdown-item" href="#">--------------------------------------</a></li>
-                                <li><a class="dropdown-item" href="{% url 'copia_chaves_adicionar' %}">Cadastrar Copia Chave</a></li>
-                                <li><a class="dropdown-item" href="{% url 'copia_chaves' %}">Listagem das Copias das chaves</a></li>
-
-                              </ul>
-                        </div>
-                        <div class="btn-group dropend mb-2 w-100">
-                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                               <i class="bi bi-arrow-left-right"></i>
-                                Emprestimo
-                              </button>
-                              <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'emprestimo_adicionar' %}">Realizar um Emrestio </a></li>
-                                <li><a class="dropdown-item" href="{% url 'emprestimos' %}">Emprestimos Realizados</a></li>
-                              </ul>
-                        </div>
-                        <div class="btn-group dropend mb-2 w-100">
-                              <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-calendar-plus"></i>
-                                  Reservas
-                              </button>
-                              <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'reserva_adicionar' %}">Realizar Reservas </a></li>
-                                <li><a class="dropdown-item" href="{% url 'reservas' %}">Reservas Realizadas</a></li>
-                                <li><a class="dropdown-item" href="#">Menu item</a></li>
-                              </ul>
-                        </div>
-                            <div>
-                            <li class="btn-group dropend mb-2 w-100">
-									 <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-door-open"></i>
-										Usuário Logado: {{ request.user.username }}
-                                     </button>
-									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar senha</a></li>
-										<li>
-											<form action="{% url 'logout' %}" method="post">
-												{% csrf_token %}
-												<button class="btn btn-link dropdown-item" type="submit">Log Out</button>
-											</form>
-										</li>
-									</ul>
-								</li>
-							{% else %}
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toddle" href="#" id="navbarAcesso" role="button"
-									   data-bs-toggle="dropdown" aria-expanded="false">
-										Acesso
-									</a>
-									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-									</ul>
-
-								</li>
-							{% endif %}
-							</ul>
-
-                     </div>
-                            <div class="btn-group dropend mb-2 w-100">
-
-                        </div>
+                <div class="btn-group dropend mb-2 w-100">
+                      <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-buildings"></i>
+                          Ambientes
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'ambiente_adicionar' %}">Cadastrar Ambiente </a></li>
+                        <li><a class="dropdown-item" href="{% url 'ambientes' %}">Listagem de Ambientes</a></li>
+                          <li><a class="dropdown-item" href="#">--------------------------------------</a></li>
+                        <li><a class="dropdown-item" href="{% url 'bloco_adicionar' %}">Cadastrar Bloco </a></li>
+                        <li><a class="dropdown-item" href="{% url 'blocos' %}">Listagem dos blocos</a></li>
+                      </ul>
                 </div>
-         </div>
-           <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="btn-group dropend mb-2 w-100">
+                      <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-key"></i>
+                          Chaves
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'chaves' %}">Listagem de Chaves</a></li>
+                        <li><a class="dropdown-item" href="#">--------------------------------------</a></li>
+                        <li><a class="dropdown-item" href="{% url 'copia_chaves_adicionar' %}">Cadastrar Copia Chave</a></li>
+                        <li><a class="dropdown-item" href="{% url 'copia_chaves' %}">Listagem das Copias das chaves</a></li>
+                      </ul>
+                </div>
+                <div class="btn-group dropend mb-2 w-100">
+                      <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                       <i class="bi bi-arrow-left-right"></i>
+                        Emprestimo
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'emprestimo_adicionar' %}">Realizar um Emrestio </a></li>
+                        <li><a class="dropdown-item" href="{% url 'emprestimos' %}">Emprestimos Realizados</a></li>
+                      </ul>
+                </div>
+                <div class="btn-group dropend mb-2 w-100">
+                      <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-calendar-plus"></i>
+                          Reservas
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'reserva_adicionar' %}">Realizar Reservas </a></li>
+                        <li><a class="dropdown-item" href="{% url 'reservas' %}">Reservas Realizadas</a></li>
+                        <li><a class="dropdown-item" href="#">Menu item</a></li>
+                      </ul>
+                </div>
 
-              {% if messages %}
-                  <div class="p-3">
-                      {% for message in messages %}
-                          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                              {{ message }}
-                              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                          </div>
-                      {% endfor %}
-                  </div>
-              {% endif %}
+                <div>
+                <li class="btn-group dropend mb-2 w-100">
+                     <button type="button" class="btn btn-custom dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-door-open"></i>
+                            Usuário Logado: {{ request.user.username }}
+                         </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar senha</a></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-link dropdown-item" type="submit">Log Out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toddle" href="#" id="navbarAcesso" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Acesso
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                </div>
 
-              {% block content %}
-              {% endblock %}
+                <div class="btn-group dropend mb-2 w-100"></div>
+            </div>
+            </div><!-- fecha sidebar -->
 
-          </main>
-        </div>
-    </div>
+            <!-- main DENTRO do row -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                {% if messages %}
+                    <div class="p-3">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
+                {% block content %}
+                {% endblock %}
+            </main>
+
+        </div><!-- fecha row -->
+    </div><!-- fecha container-fluid -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 {% block footer %}
-        {% include "footer.html" %}
-    {% endblock %}
+    {% include "footer.html" %}
+{% endblock %}
 </body>
-
 </html>
-
-
