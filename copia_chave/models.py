@@ -23,9 +23,9 @@ class CopiaChave(models.Model):
     def __str__(self):
       return f"{self.identificador} - {self.chave.descricao} ({self.get_status_display()})"
 
-def save(self, *args, **kwargs):
-    codigoIndentificador = self._state.adding
-    super().save(*args, **kwargs)
-    if codigoIndentificador:
-        CopiaChave.objects.filter(pk=self.pk).update(identificador=str(self.pk))
-        self.identificador = str(self.pk)
+    def save(self, *args, **kwargs):
+        codigoIndentificador = self._state.adding
+        super().save(*args, **kwargs)
+        if codigoIndentificador:
+            CopiaChave.objects.filter(pk=self.pk).update(identificador=str(self.pk))
+            self.identificador = str(self.pk)
