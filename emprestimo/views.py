@@ -185,26 +185,60 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
         response = super().form_valid(form)
         for copia in self.object.copias_chave.all():
             verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
-            copia.status = verificacao_perdida
-            copia.save()
- #https: // docs.djangoproject.com / en / 6.0 / topics / i18n / timezones /  link do timedelta , usei o today para pegar a data de hoje e timedelta para ver a quantidade de duração
- # https: // www.w3schools.com / django / ref_lookups_gte.php , onde eu li sobre o gte, para obter maiores ou iguias aos valores ( usei na data)
+
             if verificacao_perdida == 'perdida':
                 usuario = self.object.pessoa
                 mes = date.today() - timedelta(days=30)
-                # chaves_pedida = Emprestimo.objects.filter(pessoa=usuario,data_devolucao__gte=mes,copias_chave__status='perdida').distinct().count()
-                chaves_perdida = CopiaChave.objects.filter(emprestimos__pessoa=usuario,emprestimos__data_criacao__gte=mes,status = 'perdida').distinct().count()
-                if chaves_perdida >= 3:
-                    # usuario.bloqueado_ate = self.object.data_prevista
-                   usuario.bloqueado_ate = date.today() + timedelta(days=7)
-                   usuario.save()  # tive que salvar para conseguir visualizar os usuarios bloqueado
-                   messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7  dias, após perder 3 chave')
-                elif chaves_perdida >= 1:
-                    # usuario.bloqueado_ate = self.object.data_prevista assim dava erro
+                chaves_perdida = CopiaChave.objects.filter(
+                    emprestimos__pessoa=usuario,
+                    emprestimos__data_criacao__gte=mes,
+                    status='perdida'
+                ).distinct().count()
+
+            # salva o status da copia
+            copia.status = verificacao_perdida
+            copia.save()
+
+            # https://docs.djangoproject.com/en/6.0/topics/i18n/timezones/
+            # https://www.w3schools.com/django/ref_lookups_gte.php
+            if verificacao_perdida == 'perdida':
+                if chaves_perdida >= 2:  # já tinha 2, agora com essa vira 3
+                    usuario.bloqueado_ate = date.today() + timedelta(days=7)
+                    usuario.save()
+                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7 dias, após perder 3 chaves')
+                else:  # 1ª ou 2ª perda
                     usuario.bloqueado_ate = date.today() + timedelta(days=1)
                     usuario.save()
-                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder 1 chave')
-        self.object.status = 'devolvido' # usei pq é necesario para mudar o status na devolução da chave
+                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder chave')
+
+        self.object.status = 'devolvido'  # usei pq é necessario para mudar o status na devolução da chave
         self.object.save()
 
         return response
+ #    def form_valid(self, form):
+ #        response = super().form_valid(form)
+ #        for copia in self.object.copias_chave.all():
+ #            verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
+ #            copia.status = verificacao_perdida
+ #            copia.save()
+ # #https: // docs.djangoproject.com / en / 6.0 / topics / i18n / timezones /  link do timedelta , usei o today para pegar a data de hoje e timedelta para ver a quantidade de duração
+ # # https: // www.w3schools.com / django / ref_lookups_gte.php , onde eu li sobre o gte, para obter maiores ou iguias aos valores ( usei na data)
+ #            if verificacao_perdida == 'perdida':
+ #                usuario = self.object.pessoa
+ #                mes = date.today() - timedelta(days=30)
+ #                # chaves_pedida = Emprestimo.objects.filter(pessoa=usuario,data_devolucao__gte=mes,copias_chave__status='perdida').distinct().count()
+ #                chaves_perdida = CopiaChave.objects.filter(emprestimos__pessoa=usuario,emprestimos__data_criacao__gte=mes,status = 'perdida').distinct().count()
+ #                if chaves_perdida >= 3:
+ #                    # usuario.bloqueado_ate = self.object.data_prevista
+ #                   usuario.bloqueado_ate = date.today() + timedelta(days=7)
+ #                   usuario.save()  # tive que salvar para conseguir visualizar os usuarios bloqueado
+ #                   messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7  dias, após perder 3 chave')
+ #                elif chaves_perdida >= 1:
+ #                    # usuario.bloqueado_ate = self.object.data_prevista assim dava erro
+ #                    usuario.bloqueado_ate = date.today() + timedelta(days=1)
+ #                    usuario.save()
+ #                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder 1 chave')
+ #        self.object.status = 'devolvido' # usei pq é necesario para mudar o status na devolução da chave
+ #        self.object.save()
+ #
+ #        return response

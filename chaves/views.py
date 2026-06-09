@@ -118,9 +118,28 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
         return context
 
 
+# def verificacaoChaves(request, tipo, id):
+#   if tipo == 'ambiente':
+#     chave = Chave.objects.filter(ambientes__id=id).first()
+#     if chave:
+#       ambiente = Ambiente.objects.get(id=id)
+#       return render(request, 'verifica_form.html', {'chave': chave, 'local': ambiente.nomenclatura})
+#     return redirect('chave_ambiente', ambiente_id=id)
+#   elif tipo == 'bloco':
+#     chave = Chave.objects.filter(
+#       bloco_id=id,
+#       tipo='mestra'
+#     ).first()
+#     if chave:
+#       bloco = Bloco.objects.get(id=id)
+#       return render(request, 'verifica_form.html', {'chave': chave, 'local': bloco.nome})
+#     return redirect('chave_bloco', bloco_id=id)
+#
+#   return redirect('chaves')
+
 def verificacaoChaves(request, tipo, id):
   if tipo == 'ambiente':
-    chave = Chave.objects.filter(ambientes__id=id).first()
+    chave = Chave.objects.filter(ambientes__id=id, tipo='comum').first()
     if chave:
       ambiente = Ambiente.objects.get(id=id)
       return render(request, 'verifica_form.html', {'chave': chave, 'local': ambiente.nomenclatura})
