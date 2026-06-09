@@ -7,7 +7,7 @@ class UsuarioModelForm(forms.ModelForm):
 
     class Meta:
         model = UsuarioPersonalizado
-        fields = ['nome','email', 'senha', 'tipoUsuario', 'foto','bloqueado_ate']
+        fields = ['nome','email', 'senha', 'tipoUsuario', 'foto',]
         error_messages = {
             'nome': {'required': 'O username é um campo obrigatório'},
             'email': {'required': 'O email é um campo obrigatório'},

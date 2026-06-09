@@ -23,6 +23,9 @@ class EmprestimoModelForm(forms.ModelForm):
             'data_prevista': forms.DateInput(attrs={'type': 'date'},format='%Y-%m-%d',),
             'hora_prevista': forms.TimeInput(attrs={'type': 'time'},format='%H:%M',),
             'hora': forms.TimeInput(attrs={'type': 'time'},format='%H:%M',),
+            'data_devolucao': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d', ),
+            'hora_devolucao': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M', ),
+
         }
 
         error_messages = {
@@ -32,6 +35,8 @@ class EmprestimoModelForm(forms.ModelForm):
             'data_prevista': {'required': 'A data prevista é um campo obrigatório'},
             'hora': {'required': 'A hora de retirada é um campo obrigatório'},
             'hora_prevista': {'required': 'A hora prevista é um campo obrigatório'},
+            # 'data_devolucao': {'required': 'A data de devolução  é um campo obrigatório'},
+            # 'hora_devolucao': {'required': 'A hora devolução é um campo obrigatório'},
         }
 
     def __init__(self, *args, **kwargs):
@@ -43,6 +48,7 @@ class EmprestimoModelForm(forms.ModelForm):
             self.fields['entregue_por'].queryset = inspetores
         else:
             self.fields['entregue_por'].queryset = Usuario.objects.filter(tipoUsuario='secretaria')
+
 
 
 class EmprestimoDevolucaoForm(forms.ModelForm):
@@ -58,4 +64,7 @@ class EmprestimoDevolucaoForm(forms.ModelForm):
         else:
             self.fields['recebido_por'].queryset = Usuario.objects.filter(tipoUsuario='secretaria')
 
-
+    widgets = {
+        'data_devolucao': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d', ),
+        'hora_devolucao': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M', ),
+        }
