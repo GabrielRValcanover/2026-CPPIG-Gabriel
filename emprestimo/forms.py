@@ -23,8 +23,6 @@ class EmprestimoModelForm(forms.ModelForm):
             'data_prevista': forms.DateInput(attrs={'type': 'date'},format='%Y-%m-%d',),
             'hora_prevista': forms.TimeInput(attrs={'type': 'time'},format='%H:%M',),
             'hora': forms.TimeInput(attrs={'type': 'time'},format='%H:%M',),
-            'data_devolucao': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d', ),
-            'hora_devolucao': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M', ),
 
         }
 
@@ -35,8 +33,8 @@ class EmprestimoModelForm(forms.ModelForm):
             'data_prevista': {'required': 'A data prevista é um campo obrigatório'},
             'hora': {'required': 'A hora de retirada é um campo obrigatório'},
             'hora_prevista': {'required': 'A hora prevista é um campo obrigatório'},
-            # 'data_devolucao': {'required': 'A data de devolução  é um campo obrigatório'},
-            # 'hora_devolucao': {'required': 'A hora devolução é um campo obrigatório'},
+            'data_devolucao': {'required': 'A data de devolução  é um campo obrigatório'},
+            'hora_devolucao': {'required': 'A hora devolução é um campo obrigatório'},
         }
 
     def __init__(self, *args, **kwargs):
@@ -55,6 +53,10 @@ class EmprestimoDevolucaoForm(forms.ModelForm):
     class Meta:
         model = Emprestimo
         fields = ['recebido_por', 'data_devolucao', 'hora_devolucao']
+        widgets = {
+            'data_devolucao': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'hora_devolucao': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -64,7 +66,3 @@ class EmprestimoDevolucaoForm(forms.ModelForm):
         else:
             self.fields['recebido_por'].queryset = Usuario.objects.filter(tipoUsuario='secretaria')
 
-    widgets = {
-        'data_devolucao': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d', ),
-        'hora_devolucao': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M', ),
-        }
