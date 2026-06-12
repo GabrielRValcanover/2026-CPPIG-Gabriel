@@ -111,16 +111,16 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
                     #     if not chave_mestra_selecionada:
                     #         form.add_error('copias_chave',f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra.')
                     #         return self.form_invalid(form)
-                    existe_mestra_no_bloco = Chave.objects.filter(ambientes__bloco=bloco, tipo='mestra').exists()
+                    existe_mestra_no_bloco = Chave.objects.filter(ambientes__bloco=bloco, tipo='mestraBloco').exists()
                     if existe_mestra_no_bloco:
                         mestra_ja_emprestada = CopiaChave.objects.filter(
-                            chave__tipo='mestra',
+                            chave__tipo='mestraBloco',
                             chave__ambientes__bloco=bloco,
                             status='emprestada'
                         ).exists()
                         if not mestra_ja_emprestada:
                             chave_mestra_selecionada = copias.filter(
-                                chave__tipo='mestra',
+                                chave__tipo='mestraBloco',
                                 chave__ambientes__bloco=bloco
                             ).exists()
                             if not chave_mestra_selecionada:
@@ -185,7 +185,7 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
         response = super().form_valid(form)
         for copia in self.object.copias_chave.all():
             verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
-
+            horario_devolucao = self.request.POST.get(f'horario_devolucao_{copia.id}')
             if verificacao_perdida == 'perdida':
                 usuario = self.object.pessoa
                 mes = date.today() - timedelta(days=30)
@@ -197,6 +197,7 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
 
             # salva o status da copia
             copia.status = verificacao_perdida
+            copia.horario_devolucao = horario_devolucao if horario_devolucao else None # usei o nome para não entrar "" e entrar none
             copia.save()
 
             # https://docs.djangoproject.com/en/6.0/topics/i18n/timezones/
@@ -210,9 +211,16 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
                     usuario.bloqueado_ate = date.today() + timedelta(days=1)
                     usuario.save()
                     messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder chave')
+           #aqui faz a verificação se todas as chaves do emprestimo foram devolvidas
+        todas_chaves_devolvidas = all(
+            self.request.POST.get(f'verificacao_perdida_{copia.id}') in ['disponivel', 'perdida','danificada','manutencao']
+            for copia in self.object.copias_chave.all()
+        )
 
-        self.object.status = 'devolvido'  # usei pq é necessario para mudar o status na devolução da chave
-        self.object.save()
+        if todas_chaves_devolvidas:
+            self.object.status = 'devolvido'  # usei pq é necessario para mudar o status na devolução da chave
+            self.object.horario_devolucao = self.object.copias_chave.order_by('horario_devolucao').last().horario_devolucao # usei o last para ver o ultimo horario para
+            self.object.save()
 
         return response
  #    def form_valid(self, form):

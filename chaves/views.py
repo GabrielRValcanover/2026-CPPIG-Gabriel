@@ -102,7 +102,7 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         chave_bloco = super().form_valid(form)
-        self.object.tipo = 'mestra'
+        self.object.tipo = 'mestraBloco'
         self.object.bloco_id = self.kwargs['bloco_id']
         self.object.save()
 

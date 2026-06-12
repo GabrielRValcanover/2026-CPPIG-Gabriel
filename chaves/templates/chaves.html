@@ -50,13 +50,17 @@
                                             {% endfor %}
                                         </td>
                                             <td>
-                                                {% with ambiente=chave.ambientes.first %}
-                                                    {% if ambiente %}
-                                                        {{ ambiente.bloco }}
-                                                    {% else %}
-                                                        Mestra
-                                                    {% endif %}
-                                                {% endwith %}
+                                                {% if chave.bloco %}
+                                                    {{ chave.bloco.nome }}
+                                                {% else %}
+                                                    {% with ambiente=chave.ambientes.first %}
+                                                        {% if ambiente %}
+                                                            {{ ambiente.bloco }}
+                                                        {% else %}
+                                                            -
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                {% endif %}
                                             </td>
                                        <td> {{chave.tipo}}</td>
                                         <td style="text-align: center">

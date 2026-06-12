@@ -6,6 +6,7 @@ class Chave(models.Model):
 
     TIPO_CHOICES =[
       ('comum', 'Comum'),
+        ('mestraBloco', 'Mestra Bloco'),
       ('mestra', 'Mestra'),
     ]
 

@@ -42,6 +42,13 @@ class CopiaChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
     success_url = reverse_lazy('copia_chaves')
     success_message = 'Cópia criada com sucesso!'
 
+    def form_valid(self, form):
+        chave = form.cleaned_data['chave']
+        if CopiaChave.objects.filter(chave=chave).exists():
+            form.add_error('chave',f'Esta chave "{chave}" já possui uma cópia cadastrada')
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
 
 
 class CopiaChaveUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
