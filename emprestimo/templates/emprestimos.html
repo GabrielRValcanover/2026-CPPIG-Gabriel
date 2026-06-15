@@ -46,11 +46,12 @@
                                         <td>{{ emprestimo.pessoa }}</td>
                                         <td>
                                             {% for copia in emprestimo.copias_chave.all %}
-                                                {% if forloop.last %}
-                                                    {{ copia.identificador }}
-                                                {% else %}
-                                                    {{ copia.identificador }} ,
-                                                {% endif %}
+                                                <div>
+                                                    {{ copia.chave }}
+                                                    {% if copia.horario_devolucao %}
+                                                        <small class="text-muted">({{ copia.horario_devolucao }})</small>
+                                                    {% endif %}
+                                                </div>
                                             {% empty %}
                                                 <p class="text-center mt-4">Nenhum empréstimo cadastrado.</p>
                                             {% endfor %}

@@ -41,8 +41,6 @@
                     </p>
                     {% csrf_token %}
                     {% bootstrap_field form.recebido_por %}
-                    {% bootstrap_field form.data_devolucao %}
-                    {% bootstrap_field form.hora_devolucao %}
                     <div class="mb-3">
                             <label class="form-label fw-bold">Status das Chaves após devolução</label>
                             {% for copia in object.copias_chave.all %}
@@ -51,16 +49,21 @@
                                     <i class="bi bi-caret-right-fill"></i>
                                     <label class="form-label">{{ copia.chave }}</label>
 
+
                                     <select name="verificacao_perdida_{{ copia.id }}" class="form-select">
-                                        <option value="disponivel">Disponível</option>
-                                        <option value="emprestada">Emprestada</option>
-                                        <option value="manutencao">Manutenção</option>
-                                        <option value="perdida">Perdida</option>
-                                        <option value="danificada">Danificada</option>
+                                        <option value="emprestada" {% if copia.status == 'emprestada' %}
+                                                selected{% endif %}>Emprestada</option>
+                                        <option value="disponivel" {% if copia.status == 'disponivel' %}
+                                                selected{% endif %}>Disponível</option>
+                                        <option value="manutencao" {% if copia.status == 'manutencao' %}
+                                                selected{% endif %}>Manutenção</option>
+                                        <option value="perdida" {% if copia.status == 'perdida' %}
+                                                selected{% endif %}>Perdida</option>
+                                        <option value="danificada" {% if copia.status == 'danificada' %}
+                                                selected{% endif %}>Danificada</option>
                                     </select>
                                     <label class="mt-2">Hora de devolução desta chave</label>
-                                    <input type="time" name="horario_devolucao_{{ copia.id}}" class="form-control">
-                                </div>
+                                    <input type="time" name="horario_devolucao_{{ copia.id }}" class="form-control" value="{{ copia.horario_devolucao|time:'H:i'|default:'' }}">                                </div>
                             {% endfor %}
                         </div>
                     <div class="text-end">

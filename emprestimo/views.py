@@ -173,56 +173,75 @@ class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteVi
             copia.save()
         return super().form_valid(form)
 
-
-class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
-    model = Emprestimo
-    form_class = EmprestimoDevolucaoForm
-    template_name = 'emprestimo_devolucao.html'
-    success_url = reverse_lazy('emprestimos')
-    success_message = "Devolução registrada com sucesso!"
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        for copia in self.object.copias_chave.all():
-            verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
-            horario_devolucao = self.request.POST.get(f'horario_devolucao_{copia.id}')
-            if verificacao_perdida == 'perdida':
-                usuario = self.object.pessoa
-                mes = date.today() - timedelta(days=30)
-                chaves_perdida = CopiaChave.objects.filter(
-                    emprestimos__pessoa=usuario,
-                    emprestimos__data_criacao__gte=mes,
-                    status='perdida'
-                ).distinct().count()
-
-            # salva o status da copia
-            copia.status = verificacao_perdida
-            copia.horario_devolucao = horario_devolucao if horario_devolucao else None # usei o nome para não entrar "" e entrar none
-            copia.save()
-
-            # https://docs.djangoproject.com/en/6.0/topics/i18n/timezones/
-            # https://www.w3schools.com/django/ref_lookups_gte.php
-            if verificacao_perdida == 'perdida':
-                if chaves_perdida >= 2:  # já tinha 2, agora com essa vira 3
-                    usuario.bloqueado_ate = date.today() + timedelta(days=7)
-                    usuario.save()
-                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7 dias, após perder 3 chaves')
-                else:  # 1ª ou 2ª perda
-                    usuario.bloqueado_ate = date.today() + timedelta(days=1)
-                    usuario.save()
-                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder chave')
-           #aqui faz a verificação se todas as chaves do emprestimo foram devolvidas
-        todas_chaves_devolvidas = all(
-            self.request.POST.get(f'verificacao_perdida_{copia.id}') in ['disponivel', 'perdida','danificada','manutencao']
-            for copia in self.object.copias_chave.all()
-        )
-
-        if todas_chaves_devolvidas:
-            self.object.status = 'devolvido'  # usei pq é necessario para mudar o status na devolução da chave
-            self.object.horario_devolucao = self.object.copias_chave.order_by('horario_devolucao').last().horario_devolucao # usei o last para ver o ultimo horario para
-            self.object.save()
-
-        return response
+#
+# class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
+#     model = Emprestimo
+#     form_class = EmprestimoDevolucaoForm
+#     template_name = 'emprestimo_devolucao.html'
+#     success_url = reverse_lazy('emprestimos')
+#     success_message = "Devolução registrada com sucesso!"
+#
+#     def form_valid(self, form):
+#         response = super().form_valid(form)
+#         for copia in self.object.copias_chave.all():
+#             verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
+#             horario_devolucao = self.request.POST.get(f'horario_devolucao_{copia.id}')
+#             if verificacao_perdida == 'perdida':
+#                 usuario = self.object.pessoa
+#                 mes = date.today() - timedelta(days=30)
+#                 chaves_perdida = CopiaChave.objects.filter(
+#                     emprestimos__pessoa=usuario,
+#                     emprestimos__data_criacao__gte=mes,
+#                     status='perdida'
+#                 ).distinct().count()
+#
+#             # salva o status da copia
+#             copia.status = verificacao_perdida
+#             copia.horario_devolucao = horario_devolucao if horario_devolucao else None # usei o nome para não entrar "" e entrar none
+#             copia.save()
+#
+#             # https://docs.djangoproject.com/en/6.0/topics/i18n/timezones/
+#             # https://www.w3schools.com/django/ref_lookups_gte.php
+#             if verificacao_perdida == 'perdida':
+#                 if chaves_perdida >= 2:  # já tinha 2, agora com essa vira 3
+#                     usuario.bloqueado_ate = date.today() + timedelta(days=7)
+#                     usuario.save()
+#                     messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7 dias, após perder 3 chaves')
+#                 else:  # 1ª ou 2ª perda
+#                     usuario.bloqueado_ate = date.today() + timedelta(days=1)
+#                     usuario.save()
+#                     messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder chave')
+#            #aqui faz a verificação se todas as chaves do emprestimo foram devolvidas
+#             # todas_chaves_devolvidas = all(
+#             # self.request.POST.get(f'verificacao_perdida_{copia.id}') in ['disponivel', 'perdida', 'danificada','manutencao']
+#             #     for copia in self.object.copias_chave.all()
+#             # )
+#     todas_chaves_devolvidas = all(
+#         copia.status in ['disponivel', 'perdida', 'danificada', 'manutencao']
+#         for copia in self.object.copias_chave.all()
+#     )
+#
+#     if todas_chaves_devolvidas:
+#         self.object.status = 'devolvido'
+#         ultima_copia = self.object.copias_chave.exclude(horario_devolucao__isnull=True).order_by('horario_devolucao').last()
+#         if ultima_copia:
+#             self.object.hora_devolucao = ultima_copia.horario_devolucao
+#             self.object.data_devolucao = date.today()
+#     else:
+#         self.object.status = 'pendente'
+#     self.object.save()
+#     return response
+        # todas_chaves_devolvidas = all(
+        #     self.request.POST.get(f'verificacao_perdida_{copia.id}') in ['disponivel', 'perdida','danificada','manutencao']
+        #     for copia in self.object.copias_chave.all()
+        # )
+        #
+        # if todas_chaves_devolvidas:
+        #     self.object.status = 'devolvido'  # usei pq é necessario para mudar o status na devolução da chave
+        #     self.object.horario_devolucao = self.object.copias_chave.order_by('horario_devolucao').last().horario_devolucao # usei o last para ver o ultimo horario para
+        #     self.object.save()
+        #
+        # return response
  #    def form_valid(self, form):
  #        response = super().form_valid(form)
  #        for copia in self.object.copias_chave.all():
@@ -250,3 +269,57 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
  #        self.object.save()
  #
  #        return response
+class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
+    model = Emprestimo
+    form_class = EmprestimoDevolucaoForm
+    template_name = 'emprestimo_devolucao.html'
+    success_url = reverse_lazy('emprestimos')
+    success_message = "Devolução registrada com sucesso!"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        for copia in self.object.copias_chave.all():
+            verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
+            horario_devolucao = self.request.POST.get(f'horario_devolucao_{copia.id}')
+
+            if verificacao_perdida == 'perdida':
+                usuario = self.object.pessoa
+                mes = date.today() - timedelta(days=30)
+                chaves_perdida = CopiaChave.objects.filter(
+                    emprestimos__pessoa=usuario,
+                    emprestimos__data_criacao__gte=mes,
+                    status='perdida'
+                ).distinct().count()
+
+            # salva o status da copia
+            copia.status = verificacao_perdida
+            copia.horario_devolucao = horario_devolucao if horario_devolucao else None
+            copia.save()
+
+            if verificacao_perdida == 'perdida':
+                if chaves_perdida >= 2:
+                    usuario.bloqueado_ate = date.today() + timedelta(days=7)
+                    usuario.save()
+                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 7 dias, após perder 3 chaves')
+                else:
+                    usuario.bloqueado_ate = date.today() + timedelta(days=1)
+                    usuario.save()
+                    messages.error(self.request, f'{usuario.nome} usuario bloqueado por 24 horas, após perder chave')
+
+
+        todas_chaves_devolvidas = all(
+            copia.status in ['disponivel', 'perdida', 'danificada', 'manutencao']
+            for copia in self.object.copias_chave.all()
+        )
+
+        if todas_chaves_devolvidas:
+            self.object.status = 'devolvido'
+            ultima_copia = self.object.copias_chave.exclude(horario_devolucao__isnull=True).order_by('horario_devolucao').last()
+            if ultima_copia:
+                self.object.hora_devolucao = ultima_copia.horario_devolucao
+                self.object.data_devolucao = date.today()
+        else:
+            self.object.status = 'pendente'
+
+        self.object.save()
+        return response

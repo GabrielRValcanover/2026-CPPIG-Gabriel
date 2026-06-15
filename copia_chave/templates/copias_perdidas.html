@@ -39,13 +39,11 @@
                                 {% for copias in object_list %}
                                         <tr>
                                             <td>{{ copias.chave }}</td>
-
                                             <td>
                                                 <span class="badge bg-danger">
                                                     {{ copias.status }}
                                                 </span>
                                             </td>
-
                                             <td class="text-center">
                                                 <a href="{% url 'copia_chaves_editar' copias.pk %}">
                                                     <i class="bi bi-pencil-square"></i>
