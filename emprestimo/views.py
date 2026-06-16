@@ -7,7 +7,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from chaves.models import Chave
-from .models import Emprestimo, EmprestimoCopiaChave
+from .models import Emprestimo
+from .models import EmprestimoCopiaChave
 from reserva.models import Reserva
 from .forms import EmprestimoModelForm, EmprestimoDevolucaoForm
 from copia_chave.models import CopiaChave
@@ -137,7 +138,7 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
                 chaves_por_emprestimo += emprestimo.copias_chave.count()
         total_de_chaves = chaves_por_emprestimo + copias.count()
         if total_de_chaves > 5:
-            form.add_error('pessoa',f'{usuario.nome} cota de chaves excedita ')
+            form.add_error('pessoa',f'{usuario.nome} cota de 5 chaves excedita ')
             return self.form_invalid(form)
 
         # form.instance.status = 'emprestada'

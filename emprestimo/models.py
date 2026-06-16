@@ -19,7 +19,9 @@ class Emprestimo(models.Model):
   pessoa = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Quem retirou', on_delete=models.CASCADE, related_name='emprestimos')
   entregue_por = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Entregue por', on_delete=models.SET_NULL, null=True,blank=True, related_name='emprestimos_entregues')
   recebido_por = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Recebido por', on_delete=models.SET_NULL, null=True,blank=True, related_name='emprestimos_recebidos')
-  copias_chave = models.ManyToManyField(CopiaChave, verbose_name='Cópias das Chaves',related_name='emprestimos')
+  # copias_chave = models.ManyToManyField(CopiaChave, verbose_name='Cópias das Chaves',related_name='emprestimos')
+  copias_chave = models.ManyToManyField(CopiaChave, verbose_name='Cópias das Chaves',through='EmprestimoCopiaChave',related_name='emprestimos')
+
   data_criacao = models.DateField('Data Criação', auto_now_add=True)
   data_prevista = models.DateField('Data Prevista')
   data_devolucao = models.DateField('Data Devolução', null=True, blank=True)
@@ -38,7 +40,7 @@ class Emprestimo(models.Model):
     return f"{self.pessoa.get_full_name() or self.pessoa.username} - {self.data_criacao}"
 
   def get_horarios_do_emprestimo(self):
-        return {emprestmo_chave.copia_chave_id: emprestmo_chave.horario_devolucao for emprestmo_chave in sel.emprestimocopia_set.all()}
+        return {emprestmo_chave.copia_chave_id: emprestmo_chave.horario_devolucao for emprestmo_chave in self.emprestimocopia_set.all()}
 
 
 
