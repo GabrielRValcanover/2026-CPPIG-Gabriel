@@ -67,3 +67,10 @@ class EmprestimoDevolucaoForm(forms.ModelForm):
         else:
             self.fields['recebido_por'].queryset = Usuario.objects.filter(tipoUsuario='secretaria')
 
+    def save(self, commit=True): # Salve imediatamente no banco de dados (padrão) explicação pelo commit ele salva no banco automatico
+        copias = self.cleaned_data.pop('copias_chave',[]) #pop para nao aprofundar muito nos detalhes
+        instance =super().save(commit=commit)
+        if commit:
+            self._copias_selecionadas = copias
+        return instance
+

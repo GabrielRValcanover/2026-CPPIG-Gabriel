@@ -37,9 +37,22 @@ class Emprestimo(models.Model):
   def __str__(self):
     return f"{self.pessoa.get_full_name() or self.pessoa.username} - {self.data_criacao}"
 
+  def get_horarios_do_emprestimo(self):
+        return {emprestmo_chave.copia_chave_id: emprestmo_chave.horario_devolucao for emprestmo_chave in sel.emprestimocopia_set.all()}
 
 
 
+class EmprestimoCopiaChave(models.Model):
+    emprestimo= models.ForeignKey(Emprestimo, verbose_name='Emprestimo', on_delete=models.CASCADE)
+    copia_chave = models.ForeignKey(CopiaChave, verbose_name='Chaves', on_delete=models.CASCADE)
+    horario_devolucao= models.TimeField('harario de devolucao', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Chave de Emprestimo'
+        verbose_name_plural = 'Chaves de Emprestimos'
+
+    def __str__(self):
+        return f'{self.emprestimo} - {self.copia_chave} '
 
 
 

@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from chaves.models import Chave
-from .models import Emprestimo
+from .models import Emprestimo, EmprestimoCopiaChave
 from reserva.models import Reserva
 from .forms import EmprestimoModelForm, EmprestimoDevolucaoForm
 from copia_chave.models import CopiaChave
@@ -140,14 +140,22 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
             form.add_error('pessoa',f'{usuario.nome} cota de chaves excedita ')
             return self.form_invalid(form)
 
+        # form.instance.status = 'emprestada'
+        # response = super().form_valid(form)
+        # lembrete_email(self.object) # função para mandar o email de 30 min
+        # for copia in self.object.copias_chave.all():
+        #     copia.status = 'emprestada'
+        #     copia.save()
+        # return response
+
         form.instance.status = 'emprestada'
         response = super().form_valid(form)
-        lembrete_email(self.object) # função para mandar o email de 30 min
-        for copia in self.object.copias_chave.all():
+        for copia in copias:
+            EmprestimoCopiaChave = object.create(emprestimo=self.object, copia_chave=copia)
             copia.status = 'emprestada'
             copia.save()
+        lembrete_email(self.object)  # função para mandar o email de 30 min
         return response
-
 
 class EmprestimoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'emprestimo.change_emprestimo'
@@ -276,6 +284,16 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('emprestimos')
     success_message = "Devolução registrada com sucesso!"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for copia in self.object.copias_chave.all():
+            emprestmo_chave= EmprestimoCopiaChave.objects.filter(emprestimo=self.object, copia_chave=copia).first()
+            if emprestmo_chave and emprestmo_chave.horario_devolucao:
+                copia.horario_atual = emprestmo_chave.horario_devolucao.strftime('%H:%M')
+            else:
+                copia.horario_atual = ''
+        return context
+
     def form_valid(self, form):
         response = super().form_valid(form)
         for copia in self.object.copias_chave.all():
@@ -293,7 +311,7 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
 
             # salva o status da copia
             copia.status = verificacao_perdida
-            copia.horario_devolucao = horario_devolucao if horario_devolucao else None
+            # copia.horario_devolucao = horario_devolucao if horario_devolucao else None
             copia.save()
 
             if verificacao_perdida == 'perdida':
@@ -312,9 +330,22 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
             for copia in self.object.copias_chave.all()
         )
 
+        # if todas_chaves_devolvidas:
+        #     self.object.status = 'devolvido'
+        #     ultima_copia = self.object.copias_chave.exclude(horario_devolucao__isnull=True).order_by('horario_devolucao').last()
+        #     if ultima_copia:
+        #         self.object.hora_devolucao = ultima_copia.horario_devolucao
+        #         self.object.data_devolucao = date.today()
+        # else:
+        #     self.object.status = 'pendente'
+        #
+        # self.object.save()
+        # return response
+
         if todas_chaves_devolvidas:
             self.object.status = 'devolvido'
-            ultima_copia = self.object.copias_chave.exclude(horario_devolucao__isnull=True).order_by('horario_devolucao').last()
+            # ultima_copia = self.object.copias_chave.exclude(horario_devolucao__isnull=True).order_by('horario_devolucao').last()
+            ultima_copia = EmprestimoCopiaChave.objects.filter(emprestimo=self.object, horario_devolucao__isnull=False).order_by('-horario_devolucao').first()
             if ultima_copia:
                 self.object.hora_devolucao = ultima_copia.horario_devolucao
                 self.object.data_devolucao = date.today()

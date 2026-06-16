@@ -63,7 +63,7 @@
                                                 selected{% endif %}>Danificada</option>
                                     </select>
                                     <label class="mt-2">Hora de devolução desta chave</label>
-                                    <input type="time" name="horario_devolucao_{{ copia.id }}" class="form-control" value="{{ copia.horario_devolucao|time:'H:i'|default:'' }}">                                </div>
+                                    <input type="time" name="horario_devolucao_{{ copia.id }}" class="form-control" value="{{ copia.horario_atual|time:'H:i'|default:'' }}"></div>
                             {% endfor %}
                         </div>
                     <div class="text-end">
