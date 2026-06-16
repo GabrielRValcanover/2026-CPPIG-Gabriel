@@ -27,7 +27,7 @@
                     <p class="p-2 mt-2"><strong>Data Prevista: </strong>{{ object.data_prevista }}</p>
                     <p class="p-2 mt-2"><strong>Hora de Retirada: </strong>{{ object.hora }}</p>
                     <p class="p-2 mt-2"><strong>Cópias das Chaves: </strong>
-                        {% for copia in object.copias_chave.all %}
+                        {% for copia in object.copias_chave.distinct() %}
                             <span class="badge
                                 {% if copia.status == 'disponivel' %}bg-success
                                 {% elif copia.status == 'emprestada' %}bg-danger

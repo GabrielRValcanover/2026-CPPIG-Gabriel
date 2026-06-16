@@ -1,5 +1,6 @@
 from datetime import timedelta, date
 
+import objects
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
@@ -141,18 +142,10 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
             form.add_error('pessoa',f'{usuario.nome} cota de 5 chaves excedita ')
             return self.form_invalid(form)
 
-        # form.instance.status = 'emprestada'
-        # response = super().form_valid(form)
-        # lembrete_email(self.object) # função para mandar o email de 30 min
-        # for copia in self.object.copias_chave.all():
-        #     copia.status = 'emprestada'
-        #     copia.save()
-        # return response
-
         form.instance.status = 'emprestada'
         response = super().form_valid(form)
         for copia in copias:
-            EmprestimoCopiaChave = object.create(emprestimo=self.object, copia_chave=copia)
+            EmprestimoCopiaChave.objects.create(emprestimo=self.object, copia_chave=copia)
             copia.status = 'emprestada'
             copia.save()
         lembrete_email(self.object)  # função para mandar o email de 30 min
@@ -312,8 +305,12 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
 
             # salva o status da copia
             copia.status = verificacao_perdida
-            # copia.horario_devolucao = horario_devolucao if horario_devolucao else None
             copia.save()
+
+            emprestmo_chave = EmprestimoCopiaChave.objects.filter(emprestimo=self.object, copia_chave=copia).first()
+            if emprestmo_chave:
+                emprestmo_chave.horario_devolucao = horario_devolucao if horario_devolucao else None
+                emprestmo_chave.save()
 
             if verificacao_perdida == 'perdida':
                 if chaves_perdida >= 2:
