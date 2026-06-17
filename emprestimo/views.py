@@ -310,6 +310,7 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
             copia.status = verificacao_perdida
             copia.save()
 
+            horario_devolucao = self.request.POST.get(f'horario_devolucao_{copia.id}')
             emprestmo_chave = EmprestimoCopiaChave.objects.filter(emprestimo=self.object, copia_chave=copia).first()
             if emprestmo_chave:
                 emprestmo_chave.horario_devolucao = horario_devolucao if horario_devolucao else None
