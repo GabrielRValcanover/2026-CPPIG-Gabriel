@@ -45,9 +45,12 @@
                                         <td>{{ emprestimo.id }}</td>
                                         <td>{{ emprestimo.pessoa }}</td>
                                         <td>
-                                            {% for copia in emprestimo.copias_chave.all %}
+                                            {% for ec in emprestimo.emprestimocopiachave_set.all %}
                                                 <div>
-                                                    {{ copia.chave }}
+                                                    {{ ec.copia_chave.chave }}
+                                                    {% if ec.horario_devolucao %}
+                                                        <small class="text-muted">({{ ec.horario_devolucao|time:"H:i" }})</small>
+                                                    {% endif %}
                                                 </div>
                                             {% empty %}
                                                 <p class="text-center mt-4">Nenhum empréstimo cadastrado.</p>

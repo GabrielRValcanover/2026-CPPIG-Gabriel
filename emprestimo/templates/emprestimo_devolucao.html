@@ -27,7 +27,7 @@
                     <p class="p-2 mt-2"><strong>Data Prevista: </strong>{{ object.data_prevista }}</p>
                     <p class="p-2 mt-2"><strong>Hora de Retirada: </strong>{{ object.hora }}</p>
                     <p class="p-2 mt-2"><strong>Cópias das Chaves: </strong>
-                        {% for copia in object.copias_chave.distinct() %}
+                        {% for copia in object.copias_chave.all %}
                             <span class="badge
                                 {% if copia.status == 'disponivel' %}bg-success
                                 {% elif copia.status == 'emprestada' %}bg-danger
@@ -63,7 +63,8 @@
                                                 selected{% endif %}>Danificada</option>
                                     </select>
                                     <label class="mt-2">Hora de devolução desta chave</label>
-                                    <input type="time" name="horario_devolucao_{{ copia.id }}" class="form-control" value="{{ copia.horario_atual|time:'H:i'|default:'' }}"></div>
+                                    <input type="time" name="horario_devolucao_{{ copia.id }}" class="form-control" value="{{ copia.horario_atual }}">
+                               <div>
                             {% endfor %}
                         </div>
                     <div class="text-end">

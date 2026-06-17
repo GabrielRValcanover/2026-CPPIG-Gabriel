@@ -145,7 +145,7 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
         form.instance.status = 'emprestada'
         response = super().form_valid(form)
         for copia in copias:
-            EmprestimoCopiaChave.objects.create(emprestimo=self.object, copia_chave=copia)
+            # EmprestimoCopiaChave.objects.create(emprestimo=self.object, copia_chave=copia)
             copia.status = 'emprestada'
             copia.save()
         lembrete_email(self.object)  # função para mandar o email de 30 min
@@ -170,9 +170,10 @@ class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteVi
     success_message = "Emprestimo Deletado com sucesso!"
 
     def form_valid(self, form):
-        for copia in self.object.copias_chave.all():
-            copia.status = 'disponivel'
-            copia.save()
+        # for copia in self.object.copias_chave.all():
+        for copia in self.object.copias_chave.distinct():
+         copia.status = 'disponivel'
+         copia.save()
         return super().form_valid(form)
 
 #
@@ -280,7 +281,8 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        for copia in self.object.copias_chave.all():
+        # for copia in self.object.copias_chave.all():
+        for copia in self.object.copias_chave.distinct():
             emprestmo_chave= EmprestimoCopiaChave.objects.filter(emprestimo=self.object, copia_chave=copia).first()
             if emprestmo_chave and emprestmo_chave.horario_devolucao:
                 copia.horario_atual = emprestmo_chave.horario_devolucao.strftime('%H:%M')
@@ -290,7 +292,8 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        for copia in self.object.copias_chave.all():
+        # for copia in self.object.copias_chave.all():
+        for copia in self.object.copias_chave.distinct():
             verificacao_perdida = self.request.POST.get(f'verificacao_perdida_{copia.id}')
             horario_devolucao = self.request.POST.get(f'horario_devolucao_{copia.id}')
 
@@ -325,7 +328,8 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
 
         todas_chaves_devolvidas = all(
             copia.status in ['disponivel', 'perdida', 'danificada', 'manutencao']
-            for copia in self.object.copias_chave.all()
+            # for copia in self.object.copias_chave.all()
+            for copia in self.object.copias_chave.distinct()
         )
 
         # if todas_chaves_devolvidas:
