@@ -1,6 +1,6 @@
 from datetime import timedelta, date
 
-import objects
+# import objects
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator

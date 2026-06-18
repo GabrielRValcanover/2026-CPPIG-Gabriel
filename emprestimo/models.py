@@ -39,10 +39,11 @@ class Emprestimo(models.Model):
   def __str__(self):
     return f"{self.pessoa.get_full_name() or self.pessoa.username} - {self.data_criacao}"
 
+  # def get_horarios_do_emprestimo(self):
+  #       return {emprestmo_chave.copia_chave_id: emprestmo_chave.horario_devolucao for emprestmo_chave in self.emprestimocopia_set.all()}
+
   def get_horarios_do_emprestimo(self):
-        return {emprestmo_chave.copia_chave_id: emprestmo_chave.horario_devolucao for emprestmo_chave in self.emprestimocopia_set.all()}
-
-
+    return {ec.copia_chave_id: ec.horario_devolucao for ec in self.emprestimocopiachave_set.all()}
 
 class EmprestimoCopiaChave(models.Model):
     emprestimo= models.ForeignKey(Emprestimo, verbose_name='Emprestimo', on_delete=models.CASCADE)
