@@ -60,6 +60,8 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
             form.add_error('pessoa', f'{usuario.nome} está bloqueado até {usuario.bloqueado_ate}.')
             return self.form_invalid(form)
 #-----------------------------------------------------------------------------------------------------------------------------#
+
+        #aqui verifica se tem alguma reserva ou se ela esta bloqueada
         copias = form.cleaned_data['copias_chave']
         data = form.cleaned_data['data_prevista']
         for copia in copias:
@@ -90,7 +92,6 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
                                        f'para {ambiente.get_acesso_permitido_display()}')
                         return self.form_invalid(form)
 
- # https: // swesadiqul.medium.com / mastering - the - distinct - method - 12 d2cad2abda link que eu achei o significado do distinct() para nao entrar duplicado
 
             # if copia.chave.ambientes.count() == 1:
             #     precisa_chave_mestra = Chave.objects.filter(ambientes__in=copia.chave.ambientes.all()).distinct()
@@ -150,6 +151,7 @@ class EmprestimoAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView)
             copia.save()
         lembrete_email(self.object)  # função para mandar o email de 30 min
         return response
+ # -----------------------------------------------------------------------------------------------------------------------------#
 
 class EmprestimoUpdateView(PermissionRequiredMixin,SuccessMessageMixin, UpdateView):
     permission_required = 'emprestimo.change_emprestimo'
@@ -203,8 +205,7 @@ class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteVi
 #             copia.horario_devolucao = horario_devolucao if horario_devolucao else None # usei o nome para não entrar "" e entrar none
 #             copia.save()
 #
-#             # https://docs.djangoproject.com/en/6.0/topics/i18n/timezones/
-#             # https://www.w3schools.com/django/ref_lookups_gte.php
+#
 #             if verificacao_perdida == 'perdida':
 #                 if chaves_perdida >= 2:  # já tinha 2, agora com essa vira 3
 #                     usuario.bloqueado_ate = date.today() + timedelta(days=7)
@@ -272,6 +273,8 @@ class EmprestimoDeleteView(PermissionRequiredMixin,SuccessMessageMixin, DeleteVi
  #        self.object.save()
  #
  #        return response
+
+
 class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
     model = Emprestimo
     form_class = EmprestimoDevolucaoForm
@@ -281,13 +284,15 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # for copia in self.object.copias_chave.all():
+        copias = []
         for copia in self.object.copias_chave.distinct():
             emprestmo_chave= EmprestimoCopiaChave.objects.filter(emprestimo=self.object, copia_chave=copia).first()
             if emprestmo_chave and emprestmo_chave.horario_devolucao:
                 copia.horario_atual = emprestmo_chave.horario_devolucao.strftime('%H:%M')
             else:
                 copia.horario_atual = ''
+            copias.append(copia)
+        context['copias_individual'] = copias
         return context
 
     def form_valid(self, form):
@@ -310,10 +315,11 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
             copia.status = verificacao_perdida
             copia.save()
 
+            #salva as copias separadamente
             horario_devolucao = self.request.POST.get(f'horario_devolucao_{copia.id}')
             emprestmo_chave = EmprestimoCopiaChave.objects.filter(emprestimo=self.object, copia_chave=copia).first()
-            if emprestmo_chave:
-                emprestmo_chave.horario_devolucao = horario_devolucao if horario_devolucao else None
+            if emprestmo_chave and horario_devolucao:
+                emprestmo_chave.horario_devolucao = horario_devolucao
                 emprestmo_chave.save()
 
             if verificacao_perdida == 'perdida':
@@ -357,3 +363,11 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
 
         self.object.save()
         return response
+
+
+# referencias
+# https: // docs.djangoproject.com / en / 6.0 / topics / i18n / timezones /  link do timedelta , usei o today para pegar a data de hoje e timedelta para ver a quantidade de duração
+# https: // www.w3schools.com / django / ref_lookups_gte.php , onde eu li sobre o gte, para obter maiores ou iguias aos valores ( usei na data)
+# https://docs.djangoproject.com/en/6.0/topics/i18n/timezones/
+# https://www.w3schools.com/django/ref_lookups_gte.php
+ # https: // swesadiqul.medium.com / mastering - the - distinct - method - 12 d2cad2abda link que eu achei o significado do distinct() para nao entrar duplicado

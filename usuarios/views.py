@@ -14,7 +14,7 @@ from django.views.generic import ListView
 
 class UsuariosListView(PermissionRequiredMixin,ListView):
     permission_required = 'usuarios.view_usuariopersonalizado'
-    peemissiom_denied_message = 'Visualizar Usuario'
+    permissiom_denied_message = 'Visualizar Usuario'
     model = UsuarioPersonalizado
     template_name = 'usuarios.html'
 
