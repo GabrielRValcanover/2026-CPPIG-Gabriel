@@ -19,79 +19,60 @@
                 </div>
             </form>
             {% if object_list %}
+            <div class="row g-3">
+                {% for emprestimo in object_list %}
+            <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h3 class="text-center">Empréstimos Cadastrados</h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-primary">
-                                <th>Nº do Empréstimo</th>
-                                <th>Pessoa</th>
-                                <th>Cópias das Chaves</th>
-                                <th>Entregue por</th>
-                                <th>Data Criação</th>
-                                <th>Data Prevista</th>
-                                <th>Data Devolução</th>
-                                <th>Hora Retirada</th>
-                                <th>Hora Prevista</th>
-                                <th>Status</th>
-                                <th>Recebido por</th>
-                                <th>Hora Devolução</th>
-
-                                <th style="width: 100px; text-align: center">Ações</th>
-                            </thead>
-                            <tbody>
-                                {% for emprestimo in object_list %}
-                                    <tr>
-                                        <td>{{ emprestimo.id }}</td>
-                                        <td>{{ emprestimo.pessoa }}</td>
-                                        <td>
-                                            {% for ec in emprestimo.emprestimocopiachave_set.all %}
-                                                <div>
-                                                    {{ ec.copia_chave.chave }}
-                                                    {% if ec.horario_devolucao %}
-                                                        <small class="text-muted">({{ ec.horario_devolucao|time:"H:i" }})</small>
-                                                    {% endif %}
-                                                </div>
-                                            {% empty %}
-                                                <p class="text-center mt-4">Nenhum empréstimo cadastrado.</p>
-                                            {% endfor %}
-                                        </td>
-                                        <td>{{ emprestimo.entregue_por }}</td>
-                                        <td>{{ emprestimo.data_criacao }}</td>
-                                        <td>{{ emprestimo.data_prevista }}</td>
-                                        <td>{{ emprestimo.data_devolucao|default:"-" }}</td>
-                                        <td>{{ emprestimo.hora }}</td>
-                                        <td>{{ emprestimo.hora_prevista }}</td>
-                                        <td>{{ emprestimo.status }}</td>
-                                         <td>{{ emprestimo.recebido_por|default:"-" }}</td>
-                                        <td>{{ emprestimo.hora_devolucao|default:"-" }}</td>
-                                        <td style="text-align: center">
-                                            <a href="{% url 'emprestimo_editar' emprestimo.pk %}">
-                                                <span class="icon">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </span>
-                                            </a>
-                                            <a href="{% url 'emprestimo_apagar' emprestimo.pk %}">
-                                                <span class="icon">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </span>
-                                            </a>
-                                          <a href="{% url 'emprestimo_devolucao' emprestimo.pk %}">
-                                            <span class="icon">
-                                                <i class="bi bi-arrow-return-left"></i>
-                                            </span>
-                                          </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        {% bootstrap_pagination object_list url="/emprestimos?page=1" size="sm" %}
-                    </div>
+                    <h5 class="card-title">Empréstimo Nº {{ emprestimo.id }}</h5>
+                    <p class="card-text"><strong>Pessoa:</strong>{{ emprestimo.pessoa }}</p>
+                    <p class="card-text"><strong>Entregue por:</strong>{{ emprestimo.entregue_por }}</p>
+                    <p class="card-text"><strong>Data Criação:</strong>{{ emprestimo.data_criacao }}</p>
+                    <p class="card-text"><strong>Data Prevista:</strong>{{ emprestimo.data_prevista }}</p>
+                    <p class="card-text"><strong>Data Devolução:</strong>{{ emprestimo.data_devolucao|default:"-" }}</p>
+                    <p class="card-text"><strong>Hora Retirada:</strong>{{ emprestimo.hora }}</p>
+                    <p class="card-text"><strong>Hora Prevista:</strong>{{ emprestimo.hora_prevista }}</p>
+                    <p class="card-text"><strong>Status:</strong>{{ emprestimo.status }}</p>
+                    <p class="card-text"><strong>Recebido por:</strong>{{ emprestimo.recebido_por|default:"-" }}</p>
+                    <p class="card-text"><strong>Hora Devolução:</strong>{{ emprestimo.hora_devolucao|default:"-" }}</p>
                 </div>
-            {% endif %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Cópias das Chaves:</strong>
+                        {% for ec in emprestimo.emprestimocopiachave_set.all %}
+                            <div>
+                                {{ ec.copia_chave.chave }}
+                                {% if ec.horario_devolucao %}
+                                <small class="text-muted">({{ ec.horario_devolucao|time:"H:i" }})</small>
+                                {% endif %}
+                            </div>
+                        {% empty %}
+                            Nenhuma chave com emprestimo
+                        {% endfor %}
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <a href="{% url 'emprestimo_editar' emprestimo.pk %}"
+                        class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a href="{% url 'emprestimo_apagar' emprestimo.pk %}"
+                         class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
+                    <a href="{% url 'emprestimo_devolucao' emprestimo.pk %}"
+                        class="btn btn-success btn-sm">
+                        <i class="bi bi-arrow-return-left"></i>
+                    </a>
+                </div>
+            </div>
+            </div>
+
+         {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-center mt-4">Nenhum empréstimo cadastrado.</p>
+   {% endif %}
         </div>
     </section>
 {% endblock %}
