@@ -18,60 +18,42 @@
                     </div>
                 </div>
             </form>
-            {% if object_list %}
+            <hr>
+            <div class="row g-3">
+        {% for ambiente in object_list %}
+                <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <h3 class="text-center">Ambientes Cadastrados</h3>
                 <div class="card-body">
-                    <h3 class="text-center">Ambientes Cadastrados</h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-primary">
-                                <th>Nome</th>
-                                <th>Nomenclatura</th>
-                                <th>Exclusividade</th>
-                                <th>Bloco</th>
-                                <th style="width: 100px; text-align: center">Ações</th>
-                                 <th>Registrar uma chave</th>
-                            </thead>
-                            <tbody>
-                                 {% for ambiente in object_list %}
-                                    <tr>
-                                        <td> {{ambiente.nome}}</td>
-                                        <td> {{ambiente.nomenclatura}}</td>
-                                        <td> {{ambiente.exclusividade}}</td>
-                                        <td> {{ambiente.bloco}}</td>
-
-                                        <td style="text-align: center">
-                                            <a href="{% url 'ambiente_editar' ambiente.pk %}">
-                                                <span class="icon">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </span>
-                                            </a>
-                                            <a href="{% url 'ambiente_apagar' ambiente.pk %}">
-                                                <span class="icon">
-                                                   <i class="bi bi-trash-fill"></i>
-                                                </span>
-                                            </a>
-
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-outline-dark">
-                                            <a href="{% url 'verificar_chave' 'ambiente' ambiente.id %}">
-                                                <span class="icon">
-                                                   <i class="bi bi-key-fill"></i>
-                                                </span>
-                                            </a>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        {% bootstrap_pagination object_list url="/ambientes?page=1" size="sm" %}
-                    </div>
+                    <p class="card-text"><strong>Nome:</strong>{{ambiente.nome}}</p>
+                    <p class="card-text"><strong>Nomenclatura:</strong> {{ambiente.nomenclatura}}</p>
+                    <p class="card-text"><strong>Exclusividade:</strong>{{ambiente.exclusividade}}</p>
+                    <p class="card-text"><strong>Bloco:</strong>{{ambiente.bloco}}</p>
                 </div>
-             </div>
-            {% endif %}
+                <div class="card-body">
+                      <a href="{% url 'ambiente_editar' ambiente.pk %}"
+                        class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a href="{% url 'ambiente_apagar' ambiente.pk %}"
+                         class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
+                    <a href="{% url 'verificar_chave' 'ambiente' ambiente.id %}"
+                        class="btn btn-success btn-sm">
+                        <i class="bi bi-arrow-return-left"></i>
+                    </a>
+                </div>
+            </div>
+            </div>
+            {% empty %}
+            <p class="text-center mt-4">
+             Nenhum Ambiente cadastrado
+            </p>
+
+        {% endfor %}
         </div>
+</div>
+
     </section>
 {% endblock %}
