@@ -15,21 +15,36 @@ class CopiaChaveListView(PermissionRequiredMixin,ListView):
     model = CopiaChave
     template_name = 'copias.html'
 
+    # def get_queryset(self):
+    #     buscar = self.request.GET.get('buscar')
+    #     qs = super().get_queryset().select_related('chave')
+    #
+    #     if buscar:
+    #         qs = qs.filter(
+    #             Q(identificador__icontains=buscar)| Q(chave__descricao__icontains=buscar)
+    #         )
+    #
+    #     if qs.count() > 0:
+    #         paginator = Paginator(qs, 3)
+    #         listagem = paginator.get_page(self.request.GET.get('page'))
+    #         return listagem
+    #     else:
+    #         return messages.info(self.request, 'Não existem Copias de chaves cadastradas! ')
     def get_queryset(self):
         buscar = self.request.GET.get('buscar')
         qs = super().get_queryset().select_related('chave')
 
         if buscar:
             qs = qs.filter(
-                Q(identificador__icontains=buscar)| Q(chave__descricao__icontains=buscar)
+                Q(identificador__icontains=buscar) | Q(chave__descricao__icontains=buscar)
             )
 
-        if qs.count() > 0:
-            paginator = Paginator(qs, 3)
-            listagem = paginator.get_page(self.request.GET.get('page'))
-            return listagem
-        else:
-            return messages.info(self.request, 'Não existem Copias de chaves cadastradas! ')
+        if qs.count() == 0:
+            messages.info(self.request, 'Não existem Copias de chaves cadastradas!')
+
+        paginator = Paginator(qs, 3)
+        listagem = paginator.get_page(self.request.GET.get('page'))
+        return listagem
 
 
 

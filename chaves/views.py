@@ -20,21 +20,33 @@ class ChavesListView(PermissionRequiredMixin,ListView):
     model = Chave
     template_name = 'chaves.html'
 
+    # def get_queryset(self):
+    #     buscar = self.request.GET.get('buscar')
+    #     qs = super(ChavesListView, self).get_queryset()
+    #
+    #
+    #     if buscar:
+    #         # qs = qs.filter(nome__icontains=buscar)
+    #         qs = qs.filter(descricao__icontains=buscar)
+    #
+    #     if qs.count() > 0:
+    #         paginator = Paginator(qs, 5)
+    #         listagem = paginator.get_page(self.request.GET.get('page'))
+    #         return listagem
+    #     else:
+    #         return messages.info(self.request, 'Não existem chaves cadastradas!')
     def get_queryset(self):
         buscar = self.request.GET.get('buscar')
-        qs = super(ChavesListView, self).get_queryset()
-
-
+        qs = super().get_queryset()
         if buscar:
-            # qs = qs.filter(nome__icontains=buscar)
             qs = qs.filter(descricao__icontains=buscar)
 
-        if qs.count() > 0:
-            paginator = Paginator(qs, 5)
-            listagem = paginator.get_page(self.request.GET.get('page'))
-            return listagem
-        else:
-            return messages.info(self.request, 'Não existem chaves cadastradas!')
+        if qs.count() == 0:
+            messages.info(self.request, 'Não existem chaves cadastradas!')
+
+        paginator = Paginator(qs, 10)
+        listagem = paginator.get_page(self.request.GET.get('page'))
+        return listagem
 
 
 class ChaveAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):
@@ -147,7 +159,7 @@ def verificacaoChaves(request, tipo, id):
   elif tipo == 'bloco':
     chave = Chave.objects.filter(
       bloco_id=id,
-      tipo='mestra'
+      tipo='mestraBloco'
     ).first()
     if chave:
       bloco = Bloco.objects.get(id=id)

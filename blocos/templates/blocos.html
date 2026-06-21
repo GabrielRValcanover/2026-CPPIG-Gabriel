@@ -18,72 +18,50 @@
                     </div>
                 </div>
             </form>
-           {% if object_list %}
-        <div class="card-body">
-            <h3 class="text-center mb-4">Blocos Cadastrados</h3>
-
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-
+            <hr>
+            <div class="row g-3">
                 {% for bloco in object_list %}
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">{{ bloco.nome }}</h5>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <h3 class="text-center">Blocos Cadastrados</h3>
+                            <hr>
+                            <div class="card-body">
+                                <p class="card-text"><strong>Nome:</strong>{{ bloco.nome }}</p>
+                                <p class="card-text"><strong>Quantidade:</strong> {{ bloco.quantidade }}</p>
+                                <p class="card-text"><strong>Chave:</strong>
+                                    {% for chave in bloco.chaves.all %}
+                                        {% if chave.tipo == 'mestraBloco' %}
+                                            {{ chave.descricao }}
+                                        {% endif %}
+                                    {% empty %}
+                                        Não possui
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <hr>
+                            <div class="card-body">
+                                <a href="{% url 'bloco_editar' bloco.pk %}"
+                                   class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'bloco_apagar' bloco.pk %}"
+                                   class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                                <a href="{% url 'verificar_chave' 'bloco' bloco.id %}"
+                                   class="btn btn-success btn-sm">
+                                    <i class="bi bi-key"></i>
+                                </a>
+                            </div>
                         </div>
-
-                        <div class="card-body">
-
-                            <p>
-                                <strong>Quantidade:</strong>
-                                {{ bloco.quantidade }}
-                            </p>
-
-                            <p>
-                                <strong>Chave Mestra:</strong><br>
-
-                                {% for chave in bloco.chaves.all %}
-                                    {% if chave.tipo == 'mestra' %}
-                                        {{ chave.descricao }}
-                                    {% endif %}
-                                {% empty %}
-                                    Não possui
-                                {% endfor %}
-                            </p>
-
-                        </div>
-                        <div class="card-footer text-center">
-
-                            <a href="{% url 'bloco_editar' bloco.pk %}"
-                               class="btn btn-warning btn-sm">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            <a href="{% url 'bloco_apagar' bloco.pk %}"
-                               class="btn btn-danger btn-sm">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
-
-                            <a href="{% url 'verificar_chave' 'bloco' bloco.id %}"
-                               class="btn btn-dark btn-sm">
-                                <i class="bi bi-key-fill"></i>
-                            </a>
-
-                        </div>
-
                     </div>
-                </div>
-        {% endfor %}
-
-    </div>
-
-    <div class="d-flex justify-content-center mt-4">
-        {% bootstrap_pagination object_list url="/bloco?page=1" size="sm" %}
-    </div>
-
-</div>
-{% endif %}
+                {% empty %}
+                    <p class="text-center mt-4">Nenhum Bloco cadastrado</p>
+                {% endfor %}
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                {% bootstrap_pagination object_list url="/bloco?page=1" size="sm" %}
+            </div>
         </div>
     </section>
 {% endblock %}
-
-

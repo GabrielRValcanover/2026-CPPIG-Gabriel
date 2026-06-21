@@ -24,12 +24,14 @@
                 <div class="col-md-4">
             <div class="card h-100 shadow-sm">
                 <h3 class="text-center">Ambientes Cadastrados</h3>
+                <hr>
                 <div class="card-body">
                     <p class="card-text"><strong>Nome:</strong>{{ambiente.nome}}</p>
                     <p class="card-text"><strong>Nomenclatura:</strong> {{ambiente.nomenclatura}}</p>
                     <p class="card-text"><strong>Exclusividade:</strong>{{ambiente.exclusividade}}</p>
                     <p class="card-text"><strong>Bloco:</strong>{{ambiente.bloco}}</p>
                 </div>
+                <hr>
                 <div class="card-body">
                       <a href="{% url 'ambiente_editar' ambiente.pk %}"
                         class="btn btn-warning btn-sm">
@@ -41,7 +43,7 @@
                     </a>
                     <a href="{% url 'verificar_chave' 'ambiente' ambiente.id %}"
                         class="btn btn-success btn-sm">
-                        <i class="bi bi-arrow-return-left"></i>
+                        <i class="bi bi-key"></i>
                     </a>
                 </div>
             </div>

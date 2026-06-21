@@ -21,27 +21,39 @@ class ReservaListView(PermissionRequiredMixin,ListView):
 
 #https://docs.djangoproject.com/en/6.0/topics/i18n/timezones/ link do now w today()
 #https: // academify.com.br / datas - e - horas - no - python - com - datetime /
+    # def get_queryset(self):
+    #     # hora_atual = now()
+    #     # for reserva in Reserva.objects.filter(status = 'pendente', hora_prevista__isnull = False):
+    #     #     if reserva.data_prevista == date.today():
+    #     #         cancelamento = hora_atual.hour * 60 + hora_atual.minute - (reserva.hora_prevista.hour * 60 + reserva.hora_prevista.minute)
+    #     #         if cancelamento >=15:
+    #     #             reserva.status = 'cancelada'
+    #     #             reserva.save()
+    #
+    #     buscar = self.request.GET.get('buscar')
+    #     qs = super(ReservaListView, self).get_queryset()
+    #     if buscar:
+    #         return qs.filter(pessoa__nome__icontains=buscar)
+    #
+    #     if qs.count()>0:
+    #       paginator = Paginator(qs,10)
+    #       listagem = paginator.get_page(self.request.GET.get('page'))
+    #       return listagem
+    #     else:
+    #       messages.info(self.request,'Não existem Reservas cadastradas!')
+    #     return qs
     def get_queryset(self):
-        # hora_atual = now()
-        # for reserva in Reserva.objects.filter(status = 'pendente', hora_prevista__isnull = False):
-        #     if reserva.data_prevista == date.today():
-        #         cancelamento = hora_atual.hour * 60 + hora_atual.minute - (reserva.hora_prevista.hour * 60 + reserva.hora_prevista.minute)
-        #         if cancelamento >=15:
-        #             reserva.status = 'cancelada'
-        #             reserva.save()
-
         buscar = self.request.GET.get('buscar')
         qs = super(ReservaListView, self).get_queryset()
         if buscar:
-            return qs.filter(pessoa__nome__icontains=buscar)
+            qs = qs.filter(pessoa__nome__icontains=buscar)
 
-        if qs.count()>0:
-          paginator = Paginator(qs,10)
-          listagem = paginator.get_page(self.request.GET.get('page'))
-          return listagem
-        else:
-          messages.info(self.request,'Não existem Reservas cadastradas!')
-        return qs
+        if qs.count() == 0:
+            messages.info(self.request, 'Não existem Reservas cadastradas!')
+
+        paginator = Paginator(qs, 10)
+        listagem = paginator.get_page(self.request.GET.get('page'))
+        return listagem
 
 
 class ReservaAddView(PermissionRequiredMixin,SuccessMessageMixin, CreateView):

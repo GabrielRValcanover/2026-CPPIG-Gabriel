@@ -18,57 +18,45 @@
                     </div>
                 </div>
             </form>
-            {% if object_list %}
-                <div class="card-body">
-                    <h3 class="text-center">Reservas Cadastradas</h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-primary">
-                                <th>Nº da Reserva</th>
-                                <th>Pessoa</th>
-                                <th>Chaves</th>
-                                <th>Data da Reserva</th>
-                                <th>Data Prevista e hora do uso</th>
-                                <th>Status</th>
-                                <th style="width: 100px; text-align: center">Ações</th>
-                            </thead>
-                            <tbody>
-                                {% for reserva in reservas %}
-                                    <tr>
-                                        <td>{{ reserva.id }}</td>
-                                        <td>{{ reserva.pessoa }}</td>
-                                        <td>
-                                            {% for chave in reserva.chaves.all %}
-                                                <span class="badge bg-secondary">{{ chave }}</span>
-                                            {% endfor %}
-                                        </td>
-                                        <td>{{ reserva.data_reserva }}</td>
-                                        <td>{{ reserva.datahora_prevista }}</td>
-                                        <td>{{ reserva.status }}</td>
-                                        <td style="text-align: center">
-                                            <a href="{% url 'reserva_editar' reserva.pk %}">
-                                                <span class="icon">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </span>
-                                            </a>
-                                            <a href="{% url 'reserva_apagar' reserva.pk %}">
-                                                <span class="icon">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+            <hr>
+            <div class="row g-3">
+                {% for reserva in object_list %}
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <h3 class="text-center">Reservas Cadastradas</h3>
+                            <hr>
+                            <div class="card-body">
+                                <p class="card-text"><strong>Nº da Reserva:</strong> {{ reserva.id }}</p>
+                                <p class="card-text"><strong>Pessoa:</strong> {{ reserva.pessoa }}</p>
+                                <p class="card-text"><strong>Chaves:</strong>
+                                    {% for chave in reserva.chaves.all %}
+                                        <span class="badge bg-secondary">{{ chave }}</span>
+                                    {% empty %}
+                                        -
+                                    {% endfor %}
+                                </p>
+                                <p class="card-text"><strong>Data da Reserva:</strong> {{ reserva.data_reserva }}</p>
+                                <p class="card-text"><strong>Data Prevista e hora do uso:</strong> {{ reserva.datahora_prevista }}</p>
+                                <p class="card-text"><strong>Status:</strong> {{ reserva.status }}</p>
+                            </div>
+                            <hr>
+                            <div class="card-body">
+                                <a href="{% url 'reserva_editar' reserva.pk %}" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'reserva_apagar' reserva.pk %}" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-center">
-                        {% bootstrap_pagination object_list url="/reservas?page=1" size="sm" %}
-                    </div>
-                </div>
-            {% else %}
-                <p class="text-center mt-4">Nenhuma reserva cadastrada.</p>
-            {% endif %}
+                {% empty %}
+                    <p class="text-center mt-4">Nenhuma reserva cadastrada</p>
+                {% endfor %}
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                {% bootstrap_pagination object_list url="/reservas?page=1" size="sm" %}
+            </div>
         </div>
     </section>
 {% endblock %}

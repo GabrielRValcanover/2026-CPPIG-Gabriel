@@ -1,3 +1,4 @@
+
 {% extends 'index.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
@@ -21,65 +22,53 @@
             </div>
         </div>
     </form>
-     <div>
-                <a href="{% url 'copias_perdidas' %}">
-                <button type="button" class="btn btn-primary position-relative">
-                                     Chaves Perdidas ou Danificadas
-                                      <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                                        <span class="visually-hidden">New alerts</span>
-                                           {{ copias_perdidas }}
-                                      </span>
-                                    </button>
-                    </a>
-            </div>
+    <div>
+        <a href="{% url 'copias_perdidas' %}">
+            <button type="button" class="btn btn-primary position-relative">
+                Chaves Perdidas ou Danificadas
+                <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">New alerts</span>
+                    {{ copias_perdidas }}
+                </span>
+            </button>
+        </a>
+    </div>
     <div class="mb-3 text-end">
         <a href="{% url 'copia_chaves_adicionar' %}" class="btn btn-success">
             <i class="bi bi-plus-circle"></i> Nova Cópia
         </a>
     </div>
-    {% if object_list %}
-    <div class="card-body">
-        <h3 class="text-center">Cópias de Chaves</h3>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>ID </th>
-                        <th>Identificador</th>
-                        <th>Chave</th>
-                        <th>Status</th>
-                        <th style="width: 120px; text-align: center">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for copia in object_list %}
-                    <tr>
-                        <td>{{ copia.id }}</td>
-                        <td>{{ copia.identificador }}</td>
-                        <td>{{ copia.chave}}</td>
-                        <td>{{ copia.get_status_display }}</td>
-                        <td style="text-align: center">
-                            <a href="{% url 'copia_chaves_editar' copia.pk %}">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            <a href="{% url 'copia_chaves_apagar' copia.pk %}">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="d-flex justify-content-center">
-            {% bootstrap_pagination object_list url="?page=1" size="sm" %}
-        </div>
+    <hr>
+    <div class="row g-3">
+        {% for copia in object_list %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <h3 class="text-center">Cópias de Chaves</h3>
+                    <hr>
+                    <div class="card-body">
+                        <p class="card-text"><strong>ID:</strong> {{ copia.id }}</p>
+                        <p class="card-text"><strong>Identificador:</strong> {{ copia.identificador }}</p>
+                        <p class="card-text"><strong>Chave:</strong> {{ copia.chave }}</p>
+                        <p class="card-text"><strong>Status:</strong> {{ copia.get_status_display }}</p>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <a href="{% url 'copia_chaves_editar' copia.pk %}" class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{% url 'copia_chaves_apagar' copia.pk %}" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center mt-4">Nenhuma cópia cadastrada</p>
+        {% endfor %}
     </div>
-    {% else %}
-        <div class="alert alert-info text-center">
-            Nenhuma cópia cadastrada.
-        </div>
-    {% endif %}
+    <div class="d-flex justify-content-center mt-4">
+        {% bootstrap_pagination object_list url="?page=1" size="sm" %}
+    </div>
 </div>
 </section>
 {% endblock %}
