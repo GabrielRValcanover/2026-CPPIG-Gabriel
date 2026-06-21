@@ -52,11 +52,6 @@ class EmprestimoModelForm(forms.ModelForm):
 class EmprestimoDevolucaoForm(forms.ModelForm):
     class Meta:
         model = Emprestimo
-        # fields = ['recebido_por', 'data_devolucao', 'hora_devolucao']
-        # widgets = {
-        #     'data_devolucao': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
-        #     'hora_devolucao': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
-        # }
         fields = ['recebido_por']
 
     def __init__(self, *args, **kwargs):

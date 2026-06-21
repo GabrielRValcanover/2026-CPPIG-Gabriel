@@ -20,11 +20,6 @@ class UsuariosListView(PermissionRequiredMixin,ListView):
 
     def get_context_data(self, **kwargs):
         contador = super().get_context_data(**kwargs)
-        # usuarios_bloqueados = []   # coloco os usuarios em uma lista para contar
-        # for usuario in Usuario.objects.all():
-        #     if usuario.bloqueado_ate:
-        #         usuarios_bloqueados.append(usuario)  # uso o append para  por um incone no final da lista
-        # contador['usuarios_bloqueados'] = len(usuarios_bloqueados)
         contador['usuarios_bloqueados'] = UsuarioPersonalizado.objects.filter(bloqueado_ate__gte=date.today()).count()
         return contador
 
@@ -45,7 +40,6 @@ class UsuariosListView(PermissionRequiredMixin,ListView):
 class UsuarioAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     permission_required = 'usuarios.add_usuariopersonalizado'
     permission_denied_message = 'Cadastrar Usuario'
-    # model = Usuario
     model = UsuarioPersonalizado
     form_class = UsuarioModelForm
     template_name = 'usuario_form.html'
@@ -56,7 +50,6 @@ class UsuarioAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
 class UsuarioUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
     permission_required = 'usuarios.change_usuariopersonalizado'
     permission_denied_message = 'Editar Usuario'
-    # model = Usuario
     model = UsuarioPersonalizado
     form_class = UsuarioModelForm
     template_name = 'usuario_form.html'
@@ -66,28 +59,14 @@ class UsuarioUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
 class UsuarioDeleteView(PermissionRequiredMixin,SuccessMessageMixin,DeleteView):
     permission_required = 'usuarios.delete_usuariopersonalizado'
     permission_denied_message = 'Excluir Usuario'
-    # model = Usuario
     model = UsuarioPersonalizado
     template_name = 'usuarios_apagar.html'
     success_url = reverse_lazy('usuarios')
     success_message= "Usuario Deletado com sucesso!"
 
 #
-# class UsuariosBloqueadosListView(ListView):
-#     model = Usuario
-#     template_name = 'usuarios_bloqueados.html'
-#
-#     def get_queryset(self, **kwargs):
-#         return Usuario.objects.filter(bloqueado_ate__gte=date.today())
-#         # usuarios_bloqueados = []
-#         # for usuario in Usuario.objects.all():
-#         #     if usuario.bloqueado_ate:
-        #         usuarios_bloqueados.append(usuario)
-        # return usuarios_bloqueados
-
 
 class UsuariosBloqueadosListView(ListView):
-    # model = Usuario
     model = UsuarioPersonalizado
     template_name = 'usuarios_bloqueados.html'
     def get_queryset(self):
