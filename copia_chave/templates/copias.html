@@ -43,10 +43,9 @@
         {% for copia in object_list %}
             <div class="col-md-4">
                 <div class="card h-100 shadow-sm">
-                    <h3 class="text-center">Cópias de Chaves</h3>
+                    <h3 class="text-center"><strong>ID:</strong> {{ copia.id }}</h3>
                     <hr>
                     <div class="card-body">
-                        <p class="card-text"><strong>ID:</strong> {{ copia.id }}</p>
                         <p class="card-text"><strong>Identificador:</strong> {{ copia.identificador }}</p>
                         <p class="card-text"><strong>Chave:</strong> {{ copia.chave }}</p>
                         <p class="card-text"><strong>Status:</strong> {{ copia.get_status_display }}</p>

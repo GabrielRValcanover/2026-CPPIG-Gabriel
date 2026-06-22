@@ -2,78 +2,89 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-    <section class="section">
-        <div class="container">
-            <form action="" method="GET">
-                <div class="form-group row p-3">
-                    <label class="col-sm-2 col-form-label">Nome da Pessoa: </label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="text" name="buscar" value="{{ request.GET.buscar }}"
-                               placeholder="Digite o nome da pessoa">
-                    </div>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-primary">
-                            Buscar
-                        </button>
-                    </div>
+<section class="section">
+    <div class="container">
+        <form action="" method="GET">
+            <div class="form-group row p-3">
+                <label class="col-sm-2 col-form-label">Nome da Pessoa: </label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="buscar" value="{{ request.GET.buscar }}"
+                           placeholder="Digite o nome da pessoa">
                 </div>
-            </form>
-            <hr>
-            {% if object_list %}
-            <div class="row g-3">
-                {% for emprestimo in object_list %}
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary">
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </form>
+        <hr>
+        {% if object_list %}
+        <div class="row g-3">
+            {% for emprestimo in object_list %}
             <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Empréstimo Nº {{ emprestimo.id }}</h5>
-                    <p class="card-text"><strong>Pessoa:</strong>{{ emprestimo.pessoa }}</p>
-                    <p class="card-text"><strong>Entregue por:</strong>{{ emprestimo.entregue_por }}</p>
-                    <p class="card-text"><strong>Data Criação:</strong>{{ emprestimo.data_criacao }}</p>
-                    <p class="card-text"><strong>Data Prevista:</strong>{{ emprestimo.data_prevista }}</p>
-                    <p class="card-text"><strong>Data Devolução:</strong>{{ emprestimo.data_devolucao|default:"-" }}</p>
-                    <p class="card-text"><strong>Hora Retirada:</strong>{{ emprestimo.hora }}</p>
-                    <p class="card-text"><strong>Hora Prevista:</strong>{{ emprestimo.hora_prevista }}</p>
-                    <p class="card-text"><strong>Status:</strong>{{ emprestimo.status }}</p>
-                    <p class="card-text"><strong>Recebido por:</strong>{{ emprestimo.recebido_por|default:"-" }}</p>
-                    <p class="card-text"><strong>Hora Devolução:</strong>{{ emprestimo.hora_devolucao|default:"-" }}</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <strong>Cópias das Chaves:</strong>
-                        {% for ec in emprestimo.emprestimocopiachave_set.all %}
-                            <div>
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Empréstimo Nº {{ emprestimo.id }}</h5>
+                        <hr>
+                        <p class="card-text"><strong>Pessoa:</strong>{{ emprestimo.pessoa }}</p>
+                        <p class="card-text"><strong>Entregue por:</strong>{{ emprestimo.entregue_por }}</p>
+                        <p class="card-text"><strong>Data Criação:</strong>{{ emprestimo.data_criacao }}</p>
+                        <p class="card-text"><strong>Data Prevista:</strong>{{ emprestimo.data_prevista }}</p>
+                        <p class="card-text"><strong>Data Devolução:</strong>{{ emprestimo.data_devolucao|default:"-" }}
+                        </p>
+                        <p class="card-text"><strong>Hora Retirada:</strong>{{ emprestimo.hora }}</p>
+                        <p class="card-text"><strong>Hora Prevista:</strong>{{ emprestimo.hora_prevista }}</p>
+                        <p class="card-text"><strong>Status:</strong>{{ emprestimo.status }}</p>
+                        <p class="card-text"><strong>Recebido por:</strong>{{ emprestimo.recebido_por|default:"-" }}</p>
+                        <p class="card-text"><strong>Hora Devolução:</strong>{{ emprestimo.hora_devolucao|default:"-" }}
+                        </p>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Cópias das Chaves:</strong>
+
+                            {% for ec in emprestimo.emprestimocopiachave_set.all %}
+                            <div class="mt-1">
+                            <span class="badge bg-secondary">
                                 {{ ec.copia_chave.chave }}
+                            </span>
+
                                 {% if ec.horario_devolucao %}
-                                <small class="text-muted">({{ ec.horario_devolucao|time:"H:i" }})</small>
+                                <small class="text-muted ms-1">
+                                    ({{ ec.horario_devolucao|time:"H:i" }})
+                                </small>
                                 {% endif %}
                             </div>
-                        {% empty %}
-                            Nenhuma chave com emprestimo
-                        {% endfor %}
-                    </li>
-                </ul>
-                <div class="card-body">
-                    <a href="{% url 'emprestimo_editar' emprestimo.pk %}"
-                        class="btn btn-warning btn-sm">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a href="{% url 'emprestimo_apagar' emprestimo.pk %}"
-                         class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash-fill"></i>
-                    </a>
-                    <a href="{% url 'emprestimo_devolucao' emprestimo.pk %}"
-                        class="btn btn-success btn-sm">
-                        <i class="bi bi-arrow-return-left"></i>
-                    </a>
+                            {% empty %}
+                            <span class="text-muted">Nenhuma chave com empréstimo</span>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        <a href="{% url 'emprestimo_editar' emprestimo.pk %}"
+                           class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{% url 'emprestimo_apagar' emprestimo.pk %}"
+                           class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                        <a href="{% url 'emprestimo_devolucao' emprestimo.pk %}"
+                           class="btn btn-success btn-sm">
+                            <i class="bi bi-arrow-return-left"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-            </div>
 
-         {% endfor %}
-      </div>
-      {% else %}
-      <p class="text-center mt-4">Nenhum empréstimo cadastrado.</p>
-   {% endif %}
+            {% endfor %}
         </div>
-    </section>
+        {% else %}
+        <p class="text-center mt-4">Nenhum empréstimo cadastrado.</p>
+        {% endif %}
+    </div>
+
+</section>
 {% endblock %}

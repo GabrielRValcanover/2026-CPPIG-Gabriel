@@ -25,10 +25,9 @@
                 {% for chave in object_list %}
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
-                            <h3 class="text-center">Chaves Cadastradas</h3>
+                            <p class="text-center"><strong>Código identificador:</strong> {{ chave.id }}</p>
                             <hr>
                             <div class="card-body">
-                                <p class="card-text"><strong>Código identificador:</strong> {{ chave.id }}</p>
                                 <p class="card-text"><strong>Descrição:</strong> {{ chave.descricao }}</p>
                                 <p class="card-text"><strong>Status:</strong> {{ chave.status }}</p>
                                 <p class="card-text"><strong>Ambientes:</strong>

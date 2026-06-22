@@ -23,10 +23,9 @@
                 {% for reserva in object_list %}
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
-                            <h3 class="text-center">Reservas Cadastradas</h3>
+                            <h3 class="text-center"><strong>Nº da Reserva:</strong> {{ reserva.id }}</h3>
                             <hr>
                             <div class="card-body">
-                                <p class="card-text"><strong>Nº da Reserva:</strong> {{ reserva.id }}</p>
                                 <p class="card-text"><strong>Pessoa:</strong> {{ reserva.pessoa }}</p>
                                 <p class="card-text"><strong>Chaves:</strong>
                                     {% for chave in reserva.chaves.all %}
@@ -37,7 +36,16 @@
                                 </p>
                                 <p class="card-text"><strong>Data da Reserva:</strong> {{ reserva.data_reserva }}</p>
                                 <p class="card-text"><strong>Data Prevista e hora do uso:</strong> {{ reserva.datahora_prevista }}</p>
-                                <p class="card-text"><strong>Status:</strong> {{ reserva.status }}</p>
+                                <p class="card-text">
+                                    <strong>Status:</strong>
+                                    {% if reserva.status == "pendente" %}
+                                        <span class="badge text-bg-success">{{ reserva.status }}</span>
+                                    {% elif reserva.status == "cancelada" %}
+                                        <span class="badge text-bg-danger">{{ reserva.status }}</span>
+                                    {% else %}
+                                        <span class="text-secondary">{{ reserva.status }}</span>
+                                    {% endif %}
+                                </p>
                             </div>
                             <hr>
                             <div class="card-body">

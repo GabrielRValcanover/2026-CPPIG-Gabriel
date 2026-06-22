@@ -23,10 +23,9 @@
                 {% for bloco in object_list %}
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
-                            <h3 class="text-center">Blocos Cadastrados</h3>
+                            <h3 class="text-center"><strong>{{ bloco.nome }}</strong></h3>
                             <hr>
                             <div class="card-body">
-                                <p class="card-text"><strong>Nome:</strong>{{ bloco.nome }}</p>
                                 <p class="card-text"><strong>Quantidade:</strong> {{ bloco.quantidade }}</p>
                                 <p class="card-text"><strong>Chave:</strong>
                                     {% for chave in bloco.chaves.all %}

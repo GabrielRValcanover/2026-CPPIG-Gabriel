@@ -23,13 +23,17 @@
         {% for ambiente in object_list %}
                 <div class="col-md-4">
             <div class="card h-100 shadow-sm">
-                <h3 class="text-center">Ambientes Cadastrados</h3>
+                <h3 class="text-center"><strong>{{ambiente.nome}}</strong></h3>
                 <hr>
                 <div class="card-body">
-                    <p class="card-text"><strong>Nome:</strong>{{ambiente.nome}}</p>
                     <p class="card-text"><strong>Nomenclatura:</strong> {{ambiente.nomenclatura}}</p>
                     <p class="card-text"><strong>Exclusividade:</strong>{{ambiente.exclusividade}}</p>
-                    <p class="card-text"><strong>Bloco:</strong>{{ambiente.bloco}}</p>
+                    <span class="card-text">
+                        Bloco:
+                        <span class="badge bg-secondary ">{{ ambiente.bloco }}</span>
+                    </span>
+
+
                 </div>
                 <hr>
                 <div class="card-body">
