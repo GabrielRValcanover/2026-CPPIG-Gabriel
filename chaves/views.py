@@ -62,6 +62,19 @@ class ChaveDeleteView(PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     success_message = 'Chave excluída com sucesso!'
 
 
+class ChaveMestraAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'chaveMestra.add_chave'
+    permission_denied_message = 'Cadastrar chave mestra'
+    model = Chave
+    form_class = ChaveModelForm
+    template_name = 'chave_mestra.html'
+    success_url = reverse_lazy('chaves')
+    success_message = 'Chave mestra adicionada com sucesso!'
+
+    def form_valid(self, form):
+        form.instance.tipo = 'Mestra'
+        return super().form_valid(form)
+
 class ChaveAmbienteAddView(SuccessMessageMixin, CreateView):
     model = Chave
     form_class = ChaveModelForm
