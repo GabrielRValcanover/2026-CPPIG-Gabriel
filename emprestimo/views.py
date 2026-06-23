@@ -78,7 +78,7 @@ class EmprestimoAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
                 form.add_error('copias_chave', f'A chave "{copia}" possui reserva ativa para essa data!')
                 return self.form_invalid(form)
   # -----------------------------------------------------------------------------------------------------------------------------#
-            # aqui faz a validação se é exclusiva ou comunitaria
+            #aqui faz a validação se é exclusiva ou comunitaria
             for ambiente in copia.chave.ambientes.all():  #
                 if ambiente.exclusividade == 'exclusivas':
                     acessar = ambiente.acesso_permitido
@@ -86,6 +86,7 @@ class EmprestimoAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
                         form.add_error('copias_chave', f'Ambiente "{ambiente.nomenclatura}" é um ambiente esclusivo'
                                                        f'para {ambiente.get_acesso_permitido_display()}')
                         return self.form_invalid(form)
+
 
         for copia in copias:
             ambientes = copia.chave.ambientes.all()
