@@ -112,28 +112,31 @@ class EmprestimoAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
                                     chave__ambientes__bloco=bloco,
                                     status__in=['perdida', 'danificada']
                                 ).exists()
+
+                                mestra_geral_selecionada = False
+                                chave_mestra_selecionada = False
                                 if mestra_bloqueada:
                                     mestra_geral_selecionada = copias.filter(
-                                        chave__tipo='Mestra'
+                                        chave__tipo='mestra'
                                     ).exists()
                                     if not mestra_geral_selecionada:
                                         form.add_error(
                                             'copias_chave',
-                                            f'A chave do bloco {bloco.nome} está perdida/danificada. '
+                                            f'A chave do  {bloco.nome} está perdida/danificada. '
                                             f'É obrigatório retirar a CHAVE MESTRA geral.'
                                         )
                                         return self.form_invalid(form)
-                                if not mestra_ja_emprestada:
-                                    chave_mestra_selecionada = copias.filter(
-                                        chave__tipo='mestraBloco',
+                                elif  not mestra_ja_emprestada:
+                                         chave_mestra_selecionada = copias.filter(
+                                         chave__tipo='mestraBloco',
                                         chave__ambientes__bloco=bloco
                                     ).exists()
-                                    if not chave_mestra_selecionada:
-                                        form.add_error(
-                                            'copias_chave',
-                                            f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra do bloco.'
-                                        )
-                                        return self.form_invalid(form)
+                                         if not chave_mestra_selecionada:
+                                            form.add_error(
+                                                'copias_chave',
+                                                f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra do bloco.'
+                                            )
+                                            return self.form_invalid(form)
                 # if bloco:
                 #     existe_mestra_no_bloco = Chave.objects.filter(
                 #         ambientes__bloco=bloco,
@@ -284,6 +287,16 @@ class EmprestimoDevolucaoView(SuccessMessageMixin, UpdateView):
         context['copias_individual'] = copias
         return context
 
+    # def form_valid(self, form):
+    #     context = self.get_context_data()
+    #     frm_inline = context['frm_inline']
+    #
+    #     with transaction.atomic():
+    #         if frm_inline.is_valid():
+    #             self.object = form.save()
+    #             frm_inline.instance = self.object
+    #             frm_inline.save()
+# não usei o inline pq tem regras de nogicios mais aleboradas e para ter um maior controle na devolução
     def form_valid(self, form):
         response = super().form_valid(form)
         # for copia in self.object.copias_chave.all():

@@ -72,7 +72,7 @@ class ChaveMestraAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateVie
     success_message = 'Chave mestra adicionada com sucesso!'
 
     def form_valid(self, form):
-        form.instance.tipo = 'Mestra'
+        form.instance.tipo = 'mestra'
         return super().form_valid(form)
 
 class ChaveAmbienteAddView(SuccessMessageMixin, CreateView):
@@ -107,7 +107,7 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
         self.object.bloco_id = self.kwargs['bloco_id']
         self.object.save()
 
-        ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])
+        ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'], exclusividade='comutitarias')
         for ambiente in ambientes:
             self.object.ambientes.add(ambiente)
         # self.object.save()
