@@ -80,6 +80,8 @@ class EmprestimoAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
   # -----------------------------------------------------------------------------------------------------------------------------#
             #aqui faz a validação se é exclusiva ou comunitaria
             for ambiente in copia.chave.ambientes.all():  #
+                if copia.chave.tipo == 'mestraBloco':
+                    continue
                 if ambiente.exclusividade == 'exclusivas':
                     acessar = ambiente.acesso_permitido
                     if acessar != 'todos' and usuario.tipoUsuario != acessar:

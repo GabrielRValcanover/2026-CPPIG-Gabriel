@@ -107,7 +107,8 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
         self.object.bloco_id = self.kwargs['bloco_id']
         self.object.save()
 
-        ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'], exclusividade='comutitarias')
+        ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])  # sem filtro
+        # ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'], exclusividade='comutitarias')
         for ambiente in ambientes:
             self.object.ambientes.add(ambiente)
         # self.object.save()
