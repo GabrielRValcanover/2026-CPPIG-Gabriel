@@ -24,7 +24,7 @@ class BlocoListView(PermissionRequiredMixin,ListView):
         if qs.count() == 0:
            messages.info(self.request, 'Não existem blocos cadastrados!')
 
-        paginator = Paginator(qs, 10)
+        paginator = Paginator(qs, 6)
         listagem = paginator.get_page(self.request.GET.get('page'))
         return listagem
 

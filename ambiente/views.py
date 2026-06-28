@@ -25,7 +25,7 @@ class AmbientesListView(PermissionRequiredMixin,ListView):
             qs = qs.filter(models.Q(nome__icontains=buscar) | models.Q(nomenclatura__icontains=buscar)| models.Q(bloco__nome__icontains=buscar))
 
         if qs.count()>0:
-          paginator = Paginator(qs,50)
+          paginator = Paginator(qs,6)
           listagem = paginator.get_page(self.request.GET.get('page'))
           return listagem
         else:

@@ -27,7 +27,7 @@ class CopiaChaveListView(PermissionRequiredMixin,ListView):
         if qs.count() == 0:
             messages.info(self.request, 'Não existem Copias de chaves cadastradas!')
 
-        paginator = Paginator(qs, 3)
+        paginator = Paginator(qs, 6)
         listagem = paginator.get_page(self.request.GET.get('page'))
         return listagem
 

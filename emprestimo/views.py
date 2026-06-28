@@ -33,13 +33,12 @@ class EmprestimoListView(PermissionRequiredMixin, ListView):
                 models.Q(copias_chave__identificador__icontains=buscar)
             ).distinct()
 
-        if qs.count() > 0:
-            paginator = Paginator(qs, 10)
-            listagem = paginator.get_page(self.request.GET.get('page'))
-            return listagem
-        else:
+        if qs.count() == 0:
             messages.info(self.request, 'Não existem empréstimos cadastrados!')
-            return qs
+
+        paginator = Paginator(qs, 3)
+        listagem = paginator.get_page(self.request.GET.get('page'))
+        return listagem
 
 
 # https://docs.djangoproject.com/en/6.0/ref/forms/api/#django.forms. Form.add_error  || fonte do Form.add_erro onde eu encontrei

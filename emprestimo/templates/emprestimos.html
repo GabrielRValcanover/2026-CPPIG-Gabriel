@@ -81,10 +81,13 @@
 
             {% endfor %}
         </div>
-        {% else %}
+       {% else %}
         <p class="text-center mt-4">Nenhum empréstimo cadastrado.</p>
         {% endif %}
-    </div>
 
+        <div class="d-flex justify-content-center mt-4">
+            {% bootstrap_pagination object_list url="/emprestimos?page=1" size="sm" %}
+        </div>
+    </div>
 </section>
 {% endblock %}
