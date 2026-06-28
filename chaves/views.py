@@ -147,10 +147,7 @@ def verificacaoChaves(request, tipo, id):
             return render(request, 'verifica_form.html', {'chave': chave, 'local': ambiente.nomenclatura})
         return redirect('chave_ambiente', ambiente_id=id)
     elif tipo == 'bloco':
-        chave = Chave.objects.filter(
-            bloco_id=id,
-            tipo='mestraBloco'
-        ).first()
+        chave = Chave.objects.filter(bloco_id=id,tipo='mestraBloco').first()
         if chave:
             bloco = Bloco.objects.get(id=id)
             return render(request, 'verifica_form.html', {'chave': chave, 'local': bloco.nome})

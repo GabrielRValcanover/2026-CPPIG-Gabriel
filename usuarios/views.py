@@ -46,6 +46,10 @@ class UsuarioAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     success_url = reverse_lazy('usuarios')
     success_message = "Usuario Cadastrado com sucesso!"
 
+    def form_valid(self, form):
+        form.instance.username = form.cleaned_data['nome']
+        return super().form_valid(form)
+
 
 class UsuarioUpdateView(PermissionRequiredMixin,SuccessMessageMixin,UpdateView):
     permission_required = 'usuarios.change_usuariopersonalizado'

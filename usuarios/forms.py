@@ -27,7 +27,7 @@ class UsuarioModelForm(forms.ModelForm):
     # tratamento do hash da senha
     def save(self, commit=True):
         usuario = super().save(commit=False)
-        usuario.username = self.cleaned_data['email']
+        usuario.username = self.cleaned_data['nome']
         usuario.set_password(self.cleaned_data['senha'])
         if commit:
             usuario.save()
