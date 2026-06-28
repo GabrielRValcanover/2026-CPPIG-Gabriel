@@ -4,6 +4,7 @@ from datetime import timedelta, date
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
+from django.db import models
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -26,7 +27,11 @@ class EmprestimoListView(PermissionRequiredMixin, ListView):
         buscar = self.request.GET.get('buscar')
         qs = super(EmprestimoListView, self).get_queryset()
         if buscar:
-            return qs.filter(pessoa__nome__icontains=buscar)
+            qs = qs.filter(
+                models.Q(pessoa__nome__icontains=buscar) |
+                models.Q(status__icontains=buscar) |
+                models.Q(copias_chave__identificador__icontains=buscar)
+            ).distinct()
 
         if qs.count() > 0:
             paginator = Paginator(qs, 10)

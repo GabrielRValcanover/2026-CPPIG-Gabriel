@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
+from django.db import models
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -21,14 +22,15 @@ class AmbientesListView(PermissionRequiredMixin,ListView):
         buscar = self.request.GET.get('buscar')
         qs = super(AmbientesListView, self).get_queryset()
         if buscar:
-            return qs.filter(nome__icontains=buscar)
+            qs = qs.filter(models.Q(nome__icontains=buscar) | models.Q(nomenclatura__icontains=buscar)| models.Q(bloco__nome__icontains=buscar))
 
         if qs.count()>0:
           paginator = Paginator(qs,50)
           listagem = paginator.get_page(self.request.GET.get('page'))
           return listagem
         else:
-          return messages.info(self.request,'Não existem ambientes cadastrados!')
+            messages.info(self.request,'Não existem ambientes cadastrados!')
+            return qs
 
 
 

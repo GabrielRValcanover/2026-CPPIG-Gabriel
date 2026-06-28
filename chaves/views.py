@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
+from django.db import models
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -23,7 +24,10 @@ class ChavesListView(PermissionRequiredMixin, ListView):
         buscar = self.request.GET.get('buscar')
         qs = super().get_queryset()
         if buscar:
-            qs = qs.filter(descricao__icontains=buscar)
+            qs = qs.filter(
+                models.Q(descricao__icontains=buscar) |
+                models.Q(copias__identificador__icontains=buscar)
+            ).distinct()
 
         if qs.count() == 0:
             messages.info(self.request, 'Não existem chaves cadastradas!')

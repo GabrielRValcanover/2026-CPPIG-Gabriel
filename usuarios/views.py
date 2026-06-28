@@ -27,15 +27,15 @@ class UsuariosListView(PermissionRequiredMixin,ListView):
         buscar = self.request.GET.get('buscar')
         qs = super(UsuariosListView, self).get_queryset()
         if buscar:
-            return qs.filter(username__icontains=buscar)
+            qs = qs.filter(nome__icontains=buscar)
 
-        if qs.count()>0:
-          paginator = Paginator(qs,10)
-          listagem = paginator.get_page(self.request.GET.get('page'))
-          return listagem
+        if qs.count() > 0:
+            paginator = Paginator(qs, 10)
+            listagem = paginator.get_page(self.request.GET.get('page'))
+            return listagem
         else:
-            messages.info(self.request,'Não existem usuarios cadastrados!')
-        return qs
+            messages.info(self.request, 'Não existem usuários cadastrados!')
+            return qs
 
 class UsuarioAddView(PermissionRequiredMixin,SuccessMessageMixin,CreateView):
     permission_required = 'usuarios.add_usuariopersonalizado'
