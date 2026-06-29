@@ -28,9 +28,14 @@ class AmbientesListView(PermissionRequiredMixin,ListView):
           paginator = Paginator(qs,6)
           listagem = paginator.get_page(self.request.GET.get('page'))
           return listagem
+        # else:
+        #     messages.info(self.request,'Não existem ambientes cadastrados!')
+        #     return qs
+        # substituir o else por:
         else:
-            messages.info(self.request,'Não existem ambientes cadastrados!')
-            return qs
+            messages.info(self.request, 'Não existem ambientes cadastrados!')
+            paginator = Paginator(qs, 6)
+            return paginator.get_page(1)
 
 
 

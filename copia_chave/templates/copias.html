@@ -48,6 +48,13 @@
                     <div class="card-body">
                         <p class="card-text"><strong>Identificador:</strong> {{ copia.identificador }}</p>
                         <p class="card-text"><strong>Chave:</strong> {{ copia.chave }}</p>
+                        <p><strong>Ambiente:</strong>
+                            {% for ambiente in copia.chave.ambientes.all %}
+                                {{ ambiente.nomenclatura }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                                -
+                            {% endfor %}
+                        </p>
                         <p class="card-text"><strong>Status:</strong> {{ copia.get_status_display }}</p>
                     </div>
                     <hr>

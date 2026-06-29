@@ -36,6 +36,13 @@
                                         Não possui
                                     {% endfor %}
                                 </p>
+                                <p><strong>Ambientes do Bloco:</strong>
+                                    {% for ambiente in bloco.ambientes.all %}
+                                        {{ ambiente.nomenclatura }}{% if not forloop.last %}, {% endif %}
+                                    {% empty %}
+                                        -
+                                    {% endfor %}
+                                </p>
                             </div>
                             <hr>
                             <div class="card-body">
