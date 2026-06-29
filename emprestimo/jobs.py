@@ -9,7 +9,13 @@ scheduler = BackgroundScheduler()
 def lembrete_email(emprestimo):
     from emprestimo.utils.utils import lembrete
     datahora_prevista = datetime.combine(emprestimo.data_prevista,emprestimo.hora_prevista)
-    horario_lembrete = datahora_prevista - timedelta(seconds=10)
+
+    if emprestimo.pessoa.tipoUsuario == 'professor':
+        horario_lembrete = datahora_prevista - timedelta(minutes=1)
+    else:
+        horario_lembrete = datahora_prevista - timedelta(minutes=3)
+
+
     scheduler.add_job(
         lembrete,
         trigger='date',
@@ -18,6 +24,8 @@ def lembrete_email(emprestimo):
         replace_existing=True,
         args=[emprestimo.id],
     )
+
+
 
 def aviso_atraso():
     print('JOB EXECUTANDO')

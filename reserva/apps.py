@@ -1,3 +1,5 @@
+import os
+
 from django.apps import AppConfig
 
 
@@ -6,5 +8,6 @@ class ReservaConfig(AppConfig):
     name = 'reserva'
 
     def ready(self):
-        from .utils.utils import start
-        start()
+        if os.environ.get('RUN_MAIN') == 'true': #É uma verificação usada no Django para impedir que um bloco de código seja executado duas vezes durante o desenvolvimento local (Starck Overflow)
+            from .utils.utils import start
+            start()

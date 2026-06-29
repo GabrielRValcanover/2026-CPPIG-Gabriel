@@ -1,11 +1,11 @@
-Olá {{Usuario}}
+ Olá {{ usuario.nome }}
 
-Estamos enviando este email para avisar que sua emprega do emprestimo esta perto de expirar!
+Estamos enviando este e-mail para avisar que o prazo do seu empréstimo está próximo de expirar.
 
-Dados do Emprestimo:
+Dados do Empréstimo:
 
-Horário : {{hora_previsao}}
-
+Horário previsto para devolução: {{ hora_prevista }}
+Aviso enviado com: {{ tempo_aviso }} de antecedência.
 
 Pedimos, por gentileza, que a devolução seja realizada dentro do horário previsto.
 

@@ -17,9 +17,9 @@ def lembrete(emprestimo_id):
         if not usuario.email:
             return
         if usuario.tipoUsuario == 'professor':
-            tipo_lembrete = '1 dia'
+            tipo_lembrete = '1 minuto'
         else:
-            tipo_lembrete = '30 minutos'
+            tipo_lembrete = '3 minutos'
 
         dados = {
             'usuario': usuario,
@@ -29,16 +29,12 @@ def lembrete(emprestimo_id):
         texto_email = render_to_string( 'emails/texto_email.txt',dados )
         html_email = render_to_string('emails/texto_email.html',dados)
 
-        emails = [
-            usuario.email,
-            'secretaria@projetoI.com.br',
-            'inspetor@projetoI.com.br'
-        ]
+
         send_mail(
             subject='E.E.E.F Maria Lucia - Lembrete',
             message=texto_email,
             from_email='gabrielvalcanover@gmail.com',
-            recipient_list=emails,
+            recipient_list=[usuario.email],
             html_message=html_email,
             fail_silently=False,
         )
@@ -66,17 +62,13 @@ def chave_atrasada(emprestimo_id):
         texto_email = render_to_string('emails/texto_atraso_email.txt',dados)
         html_email = render_to_string('emails/texto_atraso_email.html',dados)
 
-        emails = [
-            usuario.email,
-            'secretaria@projetoI.com.br',
-            'inspetor@projetoI.com.br'
-        ]
+
 
         send_mail(
             subject='E.E.E.F Maria Lucia - Chave em atraso',
             message=texto_email,
             from_email='gabrielvalcanover@gmail.com',
-            recipient_list=emails,
+            recipient_list=[usuario.email],
             html_message=html_email,
             fail_silently=False,
         )

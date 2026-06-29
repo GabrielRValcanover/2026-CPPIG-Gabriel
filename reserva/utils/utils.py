@@ -19,6 +19,7 @@ def adiciona_job(reserva):
         trigger='date',
         run_date=cancelamento,
         id=str(reserva.id),
+        replace_existing=True, # nao estava funcionando, por isso coloquei o replace(instrui o armazenamento de tarefas a sobrescrever uma tarefa com o mesmo ID) google
         args=[reserva.id]
     )
 

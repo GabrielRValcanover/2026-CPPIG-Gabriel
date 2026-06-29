@@ -8,7 +8,7 @@ class EmprestimoConfig(AppConfig):
 
     def ready(self):
 
-        if os.environ.get('RUN_MAIN') == 'true':
+        if os.environ.get('RUN_MAIN') == 'true':  #É uma verificação usada no Django para impedir que um bloco de código seja executado duas vezes durante o desenvolvimento local (Starck Overflow)
             from .jobs import start
             start()
             print('APPS READY EXECUTADO')
