@@ -30,9 +30,9 @@
                             <div class="card-body">
                                 <p class="card-text"><strong>Descrição:</strong> {{ chave.descricao }}</p>
                                 <p class="card-text"><strong>Status:</strong> {{ chave.status }}</p>
-                                <p class="card-text"><strong>Ambientes:</strong>
-                                    {% for ambiente in chave.ambientes.all %}
-                                        {{ ambiente.nomenclatura }}{% if not forloop.last %}, {% endif %}
+                                <p class="card-text"><strong>Ambiente:</strong>
+                                   {% for ambiente in chave.ambientes.all %}
+                                        {{ ambiente.nome }} - {{ ambiente.nomenclatura }}{% if not forloop.last %}, {% endif %}
                                     {% empty %}
                                         -
                                     {% endfor %}

@@ -26,6 +26,8 @@ class ChavesListView(PermissionRequiredMixin, ListView):
         if buscar:
             qs = qs.filter(
                 models.Q(descricao__icontains=buscar) |
+                models.Q(ambientes__nomenclatura__icontains=buscar) |
+                models.Q(ambientes__nome__icontains=buscar) |
                 models.Q(copias__identificador__icontains=buscar)
             ).distinct()
 
@@ -67,7 +69,7 @@ class ChaveDeleteView(PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
 
 
 class ChaveMestraAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
-    permission_required = 'chaveMestra.add_chave'
+    permission_required = 'chaves.add_chave'
     permission_denied_message = 'Cadastrar chave mestra'
     model = Chave
     form_class = ChaveModelForm

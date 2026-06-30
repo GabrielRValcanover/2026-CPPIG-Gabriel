@@ -14,6 +14,7 @@ def cancelar_reserva(reserva_id):
 
 def adiciona_job(reserva):
     cancelamento = reserva.datahora_prevista + timedelta(minutes=1)
+
     scheduler.add_job(
         cancelar_reserva,
         trigger='date',

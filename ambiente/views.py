@@ -22,7 +22,10 @@ class AmbientesListView(PermissionRequiredMixin,ListView):
         buscar = self.request.GET.get('buscar')
         qs = super(AmbientesListView, self).get_queryset()
         if buscar:
-            qs = qs.filter(models.Q(nome__icontains=buscar) | models.Q(nomenclatura__icontains=buscar)| models.Q(bloco__nome__icontains=buscar))
+            qs = qs.filter(models.Q(nome__icontains=buscar) |
+                           models.Q(nomenclatura__icontains=buscar)|
+                           models.Q(bloco__nome__icontains=buscar)|
+                           models.Q(exclusividade__icontains=buscar))
 
         if qs.count()>0:
           paginator = Paginator(qs,6)
