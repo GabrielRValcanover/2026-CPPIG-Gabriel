@@ -13,7 +13,7 @@ def cancelar_reserva(reserva_id):
         pass
 
 def adiciona_job(reserva):
-    cancelamento = reserva.datahora_prevista + timedelta(minutes=1)
+    cancelamento = reserva.datahora_prevista + timedelta(minutes=15)
 
     scheduler.add_job(
         cancelar_reserva,

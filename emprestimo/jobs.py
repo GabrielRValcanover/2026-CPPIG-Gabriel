@@ -11,9 +11,9 @@ def lembrete_email(emprestimo):
     datahora_prevista = datetime.combine(emprestimo.data_prevista,emprestimo.hora_prevista)
 
     if emprestimo.pessoa.tipoUsuario == 'professor':
-        horario_lembrete = datahora_prevista - timedelta(minutes=1)
+        horario_lembrete = datahora_prevista - timedelta(days=1)
     else:
-        horario_lembrete = datahora_prevista - timedelta(minutes=3)
+        horario_lembrete = datahora_prevista - timedelta(minutes=30)
 
 
     scheduler.add_job(

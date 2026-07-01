@@ -21,4 +21,5 @@ class Reserva(models.Model):
         verbose_name_plural = 'Reservas'
 
     def __str__(self):
-        return f"{self.pessoa.get_full_name() or self.pessoa.username} - {self.datahora_prevista}"
+        # return f"{self.pessoa.get_full_name() or self.pessoa.username} - {self.datahora_prevista}"
+        return f"{self.pessoa.nome} - {self.datahora_prevista}"

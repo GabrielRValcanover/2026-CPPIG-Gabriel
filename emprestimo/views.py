@@ -133,30 +133,6 @@ class EmprestimoAddView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
                                         )
                                         return self.form_invalid(form)
 
-                                # mestra_geral_selecionada = False
-                                # chave_mestra_selecionada = False
-                                # if mestra_bloqueada:
-                                #     mestra_geral_selecionada = copias.filter(
-                                #         chave__tipo='mestra'
-                                #     ).exists()
-                                #     if not mestra_geral_selecionada:
-                                #         form.add_error(
-                                #             'copias_chave',
-                                #             f'A chave do  {bloco.nome} está perdida/danificada. '
-                                #             f'É obrigatório retirar a CHAVE MESTRA geral.'
-                                #         )
-                                #         return self.form_invalid(form)
-                                # elif  not mestra_ja_emprestada:
-                                #          chave_mestra_selecionada = copias.filter(
-                                #          chave__tipo='mestraBloco',
-                                #         chave__ambientes__bloco=bloco
-                                #     ).exists()
-                                #          if not chave_mestra_selecionada:
-                                #             form.add_error(
-                                #                 'copias_chave',
-                                #                 f'Para acessar o bloco {bloco.nome}, é necessário selecionar a chave mestra do bloco.'
-                                #             )
-                                #             return self.form_invalid(form)
 
         # -----------------------------------------------------------------------------------------------------------------------------#
 

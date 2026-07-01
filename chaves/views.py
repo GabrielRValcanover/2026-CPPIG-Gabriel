@@ -113,8 +113,7 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
         self.object.bloco_id = self.kwargs['bloco_id']
         self.object.save()
 
-        ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])  # sem filtro
-        # ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'], exclusividade='comutitarias')
+        ambientes = Ambiente.objects.filter(bloco_id=self.kwargs['bloco_id'])
         for ambiente in ambientes:
             self.object.ambientes.add(ambiente)
         # self.object.save()
@@ -125,25 +124,6 @@ class ChaveBlocoAddView(SuccessMessageMixin, CreateView):
         context['bloco'] = Bloco.objects.get(id=self.kwargs['bloco_id'])
         return context
 
-
-# def verificacaoChaves(request, tipo, id):
-#     if tipo == 'ambiente':
-#          chave = Chave.objects.filter(ambientes__id=id, tipo='comum').first()
-#          if chave:
-#              ambiente = Ambiente.objects.get(id=id)
-#              return render(request, 'verifica_form.html', {'chave': chave, 'local': ambiente.nomenclatura})
-#           return redirect('chave_ambiente', ambiente_id=id)
-#         elif tipo == 'bloco':
-#             chave = Chave.objects.filter(
-#                 bloco_id=id,
-#                 tipo='mestraBloco'
-#             ).first()
-#             if chave:
-#                 bloco = Bloco.objects.get(id=id)
-#                 return render(request, 'verifica_form.html', {'chave': chave, 'local': bloco.nome})
-#      return redirect('chave_bloco', bloco_id=id)
-#
-#     return redirect('chaves')
 
 def verificacaoChaves(request, tipo, id):
     if tipo == 'ambiente':

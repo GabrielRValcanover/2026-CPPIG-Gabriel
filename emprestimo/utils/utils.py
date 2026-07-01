@@ -17,9 +17,9 @@ def lembrete(emprestimo_id):
         if not usuario.email:
             return
         if usuario.tipoUsuario == 'professor':
-            tipo_lembrete = '1 minuto'
+            tipo_lembrete = '1 dia'
         else:
-            tipo_lembrete = '3 minutos'
+            tipo_lembrete = '30 minutos'
 
         dados = {
             'usuario': usuario,
